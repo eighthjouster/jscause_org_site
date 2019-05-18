@@ -1,2 +1,19 @@
-.sidemenu li {
-  background: red; }
+body {
+  font-family: verdana, arial, sans-serif; }
+
+.maincontainer {
+  margin: auto;
+  width: 80%;
+  min-width: 300px; }
+
+.sidemenu {
+  float: left; }
+  .sidemenu li {
+    background: red; }
+
+footer {
+  clear: both; }
+
+@media (max-width: 320px) {
+  .sidemenu {
+    float: none; } }
