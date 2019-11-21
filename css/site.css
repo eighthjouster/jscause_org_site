@@ -3,7 +3,7 @@ header:before {
   content: '';
   width: 110px;
   height: 110px;
-  background: url("/images/jscausecat.svg") no-repeat;
+  background: url("../images/jscausecat.svg") no-repeat;
   background-color: white; }
 
 body {
