@@ -53,9 +53,90 @@
           <h1>Documentation</h1>
       </div>
       <div class="content">
-          <h2 id="intro">Intro</h2>
+          <h2 id="what-is-jscause">What is JSCause?</h2>
 
-<p>Intro here.</p>
+<p>JSCause is a web framework and engine built on top of NodeJS which can be used to create simple websites.  Or complex ones, if you so desire.</p>
+
+<p>JSCause can serve regular HTML, CSS and JS files for a browser to render, just like a regular HTTP server such as Apache or nginx.  It can also preprocess files on the server side, much like ASP Classic and PHP does.</p>
+
+<p>For example, in ASP Classic, you can have an <code class="highlighter-rouge">index.asp</code> file which, among other things, could contain the following:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;h1&gt;Hello from ASP&lt;/h1&gt;
+&lt;p&gt;&lt;% Response.Write("Hello, World") %&gt;&lt;/p&gt;
+</code></pre></div></div>
+
+<p>In PHP, that would be an <code class="highlighter-rouge">index.php</code> file:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;h1&gt;Hello from PHP&lt;/h1&gt;
+&lt;p&gt;&lt;?php echo 'Hello, World'; ?&gt;&lt;/p&gt;
+</code></pre></div></div>
+
+<p>In JSCause, it would be <code class="highlighter-rouge">index.jscp</code>:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;h1&gt;Hello from JSCause&lt;/h1&gt;
+&lt;p&gt;&lt;js rt.print('Hello, World'); /js&gt;&lt;/p&gt;
+</code></pre></div></div>
+
+<p>The <code class="highlighter-rouge">jscp</code> extension stands for “[J]ava[S]cript [C]ompiled [P]age.”</p>
+
+<h2 id="structure-of-a-jscause-site">Structure of a JSCause site</h2>
+
+<p>A typical JSCause installation will have the following file and directory structure:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> ./jscause.js
+ ./jscvendor/
+ ./jscause.conf
+ ./logs/
+ ./sites/mysite/
+ ./sites/mysite/configuration/site.json
+ ./sites/mysite/logs/
+ ./sites/mysite/website/
+</code></pre></div></div>
+
+<ul>
+  <li>
+    <p><code class="highlighter-rouge">jscause.js</code>: This file contains the actual JSCause node application.  You use it when running node to start serving your website (<code class="highlighter-rouge">node jscause.js</code>). You won’t normally need to edit this file, ever.</p>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">jscvendor/</code>:  This directory contains the third-party dependencies that support specific JSCause features, such as HTML form handling and cookies.  You won’t normally need to edit the contents of this directory.  “But I thought JSCause didn’t have any dependencies!” you may be thinking.  What we mean by that is that JSCause is self-contained.  Once you download and unzip it, it’s good to go.  <a href="#jscvendor-jscause-vendor-directory">Read more about the jscvendor directory here</a>.</p>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">jscause.conf</code>: This file holds your website’s general configuration.  You can specify here where your content and log files are, whether to accept secure HTTPS connections, etc.  You can <a href="#jscauseconf-configuring-jscause-to-serve-your-website">read more about this file here</a>.</p>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">logs/</code>: This directory contains the server access and error logs.</p>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">sites/mysite</code>: This subdirectory contains your site’s specific configuration, logs and, finally, the actual content.</p>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">sites/mysite/configuration/site.json</code>: In this configuration file you can configure the details of your website: host name and port, upload limits, logging, etc. <a href="#siteconf-configuring-your-websites-details">Read more about this file here</a>.</p>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">sites/mysite/logs/</code>:  In this directory, JSCause will log access and error entries pertaining to your website only.  This is in contrast with the previously mentioned <code class="highlighter-rouge">logs/</code> directory, which will contain global logging information.</p>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">sites/mysite/website/</code>:  This directory will contain your website’s files and resources to be served to the browser and other web clients:  All your HTML, CSS and Javascript files go in here.  Other assets go here as well; such as images and files to be downloaded.  Dynamic <code class="highlighter-rouge">.jscp</code> files also go here.  These will be parsed and executed by JSCause, and the result of said execution will be sent to the web client.  <a href="#the-website-directory-all-your-websites-content">Read more about this directory here</a>.</p>
+  </li>
+</ul>
+
+<h2 id="jscauseconf-configuring-jscause-to-serve-your-website">jscause.conf: Configuring JSCause to serve your website</h2>
+
+<p>Here we’ll talk about all the config options.</p>
+
+<h2 id="siteconf-configuring-your-websites-details">site.conf: Configuring your website’s details</h2>
+
+<p>Here we’ll talk about all the config options.</p>
+
+<h2 id="jscvendor-jscause-vendor-directory">jscvendor: JSCause vendor directory</h2>
+
+<p>In a typical installation workflow, all you need to get JSCause up and running is to download the zip file, unzip it and run it.  No need to run an <code class="highlighter-rouge">npm install</code> command, or generate some usually big <code class="highlighter-rouge">node_modules/</code> directory that requires maintaining.</p>
+
+<p>OOOf course, if you prefer to install via <code class="highlighter-rouge">npm</code>, <a href="/download.html">you can still do so</a>.</p>
+
+<h2 id="the-website-directory-all-your-websites-content">The website/ directory: All your website’s content</h2>
+
+<p>Here we’ll talk about all the config options.</p>
 
 <h2 id="troubleshooting-jscause">Troubleshooting JSCause</h2>
 
