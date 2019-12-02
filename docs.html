@@ -122,11 +122,108 @@
 
 <h2 id="jscauseconf-configuring-jscause-to-serve-your-website">jscause.conf: Configuring JSCause to serve your website</h2>
 
-<p>Here we’ll talk about all the config options.</p>
+<p>When JSCause is invoked, it reads the <code class="highlighter-rouge">jscause.conf</code> file for configuration options. The options are declared as a <em>sort of</em> JSON object.  We use “sort of” here because comments (designated by <code class="highlighter-rouge">//</code>) are allowed, whereas in a truly JSON object, they are not.</p>
+
+<p>They options, in the form of attributes, are listed below:</p>
+
+<h3 id="sites">sites:</h3>
+
+<p>This is an array of object declarations, each representing a site to be served by JSCause:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"sites": [
+  {
+    // First site configuration goes here.
+  },
+  {
+    // Second site configuration goes here.
+  }
+  // etc.
+]
+</code></pre></div></div>
+
+<p>A site entry can contain the following attributes:</p>
+
+<p><strong><em>name:</em></strong></p>
+
+<p>This is the site’s name.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"name": "My Site"
+</code></pre></div></div>
+
+<p>“<em>name</em>” must be unique.  If JSCause ever needs to notify or log some event related to the site, it will refer to it by this name.</p>
+
+<p><strong><em>port:</em></strong></p>
+
+<p>This is the network port JSCause will listen for client connections.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"port": 3000
+</code></pre></div></div>
+
+<p>More than one site can share the same port, as long as they also have a unique host name (see the your-websites-siteconf-configuring-your-websites-details)) and a unique root directory name (see (#httpsssl-configuration).next section about <code class="highlighter-rouge">rootDirectoryName</code>.)</p>
+
+<p><strong><em>rootDirectoryName:</em></strong></p>
+
+<p>This is the name of the subdirectory the website files are located at inside the <code class="highlighter-rouge">sites/</code> directory.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"rootDirectoryName": "mysite"
+</code></pre></div></div>
+
+<p>The above states that the site is under <code class="highlighter-rouge">sites/mysite</code>.</p>
+
+<p>More than one site can share the same root directory name, as long as they use different ports.</p>
+
+<p><strong><em>enableHTTPS:</em></strong></p>
+
+<p>This attribute indicates whether the site is served as either HTTPS (<code class="highlighter-rouge">true</code>) or HTTP (<code class="highlighter-rouge">false</code>).</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"enableHTTPS": true
+</code></pre></div></div>
+
+<p>If HTTPS is enabled, you must provide JSCause with your certificate file, as well as your certificate’s public key file.  Check out these resources: <a href="#siteconf-configuring-your-websites-details">httpsCertFile and httpsKeyFile section on site.conf</a>, and the <a href="#httpsssl-configuration">HTTPS/SSL configuration section</a>.</p>
+
+<h3 id="logging">logging:</h3>
+
+<p>This is a list of attributes to indicate what JSCause will log, and how:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"logging": {
+  "general": {
+    // Attributes pertaining application-wide logging.
+  },
+  "perSite": {
+    // Attributes pertaining per-site-wide logging.
+  }
+}
+</code></pre></div></div>
+
+<p><strong>- general</strong>: A “<em>general</em>” entry can contain the following attributes:</p>
+
+<p><strong><em>directoryName:</em></strong></p>
+
+<p>Bleh bleh</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"directoryName": "./logs"
+</code></pre></div></div>
+
+<p>Here is an example configuration:</p>
+
+<p>(TO-DO: EXAMPLE CONFIGURATION HERE.)</p>
 
 <h2 id="siteconf-configuring-your-websites-details">site.conf: Configuring your website’s details</h2>
 
 <p>Here we’ll talk about all the config options.</p>
+
+<p><strong><em>hostName:</em></strong></p>
+
+<p>Bleh bleh</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"hostName": "jscausesite1"
+</code></pre></div></div>
+
+<p>More than one site can share the same host name, as long as they use different ports.</p>
+
+<h2 id="httpsssl-configuration">HTTPS/SSL configuration</h2>
+
+<p>here we talk about configuring SSL.</p>
 
 <h2 id="jscvendor-jscause-vendor-directory">jscvendor: JSCause vendor directory</h2>
 
