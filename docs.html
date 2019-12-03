@@ -59,7 +59,7 @@
 
 <p>JSCause is a web framework and engine built on top of NodeJS which can be used to create simple websites.  Or complex ones, if you so desire.</p>
 
-<p>JSCause can serve regular HTML, CSS and JS files for a browser to render, just like a regular HTTP server such as Apache or nginx.  It can also preprocess files on the server side, much like ASP Classic and PHP does.</p>
+<p>JSCause can serve HTML, CSS and JS files for a browser to render, just like a regular HTTP server such as Apache or nginx.  It can also preprocess files on the server side, much like how ASP Classic and PHP do.</p>
 
 <p>For example, in ASP Classic, you can have an <code class="highlighter-rouge">index.asp</code> file which, among other things, could contain the following:</p>
 
@@ -105,7 +105,7 @@
     <p><code class="highlighter-rouge">sites/mysite/website/</code>:  This subdirectory will contain your website’s files and resources to be served to the browser and other web clients:  All your HTML, CSS and Javascript files go in here.  Other assets go here as well; such as images and files to be downloaded.  Dynamic <code class="highlighter-rouge">.jscp</code> files also go here.  These will be parsed and executed by JSCause, and the result of said execution will be sent to the web client.  <a href="#the-website-directory-all-your-websites-content">Read more about this directory here</a>.</p>
   </li>
   <li>
-    <p><code class="highlighter-rouge">sites/mysite/configuration/site.json</code>: In this file you can configure the details of your website: host name and port, upload limits, logging, etc. <a href="#siteconf-configuring-your-websites-details">Read more about this file here</a>.</p>
+    <p><code class="highlighter-rouge">sites/mysite/configuration/site.json</code>: In this file you can configure the details of your website: host name and port, upload limits, logging, etc. <a href="#sitejson-configuring-your-websites-details">Read more about this file in the site.json section</a>.</p>
   </li>
   <li>
     <p><code class="highlighter-rouge">sites/mysite/logs/</code>:  In this subdirectory, JSCause will log access and error entries pertaining to your website.</p>
@@ -116,7 +116,7 @@
 
 <ul>
   <li>
-    <p><code class="highlighter-rouge">jscause.conf</code>: This file holds JSCause’s general configuration.  You can specify here where your content and log files are, whether to accept secure HTTPS connections, etc.  It may also hold configuration options that applies to, and prevails over, a website’s <code class="highlighter-rouge">site.json</code> configuration.  You can <a href="#jscauseconf-configuring-jscause-to-serve-your-website">read more about this file here</a>.</p>
+    <p><code class="highlighter-rouge">jscause.conf</code>: This file holds JSCause’s general configuration.  You can specify here where your content and log files are, whether to accept secure HTTPS connections, etc.  It may also hold configuration options that apply to, and prevail over, a website’s <code class="highlighter-rouge">site.json</code> configuration.  You can <a href="#jscauseconf-configuring-jscause-to-serve-your-website">read more about this file here</a>.</p>
   </li>
   <li>
     <p><code class="highlighter-rouge">logs/</code>: This directory contains the server access and error logs.</p>
@@ -138,7 +138,7 @@
 
 <p>When JSCause is invoked, it reads the <code class="highlighter-rouge">jscause.conf</code> file for configuration options. The options are declared as a <em>sort of</em> JSON object.  We use “sort of” here because comments (designated by <code class="highlighter-rouge">//</code>) are allowed, whereas in a truly JSON object, they are not.</p>
 
-<p>They options, in the form of attributes, are listed below:</p>
+<p>The options, in the form of attributes, are listed below:</p>
 
 <h3 id="sites">sites:</h3>
 
@@ -173,7 +173,7 @@
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"port": 3000
 </code></pre></div></div>
 
-<p>More than one site can share the same port, as long as they also have a unique host name (see the your-websites-siteconf-configuring-your-websites-details)) and a unique root directory name (see (#httpsssl-configuration).next section about <code class="highlighter-rouge">rootDirectoryName</code>.)</p>
+<p>More than one site can share the same port, as long as they also have a unique host name (see <a href="#sitejson-configuring-your-websites-details">the site.json section</a>) and a unique root directory name (see the next section about <code class="highlighter-rouge">rootDirectoryName</code>.)</p>
 
 <p><strong><em>rootDirectoryName:</em></strong></p>
 
@@ -193,7 +193,7 @@
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"enableHTTPS": true
 </code></pre></div></div>
 
-<p>If HTTPS is enabled, you must provide JSCause with your certificate file, as well as your certificate’s public key file.  Check out these resources: <a href="#siteconf-configuring-your-websites-details">httpsCertFile and httpsKeyFile section on site.conf</a>, and the <a href="#httpsssl-configuration">HTTPS/SSL configuration section</a>.</p>
+<p>If HTTPS is enabled, you must provide JSCause with your certificate file, as well as your certificate’s public key file.  Check out these resources: <a href="#sitejson-configuring-your-websites-details">httpsCertFile and httpsKeyFile section on site.json</a>, and the <a href="#httpsssl-configuration">HTTPS/SSL configuration section</a>.</p>
 
 <h3 id="logging">logging:</h3>
 
@@ -222,7 +222,7 @@
 
 <p>(TO-DO: EXAMPLE CONFIGURATION HERE.)</p>
 
-<h2 id="siteconf-configuring-your-websites-details">site.conf: Configuring your website’s details</h2>
+<h2 id="sitejson-configuring-your-websites-details">site.json: Configuring your website’s details</h2>
 
 <p>Here we’ll talk about all the config options.</p>
 
