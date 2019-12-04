@@ -292,31 +292,135 @@
 
 <h3 id="requesttimeoutsecs">requestTimeoutSecs:</h3>
 
-<p>(CONTINUE HERE.) Bleh bleh bleh</p>
+<p>This attribute sets the time in seconds JSCause will wait for a request to be handled.</p>
 
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"requestTimeoutSecs": 60
 </code></pre></div></div>
 
-<p>(TO-DO: Talk about symlinking? Where?)</p>
+<p>The timing starts when the request is created due to a web client contacting JSCause.  It includes the time it takes for the client to finish sending the request (including POST bodies and file uploads), and the time it takes for the website (read, JSCP files) to process the request and send a response.  It also includes the time JSCause takes giving the response for the operating system (OS) to send back to the web client.</p>
+
+<p>So, when JSCause gives the whole response for the operating system to handle, <code class="highlighter-rouge">requestTimeoutSecs</code> stops applying.  This means that the response could take longer than the time specified in <code class="highlighter-rouge">requestTimeoutSecs</code>, simply because it’s not longer under JSCause’s control, but the operating system’s.</p>
+
+<p>If the request exceeds the time specified by <code class="highlighter-rouge">requestTimeoutSecs</code>, JSCause will respond with an HTTP 408 (request timeout) error.</p>
+
+<p>If <code class="highlighter-rouge">requestTimeoutSecs</code> is 0, no timeout is set and, therefore, the request can take as long as it needs.</p>
 
 <p>Here is an example configuration:</p>
 
-<p>(TO-DO: EXAMPLE CONFIGURATION HERE.)</p>
+<h2 id="example-jscauseconf-configuration">Example jscause.conf configuration</h2>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{
+  "sites": [
+    {
+      "name": "My Site",
+      "port": 3000,
+      "rootDirectoryName": "mysite",
+      "enableHTTPS": false // If true, provide cert information in site.json
+    }
+  ],
+  "logging": {
+    "general": {
+      "directoryName": "./logs",
+      "fileOutput": "enabled",
+      "consoleOutput": "enabled"
+    },
+    "perSite": {
+      "fileOutput": "per site",
+      "consoleOutput": "per site"
+    }
+  },
+  "requesttimeoutsecs": 60
+}
+</code></pre></div></div>
 
 <h2 id="sitejson-configuring-your-websites-details">site.json: Configuring your website’s details</h2>
 
-<p>Here we’ll talk about all the config options.</p>
+<p>Once JSCause completes initialization via the <code class="highlighter-rouge">jscause.conf</code> file, it will proceed to read the configuration of the website (or websites, if there is more than one.)  JSCause knows how to find this configuration thanks to the <code class="highlighter-rouge">rootDirectoryName</code> attribute declared for each website in <code class="highlighter-rouge">jscause.conf</code>.  <code class="highlighter-rouge">rootDirectoryName</code> indicates where JSCause can find a subdirectory with all the website information.  Such subdirectory will be inside the <code class="highlighter-rouge">sites</code> directory found in the same directory <code class="highlighter-rouge">jscause.js</code>, the main JSCause application, is in.  Once in it, it will then proceed to look for a <code class="highlighter-rouge">configuration</code> subdirectory, then look inside it for a <code class="highlighter-rouge">site.json</code> file.</p>
+
+<p>So, in the example in the previous section, the website has a <code class="highlighter-rouge">rootDirectoryName</code> of “mysite”.  Therefore, JSCause will look for, and read the <code class="highlighter-rouge">sites/mysite/configuration/site.json</code> file.</p>
+
+<p>Just like with <code class="highlighter-rouge">jscause.conf</code>, <code class="highlighter-rouge">site.json</code> is a <em>sort of</em> JSON object (it accepts comments that start with <code class="highlighter-rouge">//</code>.)</p>
 
 <p>The options, in the form of attributes, are case insensitive (i.e. <code class="highlighter-rouge">hostName</code> can be written as <code class="highlighter-rouge">hostname</code>, <code class="highlighter-rouge">Hostname</code>, <code class="highlighter-rouge">HOSTNAME</code>, etc.)  They are listed below:</p>
 
 <p><strong><em>hostName:</em></strong></p>
 
-<p>Bleh bleh</p>
+<p>This is the site’s host name.</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"hostName": "jscausesite1"
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"hostName": "example.com"
 </code></pre></div></div>
 
+<p>The host name must coincide with the web client’s request host name for JSCause to serve the contents from this site.  So, if <code class="highlighter-rouge">hostName</code> is <code class="highlighter-rouge">jscausesite1</code> but the client requests content from <code class="highlighter-rouge">othersite1</code>, even if it’s the same IP address, JSCause will not respond.</p>
+
 <p>More than one site can share the same host name, as long as they use different ports.</p>
+
+<p><strong><em>canUpload:</em></strong></p>
+
+<p>This attribute determines whether a site can accept POST requests or file uploads, or not.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"canUpload": true
+</code></pre></div></div>
+
+<p>The valid values are <code class="highlighter-rouge">true</code> and <code class="highlighter-rouge">false</code>.</p>
+
+<p>If <code class="highlighter-rouge">true</code>, POST requests and uploads are accepted.  If <code class="highlighter-rouge">false</code>, the server will respond with an HTTP 403 (forbidden) error.</p>
+
+<p><strong><em>maxPayloadSizeBytes:</em></strong></p>
+
+<p>This attribute determines the size in bytes of the upload payload in a POST request or file upload.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"maxPayloadSizeBytes": 1024
+</code></pre></div></div>
+
+<p>If a payload size exceeds the amount specified in <code class="highlighter-rouge">maxPayloadSizeBytes</code>, JSCause will respond with an HTTP 413 (payload too large) error.</p>
+
+<p>If <code class="highlighter-rouge">maxPayloadSizeBytes</code> is 0, then JSCause assumes no payload size limit.</p>
+
+<p><strong><em>jscpExtensionRequired:</em></strong></p>
+
+<p>This attribute determines whether a query string, or route, must include <code class="highlighter-rouge">.jscp</code> to refer to a JSCP file.</p>
+
+<p>As an example, let’s assume we have the <code class="highlighter-rouge">mysite/page_one.jscp</code> file.  If <code class="highlighter-rouge">jscpExtensionRequired</code> is set as <code class="highlighter-rouge">always</code>, then the URL referring to the index file must include <code class="highlighter-rouge">.jscp</code> in it:  <code class="highlighter-rouge">http://example.com/page_one.jscp</code>.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"jscpExtensionRequired": "optional"
+</code></pre></div></div>
+
+<p>There are three valid values:</p>
+<ul>
+  <li>
+    <p><code class="highlighter-rouge">never</code>:  The URL must <em>never</em> include <code class="highlighter-rouge">.jscp</code>.  So, in the example above, <code class="highlighter-rouge">http://example.com/page_one.jscp</code> will throw an HTTP 404 (not found) error.  <code class="highlighter-rouge">http://example.com/page_one</code> will work.</p>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">always</code>:  The URL must <em>always</em> include <code class="highlighter-rouge">.jscp</code>.  In the example above, <code class="highlighter-rouge">http://example.com/page_one</code> will throw an HTTP 404 (not found) error.  <code class="highlighter-rouge">http://example.com/page_one.jscp</code> will work.</p>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">optional</code>:  The URL may include <code class="highlighter-rouge">.jscp</code>, but it’s not required to.  In the example above, both <code class="highlighter-rouge">http://example.com/page_one</code> and <code class="highlighter-rouge">http://example.com/page_one.jscp</code> will work and refer to the same <code class="highlighter-rouge">page_one.jscp</code> file.</p>
+  </li>
+</ul>
+
+<p><strong><em>httpPoweredByHeader:</em></strong></p>
+
+<p>This attribute determines whether JSCause will include the following header entry in a response: <code class="highlighter-rouge">X-Powered-By: jscause</code></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"httpPoweredByHeader": "include"
+</code></pre></div></div>
+
+<p>There are two valid values:</p>
+<ul>
+  <li>
+    <p><code class="highlighter-rouge">include</code>:  Include the <code class="highlighter-rouge">X-Powered-By</code> header entry in the response.</p>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">excluse</code>:  Omit the <code class="highlighter-rouge">X-Powered-By</code> header entry from the response.</p>
+  </li>
+</ul>
+
+<p>(CONTINUE HERE….. certs.  Oh boy.)</p>
+
+<h2 id="example-sitejson-configuration">Example site.json configuration</h2>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"hostName": "example.com"
+</code></pre></div></div>
 
 <h2 id="httpsssl-configuration">HTTPS/SSL configuration</h2>
 
@@ -338,7 +442,18 @@
 
 <h2 id="the-website-directory-all-your-websites-content">The website/ directory: All your website’s content</h2>
 
-<p>Here we’ll talk about all the config options.</p>
+<p>Here we’ll talk about how the website is actually served.</p>
+<ul>
+  <li>You may want to check the “How files are mapped to url routes” section in notes_specs.txt.</li>
+</ul>
+
+<h2 id="symbolic-links-in-configuration-and-websites">Symbolic links in configuration and websites</h2>
+
+<p>Here we’ll talk about how to handle symoblic links.</p>
+
+<h2 id="the-runtime-framework">The runtime framework</h2>
+
+<p>rt.this, rt.that and jscm modules.</p>
 
 <h2 id="troubleshooting-jscause">Troubleshooting JSCause</h2>
 
