@@ -415,7 +415,75 @@
   </li>
 </ul>
 
-<p>(CONTINUE HERE….. certs.  Oh boy.)</p>
+<p><strong><em>httpsCertFile:</em></strong></p>
+
+<p>This attribute indicates the location of your certificate file, which is required for HTTPS.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"httpsCertFile": "your-cert-file.pem"
+</code></pre></div></div>
+
+<p>Note: The default installation of JSCause includes an example cert file called <code class="highlighter-rouge">jscause-cert.pem</code>.  Do <em>NOT</em> use this in production!  User’s browsers will emit a security warning.</p>
+
+<p><strong><em>httpsKeyFile:</em></strong></p>
+
+<p>This attribute indicates the location of your private key file, which is required for HTTPS.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"httpsKeyFile": "your-key-file.pem"
+</code></pre></div></div>
+
+<p>Note: The default installation of JSCause includes an example key file called <code class="highlighter-rouge">jscause-key.pem</code>.  Do <em>NOT</em> use this in production!  User’s browsers will emit a security warning.</p>
+
+<p><strong><em>tempWorkDirectory:</em></strong></p>
+
+<p>This attribute indicates the location of a temporary directory JSCause can use for internal operation purposes (e.g. file uploads.)</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"tempWorkDirectory": "./workbench"
+</code></pre></div></div>
+
+<p>Make sure that this directory is writeable by JSCause.</p>
+
+<p>The path can be absolute (e.g. <code class="highlighter-rouge">/home/user_name/server_data/my_site/workbench</code>) or relative (e.g. <code class="highlighter-rouge">./workbench</code>).  If relative, it will be relative to the site’s <code class="highlighter-rouge">rootDirectoryName</code>.</p>
+
+<p>For example:  if JSCause is installed in <code class="highlighter-rouge">/home/user_name/jscause/</code>, and <code class="highlighter-rouge">rootDirectoryName</code> is <code class="highlighter-rouge">mysite</code>, and <code class="highlighter-rouge">tempWorkDirectory</code> is <code class="highlighter-rouge">./workbench</code>, then the latter will be located at <code class="highlighter-rouge">/home/user_name/jscause/sites/mysite/workbench</code>.</p>
+
+<p><strong><em>mimeTypes:</em></strong></p>
+
+<p>(CONTINUE HERE.  Base it on node_specs.txt)
+bleh, bleh</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"mimeTypes": {
+  "include": {
+    // Mime types to accept.
+  },
+  "excluse": {
+    // Mime types to exclude or reject.
+  }
+}
+</code></pre></div></div>
+
+<p>bleh, bleh, bleh</p>
+
+<p><strong>- include</strong></p>
+
+<p>yeah, yeha</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"include": {
+
+}
+</code></pre></div></div>
+
+<p>yeah, yeha</p>
+
+<p><strong>- exclude</strong></p>
+
+<p>yeah, yeha</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"exclude": {
+
+}
+</code></pre></div></div>
+
+<p>yeah, yeha</p>
 
 <h2 id="example-sitejson-configuration">Example site.json configuration</h2>
 
@@ -454,6 +522,13 @@
 <h2 id="the-runtime-framework">The runtime framework</h2>
 
 <p>rt.this, rt.that and jscm modules.</p>
+<ul>
+  <li>Sanitization
+    <ul>
+      <li>See symbolsToSanitize in code.</li>
+    </ul>
+  </li>
+</ul>
 
 <h2 id="troubleshooting-jscause">Troubleshooting JSCause</h2>
 
