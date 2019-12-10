@@ -211,7 +211,7 @@
 }
 </code></pre></div></div>
 
-<p>To learn more about what type of data JSCause logs, please check out the <a href="#server-logging">server logging section</a>.</p>
+<p>To learn more about what type of data JSCause logs, please check out the <a href="#logging">logging section</a>.</p>
 
 <p><strong><em>general</em></strong></p>
 
@@ -329,7 +329,7 @@
       "consoleOutput": "per site"
     }
   },
-  "requesttimeoutsecs": 60
+  "requestTimeoutSecs": 60
 }
 </code></pre></div></div>
 
@@ -448,65 +448,148 @@
 
 <p><strong><em>mimeTypes:</em></strong></p>
 
-<p>(CONTINUE HERE.  Base it on node_specs.txt)
-bleh, bleh</p>
+<p>This attribute sets a list of MIME types JSCause can associate to certain file/resource extensions.  For example, the <code class="highlighter-rouge">.html</code> file extension is associated with the <code class="highlighter-rouge">text/html</code> MIME type, then JSCause reports this to the requesting client (browser or otherwise) when responding to a request.</p>
 
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"mimeTypes": {
   "include": {
     // Mime types to accept.
   },
-  "excluse": {
+  "exclude": {
     // Mime types to exclude or reject.
   }
 }
 </code></pre></div></div>
 
-<p>bleh, bleh, bleh</p>
-
 <p><strong>- include</strong></p>
 
-<p>yeah, yeha</p>
+<p>This is an object with file extensions as keys, and MIME types as values.  When a client requests a resource with a file extension, JSCause will include in the response the type of file indicated in this list.  For example:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"include": {
-
-}
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  "include": {
+    "png": "image/png",
+    "some_other_type": "some_other_value"
+  }
 </code></pre></div></div>
 
-<p>yeah, yeha</p>
+<p>In the example above, when the client requests a PNG resource, JSCause will respond indicating that the resource is of type <code class="highlighter-rouge">image/png</code>.</p>
+
+<p>If you specify an empty string as a value, it will be assumed <code class="highlighter-rouge">application/octet-stream</code>, and a warning will be shown in the server console during startup.</p>
+
+<p>There are a few MIME types that JSCause will handle automatically, so they don’t need to be added to the <code class="highlighter-rouge">"include"</code> list.  Those are:</p>
+
+<ul>
+  <li><code class="highlighter-rouge">css</code>: <code class="highlighter-rouge">text/css; charset=utf-8</code></li>
+  <li><code class="highlighter-rouge">eot</code>: <code class="highlighter-rouge">application/vnd.ms-fontobject</code></li>
+  <li><code class="highlighter-rouge">gif</code>: <code class="highlighter-rouge">image/gif</code></li>
+  <li><code class="highlighter-rouge">html</code>: <code class="highlighter-rouge">text/html; charset=utf-8</code></li>
+  <li><code class="highlighter-rouge">ico</code>: <code class="highlighter-rouge">image/x-icon</code></li>
+  <li><code class="highlighter-rouge">jpg</code>: <code class="highlighter-rouge">image/jpg</code></li>
+  <li><code class="highlighter-rouge">js</code>: <code class="highlighter-rouge">text/javascript; charset=utf-8</code></li>
+  <li><code class="highlighter-rouge">json</code>: <code class="highlighter-rouge">application/json; charset=utf-8</code></li>
+  <li><code class="highlighter-rouge">mp4</code>: <code class="highlighter-rouge">video/mp4</code></li>
+  <li><code class="highlighter-rouge">otf</code>: <code class="highlighter-rouge">application/font-otf</code></li>
+  <li><code class="highlighter-rouge">png</code>: <code class="highlighter-rouge">image/png</code></li>
+  <li><code class="highlighter-rouge">svg</code>: <code class="highlighter-rouge">application/image/svg+xml; charset=utf-</code></li>
+  <li><code class="highlighter-rouge">ttf</code>: <code class="highlighter-rouge">application/font-ttf</code></li>
+  <li><code class="highlighter-rouge">txt</code>: <code class="highlighter-rouge">text/plain; charset=utf-8</code></li>
+  <li><code class="highlighter-rouge">wav</code>: <code class="highlighter-rouge">audio/wav</code></li>
+  <li><code class="highlighter-rouge">woff</code>: <code class="highlighter-rouge">application/font-woff</code></li>
+</ul>
 
 <p><strong>- exclude</strong></p>
 
-<p>yeah, yeha</p>
+<p>Unlike <code class="highlighter-rouge">"include"</code>, this attribute is an <em>array</em>, listing all the file extensions that JSCause must <em>not</em> send a specific MIME type for.</p>
 
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"exclude": {
-
+  ["jpg", "docx", "etc"]
 }
 </code></pre></div></div>
 
-<p>yeah, yeha</p>
+<p>An <code class="highlighter-rouge">application/octet-stream</code> will be sent instead, which may prompt a web browser to download the resource instead of attempting to display it (this, of course, will depend on the browser.)</p>
+
+<p>If the same mime type is added to both <code class="highlighter-rouge">"include"</code> and <code class="highlighter-rouge">"exclude"</code> lists, the lattermost list will prevail (i.e. if <code class="highlighter-rouge">"exclude"</code> is defined after <code class="highlighter-rouge">"include"</code>, then the MIME type will be excluded.)</p>
+
+<p>If a MIME type is defined more than once in the <code class="highlighter-rouge">"include"</code> list, JSCause makes no guarantees as to which value is ultimately used.</p>
+
+<p><strong><em>logging:</em></strong></p>
+
+<p>Just like in <a href="#logging"><code class="highlighter-rouge">site.conf</code></a>, this is a list of attributes to indicate what aspects of the website JSCause will log, and how:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"logging": {
+  // Attributes pertaining website logging.
+}
+</code></pre></div></div>
+
+<p><strong>- fileOutput</strong></p>
+
+<p>This attribute indicates whether the log data should be written to the file system.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"fileOutput": "enabled"
+</code></pre></div></div>
+
+<p>There are two valid values:</p>
+<ul>
+  <li><code class="highlighter-rouge">enabled</code>:  Create log files and write to them.  You must provide a valid <code class="highlighter-rouge">directoryName</code> entry (read below.)</li>
+  <li><code class="highlighter-rouge">disabled</code>:  No creating log files or writing to them.  In this case, <code class="highlighter-rouge">directoryName</code> can be optional.</li>
+</ul>
+
+<p><strong>- directoryName</strong></p>
+
+<p>This is the path of the directory to be used to store JSCause’s website log data.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"directoryName": "./localLogs"
+</code></pre></div></div>
+
+<p>The path can be absolute (e.g. <code class="highlighter-rouge">/home/user_name/server_data/mysite/localLogs</code>) or relative (e.g. <code class="highlighter-rouge">./localLogs</code>).  If relative, it will be relative to the website directory.</p>
+
+<p>If <code class="highlighter-rouge">fileOutput</code> is false, this attribute is optional.</p>
+
+<p><strong>- consoleOutput</strong></p>
+
+<p>This attribute indicates whether the log data should be printed to the terminal.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"consoleOutput": "enabled"
+</code></pre></div></div>
+
+<p>There are two valid values:</p>
+<ul>
+  <li><code class="highlighter-rouge">enabled</code>:  Print to the terminal.</li>
+  <li><code class="highlighter-rouge">disabled</code>:  No printing to the terminal whatsoever.</li>
+</ul>
+
+<p>To learn more about what type of data JSCause logs for websites, please check out the <a href="#logging">logging section</a>.</p>
 
 <h2 id="example-sitejson-configuration">Example site.json configuration</h2>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"hostName": "example.com"
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{
+  "hostName": "example.com",
+  "canUpload": true,
+  "maxPayloadSizeBytes": 0,
+  "jscpExtensionRequired": "optional",
+  "httpPoweredByHeader": "include",
+  "httpsCertFile": "jscause-cert.pem", // Use your own cert file.
+  "httpsKeyFile": "jscause-key.pem", // Use your own key file.
+  "tempWorkDirectory": "./workbench",
+  "mimeTypes": {
+    "include": {
+        "abw": "application/x-abiword",
+        "mid": "audio/midi"
+    },
+    "exclude": [
+        "odp",
+        "zip"
+    ]
+  },
+  "logging": {
+    "directoryName": "./localLogs",
+    "consoleOutput": "enabled",
+    "fileOutput": "enabled"
+  }
+}
 </code></pre></div></div>
 
-<h2 id="httpsssl-configuration">HTTPS/SSL configuration</h2>
+<h2 id="starting-up-jscause">Starting up JSCause</h2>
 
-<p>here we talk about configuring SSL.</p>
-
-<h2 id="server-logging">Server logging</h2>
-
-<p>here we talk about logging</p>
-<ul>
-  <li>What kind of data is logged.</li>
-  <li>If files, how the files are created and rotated (if not covered in the configuration files.)</li>
-</ul>
-
-<h2 id="jscvendor-jscause-vendor-directory">jscvendor: JSCause vendor directory</h2>
-
-<p>In a typical installation workflow, all you need to get JSCause up and running is to download the zip file, unzip it and run it.  No need to run an <code class="highlighter-rouge">npm install</code> command, or generate some usually big <code class="highlighter-rouge">node_modules/</code> directory that requires maintaining.</p>
-
-<p>Of course, if you prefer to install via <code class="highlighter-rouge">npm</code>, <a href="/download.html">you can still do so</a>.</p>
+<p>(TO-DO: CONTINUE HERE.)</p>
 
 <h2 id="the-website-directory-all-your-websites-content">The website/ directory: All your website’s content</h2>
 
@@ -514,10 +597,6 @@ bleh, bleh</p>
 <ul>
   <li>You may want to check the “How files are mapped to url routes” section in notes_specs.txt.</li>
 </ul>
-
-<h2 id="symbolic-links-in-configuration-and-websites">Symbolic links in configuration and websites</h2>
-
-<p>Here we’ll talk about how to handle symoblic links.</p>
 
 <h2 id="the-runtime-framework">The runtime framework</h2>
 
@@ -530,9 +609,41 @@ bleh, bleh</p>
   </li>
 </ul>
 
+<h2 id="logging-1">Logging</h2>
+
+<p>here we talk about logging</p>
+<ul>
+  <li>What kind of data is logged.</li>
+</ul>
+
+<h3 id="log-file-compression-and-rotation">Log file compression and rotation</h3>
+
+<ul>
+  <li>If files, how the files are created and rotated (if not covered in the configuration files.)</li>
+</ul>
+
+<h2 id="httpsssl-configuration">HTTPS/SSL configuration</h2>
+
+<p>here we talk about configuring SSL.</p>
+
+<h2 id="jscvendor-jscause-vendor-directory">jscvendor: JSCause vendor directory</h2>
+
+<p>In a typical installation workflow, all you need to get JSCause up and running is to download the zip file, unzip it and run it.  No need to run an <code class="highlighter-rouge">npm install</code> command, or generate some usually big <code class="highlighter-rouge">node_modules/</code> directory that requires maintaining.</p>
+
+<p>Of course, if you prefer to install via <code class="highlighter-rouge">npm</code>, <a href="/download.html">you can still do so</a>.</p>
+
+<h2 id="symbolic-links-in-configuration-and-websites">Symbolic links in configuration and websites</h2>
+
+<p>Here we’ll talk about how to handle symoblic links.</p>
+
 <h2 id="troubleshooting-jscause">Troubleshooting JSCause</h2>
 
 <p>Troubleshooting here.</p>
+
+<h2 id="more-resources">More resources</h2>
+
+<p>Where to find more information about JSCause?</p>
+
 
       </div>
       <div class="topmenu">
