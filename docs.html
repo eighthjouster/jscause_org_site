@@ -488,7 +488,7 @@
   <li><code class="highlighter-rouge">mp4</code>: <code class="highlighter-rouge">video/mp4</code></li>
   <li><code class="highlighter-rouge">otf</code>: <code class="highlighter-rouge">application/font-otf</code></li>
   <li><code class="highlighter-rouge">png</code>: <code class="highlighter-rouge">image/png</code></li>
-  <li><code class="highlighter-rouge">svg</code>: <code class="highlighter-rouge">application/image/svg+xml; charset=utf-</code></li>
+  <li><code class="highlighter-rouge">svg</code>: <code class="highlighter-rouge">application/image/svg+xml; charset=utf-8</code></li>
   <li><code class="highlighter-rouge">ttf</code>: <code class="highlighter-rouge">application/font-ttf</code></li>
   <li><code class="highlighter-rouge">txt</code>: <code class="highlighter-rouge">text/plain; charset=utf-8</code></li>
   <li><code class="highlighter-rouge">wav</code>: <code class="highlighter-rouge">audio/wav</code></li>
@@ -589,16 +589,141 @@
 
 <h2 id="starting-up-jscause">Starting up JSCause</h2>
 
-<p>(TO-DO: CONTINUE HERE.)</p>
+<p>Once you have configured JSCause and your website, you can run it by changing to the JSCause directoru and issuing the following command:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>node jscause
+</code></pre></div></div>
+
+<p>JSCause will print out the following (may differ depending on your configuration):</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>*** JSCause Server version [VERSION NUMBER HERE]
+INFO: Reading configuration for site 'My Site' from 'sites/mysite'
+INFO: Site 'My Site' at https://example.com:80/ assigned to server 0
+INFO: ************ All sites' configuration read at this point ********************
+INFO: The following sites were set up successfully:
+INFO: 'My Site'
+INFO: Will start listening.
+INFO: Server 0 listening on port 80
+</code></pre></div></div>
+
+<p>If the last line is about a server listening on a port, then everything was configured correctly.  Having said that, do check for warning messages (for example: <code class="highlighter-rouge">WARNING: Site configuration: Site 'My Site' has file logging enabled while the server has per-site file logging disabled.</code>)</p>
+
+<p>If you get a warning or an error, refer to the <a href="#troubleshooting-jscause">troubleshooting section</a> to find out how to address it.</p>
+
+<h2 id="stopping-jscause">Stopping JSCause</h2>
+
+<p>You can stop JSCause simply by issuing Ctrl+C in the terminal:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>^C
+Received interrupt signal.  Cleaning up before exiting...
+Terminated.
+</code></pre></div></div>
+
+<p>Or you can send the SIGTERM signal to the JSCause process via the <code class="highlighter-rouge">kill</code> command:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ killall node jscause
+Received interrupt signal.  Cleaning up before exiting...
+Terminated.
+
+[1]+  Done                    node jscause
+</code></pre></div></div>
 
 <h2 id="the-website-directory-all-your-websites-content">The website/ directory: All your website’s content</h2>
 
-<p>Here we’ll talk about how the website is actually served.</p>
+<p>JSCause will serve everything you place inside the <code class="highlighter-rouge">website</code> directory to the public.  The directory tree of this directory will map the routing tree of your website.</p>
+
+<p>For example, let’s assume that you have a website configured for <code class="highlighter-rouge">https://www.example.com</code>.</p>
+
+<p>If you have the following three files inside <code class="highlighter-rouge">website</code>:</p>
+
 <ul>
-  <li>You may want to check the “How files are mapped to url routes” section in notes_specs.txt.</li>
+  <li><code class="highlighter-rouge">website/index.html</code></li>
+  <li><code class="highlighter-rouge">website/scripts/app.js</code></li>
+  <li><code class="highlighter-rouge">website/css/styles.css</code></li>
 </ul>
 
+<p>Then JSCause will deliver their content when a web client (like a web browser) hits these corresponding urls:</p>
+
+<ul>
+  <li><code class="highlighter-rouge">https://www.example.com/index.html</code></li>
+  <li><code class="highlighter-rouge">https://www.example.com/scripts/app.js</code></li>
+  <li><code class="highlighter-rouge">https://www.example.com/css/styles.css</code></li>
+</ul>
+
+<h3 id="jscp-files">JSCP files</h3>
+
+<p>JSCP files end in <code class="highlighter-rouge">.jscp</code>, and are considered executable.  Therefore, they are <em>run</em> instead of having their content delivered.</p>
+
+<p>For example, if you have an <code class="highlighter-rouge">index.jscp</code> file with the following content:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rt.print('Hello, number ' + (2 + 2).toString());
+</code></pre></div></div>
+
+<p>Then visiting <code class="highlighter-rouge">https://www.example.com/index.jscp</code> in a web browser will display:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Hello, number 4
+</code></pre></div></div>
+
+<h3 id="jscm-files">JSCM files</h3>
+
+<p>Files ending in <code class="highlighter-rouge">.jscm</code> are considered executable modules, which can be called by <code class="highlighter-rouge">.jscp</code> files.</p>
+
+<p>JSCM files will never be served directly.  JSCause will issue an HTTP 404 error if it receives a direct request for one.</p>
+
+<p><code class="highlighter-rouge">https://www.example.com/module.jscp --&gt; 404 error</code></p>
+
+<h3 id="index-files">Index files</h3>
+
+<p>An <code class="highlighter-rouge">index.jscp</code> file is considered an <em>index file</em>, and serve as the default when a resource/file is omitted in a url (<strong>Note</strong>: <code class="highlighter-rouge">index.html</code> will not work as an index file.  This might be allowed in a future version.)</p>
+
+<p>For example, if your website is hosted at <code class="highlighter-rouge">https://www.example.com</code> and it has the following file:</p>
+
+<p><code class="highlighter-rouge">website/index.jscp</code></p>
+
+<p>Then a web browser can request said file with either <code class="highlighter-rouge">https://www.example.com/index.jscp</code> or just <code class="highlighter-rouge">https://www.example.com</code></p>
+
+<p>Another example:</p>
+
+<p>If the following file exists:</p>
+
+<p><code class="highlighter-rouge">website/stories/index.jscp</code></p>
+
+<p>Then it can be requested via <code class="highlighter-rouge">https://www.example.com/stories/index.jscp</code> or just <code class="highlighter-rouge">https://www.example.com/stories</code></p>
+
+<h3 id="all-the-routing-rules">All the routing rules</h3>
+
+<p>When JSCause receives a request, it applies the following rules to determine which file to serve:</p>
+
+<ol>
+  <li>
+    <p>If the url is <code class="highlighter-rouge">/</code>, <code class="highlighter-rouge">/index.jscp</code> will be assumed (see #5.)</p>
+  </li>
+  <li>
+    <p>If the url is <code class="highlighter-rouge">/name.jscp</code> (or <code class="highlighter-rouge">/directory/name.jscp</code>), JSCause will check for the file.  If it exists, and <em><code class="highlighter-rouge">jscpExtensionRequired</code></em> is either <code class="highlighter-rouge">optional</code> or <code class="highlighter-rouge">always</code>, it will run it (see #5.)  If it doesn’t, or if the url ends in <code class="highlighter-rouge">/</code> (e.g. <code class="highlighter-rouge">/directory/name/</code> or, if <em><code class="highlighter-rouge">jscpExtensionRequired</code></em> is either <code class="highlighter-rouge">optional</code> or <code class="highlighter-rouge">always</code>, <code class="highlighter-rouge">/directory/name.jscp/</code>), it will assume it’s a directory (see #4.)</p>
+  </li>
+  <li>
+    <p>If the url is <code class="highlighter-rouge">/name</code> (or <code class="highlighter-rouge">/directory/name</code>), and if <em><code class="highlighter-rouge">jscpExtensionRequired</code></em> is either <code class="highlighter-rouge">never</code> or <code class="highlighter-rouge">optional</code>, JSCause will check for the file <code class="highlighter-rouge">/name.jscp</code> (or <code class="highlighter-rouge">/directory/name.jscp</code>.)  If it exists, it will run it (see #5.)  If the file name does not exist, or if the url ends in <code class="highlighter-rouge">/</code>, it will assume it’s a directory (see #4.)</p>
+  </li>
+  <li>
+    <p>If the url refers to a directory (e.g. <code class="highlighter-rouge">/name</code> or <code class="highlighter-rouge">/name/</code>), check for <code class="highlighter-rouge">/name/index.jscp</code>.  This check happens regardless of the value of <em><code class="highlighter-rouge">jscpExtensionRequired</code></em>.</p>
+  </li>
+  <li>
+    <p>If the extension is <code class="highlighter-rouge">.jscp</code> (e.g. <code class="highlighter-rouge">/name.jscp</code> or <code class="highlighter-rouge">/directory/name.jscp</code>), and again, if <em><code class="highlighter-rouge">jscpExtensionRequired</code></em> is either <code class="highlighter-rouge">optional</code> or <code class="highlighter-rouge">always</code> (unless we’re coming from #3, in which case <code class="highlighter-rouge">never</code> is overriden), then JSCause will run the contents and serve its output.</p>
+  </li>
+  <li>
+    <p>If the url is <code class="highlighter-rouge">/name.extension</code>, with the extension being neither <code class="highlighter-rouge">.jscp</code> nor <code class="highlighter-rouge">.jscm</code> (or not present), JSCause will check for the file.  If it exists, JSCause will serve the contents of it (i.e., it is assumed a static resource.)</p>
+  </li>
+  <li>
+    <p>If the extension is <code class="highlighter-rouge">.jscm</code>, serve an HTTP 404 error.</p>
+  </li>
+  <li>
+    <p>If none of the above applies, serve an HTTP 404 error.</p>
+  </li>
+</ol>
+
 <h2 id="the-runtime-framework">The runtime framework</h2>
+
+<p><code class="highlighter-rouge">.jscp</code> files and <code class="highlighter-rouge">.jscm</code> files.</p>
 
 <p>rt.this, rt.that and jscm modules.</p>
 <ul>
