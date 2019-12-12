@@ -723,7 +723,163 @@ Terminated.
 
 <h2 id="the-runtime-framework">The runtime framework</h2>
 
-<p><code class="highlighter-rouge">.jscp</code> files and <code class="highlighter-rouge">.jscm</code> files.</p>
+<p>When a web client requests a JSCP file (a file ending in <code class="highlighter-rouge">.jscp</code>), JSCause will execute it, then sends the result of the execution as a response.</p>
+
+<p>JSCP files combine HTML and Javascript.  Let’s go through three different scenarios.</p>
+
+<h3 id="jscp-with-javascript-only">JSCP with Javascript only</h3>
+
+<p>A JSCP file can contain just Javascript code.  To send a response back to the web client, use the command <code class="highlighter-rouge">rt.print</code>:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// This is a valid JSCP program
+rt.print('Hello, Javascript');
+</code></pre></div></div>
+
+<p>When a browser access this file (e.g. <code class="highlighter-rouge">index.jscp</code>), it will display <code class="highlighter-rouge">Hello, Javacript</code> back to the user.</p>
+
+<h3 id="jscp-with-html-only">JSCP with HTML only</h3>
+
+<p>To let JSCP know that the whole file is HTML, start it with <code class="highlighter-rouge"><span class="nt">&lt;html</span> <span class="nt">/&gt;</span></code>:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;html</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;html&gt;</span>
+  <span class="nt">&lt;head&gt;&lt;title&gt;</span>Sample HTML document<span class="nt">&lt;/title&gt;&lt;/head&gt;</span>
+  <span class="nt">&lt;body&gt;&lt;h1&gt;</span>Hello, HTML<span class="nt">&lt;/h1&gt;&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</code></pre></div></div>
+
+<p>When a browser access this file (e.g. <code class="highlighter-rouge">index.jscp</code>), it will display <code class="highlighter-rouge">Hello, HTML</code> back to the user.</p>
+
+<p>Note: You can replace <code class="highlighter-rouge"><span class="nt">&lt;html</span> <span class="nt">/&gt;</span></code> with <code class="highlighter-rouge">&lt;js/js&gt;</code> and achieve the same thing above.</p>
+
+<h3 id="jscp-with-both-html-and-javascript">JSCP with both HTML and Javascript</h3>
+
+<p>Enclose your Javascript code within <code class="highlighter-rouge">&lt;js&gt;</code> tags (<code class="highlighter-rouge">&lt;js</code> and <code class="highlighter-rouge">/js&gt;</code>).  Anything outside of the tags will be considered HTML.</p>
+
+<p>Here’s an example - The value of PI:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;html&gt;</span>
+  <span class="nt">&lt;head&gt;&lt;title&gt;</span>Sample HTML document<span class="nt">&lt;/title&gt;&lt;/head&gt;</span>
+  <span class="nt">&lt;body&gt;</span>
+    <span class="nt">&lt;h1&gt;</span>Hello, PI<span class="nt">&lt;/h1&gt;</span>
+    <span class="nt">&lt;p&gt;</span>PI is: <span class="nt">&lt;js</span> <span class="na">rt</span><span class="err">.</span><span class="na">print</span><span class="err">(</span><span class="na">Math</span><span class="err">.</span><span class="na">PI</span><span class="err">);</span> <span class="err">/</span><span class="na">js</span><span class="nt">&gt;</span>
+<span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</code></pre></div></div>
+
+<p>Notice that there is no need to include <code class="highlighter-rouge"><span class="nt">&lt;html</span> <span class="nt">/&gt;</span></code> at the top of a file if it contains executable Javascript code.</p>
+
+<p>Another example - Children 3 years and under enter the theater for free:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;js const randomAge = Math.floor(Math.random() * 120); /js&gt;
+&lt;p&gt;John's age is: &lt;js rt.print(randomAge); /js&gt;&lt;/p&gt;
+&lt;js if (randomAge &lt;= 3) { /js&gt;
+  &lt;p&gt;John can enter the theater for free.&lt;/p&gt;
+&lt;js } else { /js&gt;
+  &lt;p&gt;John will need a ticket in order to enter the theater.&lt;/p&gt;
+&lt;js } /js&gt;
+</code></pre></div></div>
+
+<p>Alternatively:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;js
+  const randomAge = Math.floor(Math.random() * 120);
+  const message = (randomAge &lt;= 3) ?
+    'John can enter the theater for free.' :
+    'John will need a ticket in order to enter the theater.';
+/js&gt;
+&lt;p&gt;John's age is: &lt;js rt.print(randomAge); /js&gt;&lt;/p&gt;
+&lt;p&gt;&lt;js rt.print(message); /js&gt;&lt;/p&gt;
+</code></pre></div></div>
+
+<h3 id="jscause-modules-jscm-files">JSCause modules: JSCM files</h3>
+
+<p>JSCM files have the <code class="highlighter-rouge">.jscm</code> extension.  They are essentially regular Javascript modules.  You can import them in your program with the <code class="highlighter-rouge">rt.module()</code> instruction:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>const myModule = rt.module('myModule');
+</code></pre></div></div>
+
+<p>Example:</p>
+
+<p>Let’s create a <code class="highlighter-rouge">sum.jscm</code> module file with the following contents:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>module.exports =
+{
+  addTwo(a, b)
+  {
+    return a + b;
+  },
+  numberFive: 5
+};
+</code></pre></div></div>
+
+<p>And an <code class="highlighter-rouge">index.jscp</code> file with the following contents:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>const sumModule = rt.module('sum');
+
+rt.print(sumModule.addTwo(1, 2));
+rt.print(' and ');
+rt.print(sumModule.numberFive);
+</code></pre></div></div>
+
+<p>When we hit <code class="highlighter-rouge">/index.jscp</code> in the browser, the following will be displayed in the browser window:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>3 and 5
+</code></pre></div></div>
+
+<h3 id="rt-in-modules">rt in modules</h3>
+
+<p>You may notice that <code class="highlighter-rouge">rt</code> is not available in modules, at least, not directly.  So, instructions such as <code class="highlighter-rouge">rt.print</code> are not available.</p>
+
+<p>Consider this module:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>module.exports =
+{
+  twoSum(a, b)
+  {
+    rt.print(a,b);
+  }
+};
+</code></pre></div></div>
+
+<p>If we import it in our code as <code class="highlighter-rouge">printSum</code>, and attempt to use <code class="highlighter-rouge">twoSum()</code>:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  const printSum = rt.module('printSum');
+  printSum.twoSum(1, 2);
+</code></pre></div></div>
+
+<p>JSCause will report an HTTP error 500 back to the browser, and print something similar to the following to the console:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ERROR: Site: My Site: Runtime error on file /index.jscp: rt is not defined at line 1
+ReferenceError: rt is not defined
+    at Object.addTwo (/jscause_path/sites/mysite/website/sum.jscm:5:7)
+    at ... [etc]
+Thu, 12 Dec 2019 05:05:26 GMT - example.com - GET: / - 500
+</code></pre></div></div>
+
+<p>To overcome that, we can pass the <code class="highlighter-rouge">rt</code> object to the module as a function parameter:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>module.exports = function(rt)
+{
+  return {
+    twoSum(a, b)
+    {
+      rt.print(a,b);
+    }
+  };
+};
+</code></pre></div></div>
+
+<p>Then we modify our main code:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  const printSum = rt.module('printSum')(rt);
+  printSum.twoSum(1, 2);
+</code></pre></div></div>
+
+<p>We’ll no longer get an HTTP error 500, and the browser will display <code class="highlighter-rouge">3</code>.</p>
+
+<h3 id="the-rt-runtime-object">The rt runtime object</h3>
+
+<p>(CONTINUE HERE.)</p>
 
 <p>rt.this, rt.that and jscm modules.</p>
 <ul>
