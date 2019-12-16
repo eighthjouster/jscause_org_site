@@ -444,7 +444,7 @@
 
 <p>The path can be absolute (e.g. <code class="highlighter-rouge">/home/user_name/server_data/my_site/workbench</code>) or relative (e.g. <code class="highlighter-rouge">./workbench</code>).  If relative, it will be relative to the site’s <code class="highlighter-rouge">rootDirectoryName</code>.</p>
 
-<p>For example:  if JSCause is installed in <code class="highlighter-rouge">/home/user_name/jscause/</code>, and <code class="highlighter-rouge">rootDirectoryName</code> is <code class="highlighter-rouge">mysite</code>, and <code class="highlighter-rouge">tempWorkDirectory</code> is <code class="highlighter-rouge">./workbench</code>, then the latter will be located at <code class="highlighter-rouge">/home/user_name/jscause/sites/mysite/workbench</code>.</p>
+<p>For example:  if JSCause is installed in <code class="highlighter-rouge">/home/user_name/jscause/</code>, <code class="highlighter-rouge">rootDirectoryName</code> is <code class="highlighter-rouge">mysite</code>, and <code class="highlighter-rouge">tempWorkDirectory</code> is <code class="highlighter-rouge">./workbench</code>, then the latter will be located at <code class="highlighter-rouge">/home/user_name/jscause/sites/mysite/workbench</code>.</p>
 
 <p><strong><em>mimeTypes:</em></strong></p>
 
@@ -664,6 +664,8 @@ Terminated.
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Hello, number 4
 </code></pre></div></div>
 
+<p>JSCause will only run JSCP files only if they are located in a site’s <code class="highlighter-rouge">website</code> directory.  If you need to run files outside of <code class="highlighter-rouge">website</code>, use symlinks (use this feature with caution.)</p>
+
 <h3 id="jscm-files">JSCM files</h3>
 
 <p>Files ending in <code class="highlighter-rouge">.jscm</code> are considered executable modules, which can be called by <code class="highlighter-rouge">.jscp</code> files.</p>
@@ -671,6 +673,8 @@ Terminated.
 <p>JSCM files will never be served directly.  JSCause will issue an HTTP 404 error if it receives a direct request for one.</p>
 
 <p><code class="highlighter-rouge">https://www.example.com/module.jscp --&gt; 404 error</code></p>
+
+<p>JSCause will only run JSCM files only if they are located in a site’s <code class="highlighter-rouge">website</code> directory.  If you need to run files outside of <code class="highlighter-rouge">website</code>, use symlinks (use this feature with caution.)</p>
 
 <h3 id="index-files">Index files</h3>
 
@@ -879,17 +883,220 @@ Thu, 12 Dec 2019 05:05:26 GMT - example.com - GET: / - 500
 
 <h3 id="the-rt-runtime-object">The rt runtime object</h3>
 
-<p>(CONTINUE HERE.)</p>
+<p><code class="highlighter-rouge">rt</code> stands for “runtime,” and it’s the object that contains a library of convenient methods and variables to make things easier for you, the developer.</p>
 
-<p>rt.this, rt.that and jscm modules.</p>
+<p><code class="highlighter-rouge">rt</code> exists in every JSCP file.  To use it in JSCM modules, the calling JSCP file will need to pass it <code class="highlighter-rouge">rt</code> as a parameter - see the previous section, <a href="#rt-in-modules">rt in modules</a>.</p>
+
+<h4 id="rtadditional">rt.additional</h4>
+
+<p><em>Type</em>: Object.</p>
+
+<p>It contains additional values related to a previously run JSCause operation, or an error.</p>
+
+<p>At the moment, the only value available is <code class="highlighter-rouge">rt.additional.jsonParseError</code>, which will be set to <code class="highlighter-rouge">true</code> if an incoming request includes a JSON-formatted payload, and JSCause was unable to parse it )(for instance, if it was malformed.)</p>
+
+<p>Example:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;html&gt;</span>
+<span class="nt">&lt;head&gt;&lt;/head&gt;</span>
+<span class="nt">&lt;body&gt;</span>
+<span class="nt">&lt;js</span> <span class="na">if</span> <span class="err">(</span><span class="na">rt</span><span class="err">.</span><span class="na">additional</span><span class="err">.</span><span class="na">jsonParseError</span><span class="err">)</span> <span class="err">{</span>
+      <span class="na">rt</span><span class="err">.</span><span class="na">print</span><span class="err">('</span><span class="na">Sorry</span><span class="err">,</span> <span class="na">the</span> <span class="na">upload</span> <span class="na">JSON</span> <span class="na">object</span> <span class="na">was</span> <span class="na">not</span> <span class="na">understood</span><span class="err">');</span>
+    <span class="err">}</span>
+<span class="err">/</span><span class="na">js</span><span class="nt">&gt;</span>
+<span class="nt">&lt;/body&gt;</span>
+</code></pre></div></div>
+
+<p>See also:</p>
 <ul>
-  <li>Sanitization
+  <li><a href="#rtpostparams">rt.postParams</a></li>
+</ul>
+
+<h4 id="rtcontenttype">rt.contentType</h4>
+
+<p><em>Type</em>: String.</p>
+
+<p>It contains the content type of the request.  For example, <code class="highlighter-rouge">text/plain</code>.</p>
+
+<p>Having said that, there are three cases which will set <code class="highlighter-rouge">contentType</code> to values unique to JSCause:</p>
+
+<ul>
+  <li><code class="highlighter-rouge">formData</code>: When the request contains a submitted HTML form.</li>
+  <li><code class="highlighter-rouge">formDataWithUpload</code>:  When the request contains a submitted HTML form and/or uploaded files.</li>
+  <li><code class="highlighter-rouge">jsonData</code>: When the request is submitted as JSON.</li>
+</ul>
+
+<p>See also:</p>
+<ul>
+  <li><a href="#rtpostparams">rt.postParams</a></li>
+  <li><a href="#rtuploadedfiles">rt.uploadedFiles</a></li>
+  <li><a href="#rtmovefile">rt.moveFile</a></li>
+  <li><a href="#rtreadfile">rt.readFile</a></li>
+  <li><a href="#rtrequestmethod">rt.requestMethod</a></li>
+</ul>
+
+<h4 id="rtcopyfile">rt.copyFile()</h4>
+
+<p><em>Type</em>: Method.</p>
+
+<p><em>Syntax</em>: <code class="highlighter-rouge">rt.copyFile(source:String, destination:String, [overwrite:Boolean = true])</code></p>
+
+<p><em>Returns</em>: RT Promise.</p>
+
+<p>It copies a file from <code class="highlighter-rouge">source</code> to <code class="highlighter-rouge">destination</code>.  <code class="highlighter-rouge">overwrite</code> is optional, and <code class="highlighter-rouge">true</code> by default.</p>
+
+<p>Example:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rt.copyFile('my_source.txt', 'my_destination.txt')
+  .rtOnSuccess(() =&gt; { rt.print('File copied successfully!'); })
+  .rtOnError((err) =&gt; { rt.print(`There was an error: ${err}`); })
+</code></pre></div></div>
+
+<p><code class="highlighter-rouge">source</code> and <code class="highlighter-rouge">destination</code> can be contain either absolute or relative paths.</p>
+
+<p>If a relative path, it will be relative to the site’s <code class="highlighter-rouge">rootDirectoryName</code>.  For example:  if JSCause is installed in <code class="highlighter-rouge">/home/user_name/jscause/</code>, <code class="highlighter-rouge">rootDirectoryName</code> is <code class="highlighter-rouge">mysite</code>, and <code class="highlighter-rouge">source</code> is <code class="highlighter-rouge">./folder/file.txt</code>, then the latter will be intepreted as <code class="highlighter-rouge">/home/user_name/jscause/sites/mysite/folder/file.txt</code>.</p>
+
+<p>If <code class="highlighter-rouge">destination</code> exists prior to the copy operation, JSCause will check the value of <code class="highlighter-rouge">overwrite</code>.  If <code class="highlighter-rouge">overwrite</code> is <code class="highlighter-rouge">true</code>, then the copy operation will overwrite whatever is in <code class="highlighter-rouge">destination</code>.  If <code class="highlighter-rouge">overwrite</code> is <code class="highlighter-rouge">false</code>, then JSCause will <em>not</em> proceed with the copy operation, and will emit an <code class="highlighter-rouge">EEXISTS</code> error instead.</p>
+
+<p><code class="highlighter-rouge">rt.copyFile</code> returns an RT Promise, which consists in two chainable methods, <code class="highlighter-rouge">rtOnSuccess()</code> and <code class="highlighter-rouge">rtOnError()</code>.  Only one of them will apply depending on whether the copy operation succeeds or fails.  When the copy operation succeeds, JSCause will invoke the callback specified by <code class="highlighter-rouge">rtOnSuccess()</code>.  If it fails, JSCause will invole the callback specified by <code class="highlighter-rouge">rtOnError()</code>.</p>
+
+<p>Note:  You will read elsewhere in this document that callbacks must be wrapped with <code class="highlighter-rouge">rt.waitFor()</code>.  When you use <code class="highlighter-rouge">rtOnSuccess()</code> and <code class="highlighter-rouge">rtOnError()</code>, no such wrapping is necessary.  You can <a href="#rt-promises">read more about RT Promises here</a>.</p>
+
+<p>This method relies on node’s <code class="highlighter-rouge">fs.readFile</code>.  Any strengths and limitations of the latter will apply to <code class="highlighter-rouge">rt.readFile</code> as well.</p>
+
+<p>See also:</p>
+<ul>
+  <li><a href="#rtmovefile">rt.moveFile</a></li>
+  <li><a href="#rtreadfile">rt.readFile</a></li>
+  <li><a href="#rtdeletefile">rt.deleteFile</a></li>
+  <li><a href="#rtfileexists">rt.fileExists</a></li>
+  <li><a href="#rtuploadedfiles">rt.uploadedFiles</a></li>
+  <li><a href="#rtrunafter">rt.runAfter</a></li>
+  <li><a href="#rt-promises">RT Promises</a></li>
+</ul>
+
+<h4 id="rtdeletecookie">rt.deleteCookie()</h4>
+
+<p>Does this or that.</p>
+
+<h4 id="rtdeletefile">rt.deleteFile()</h4>
+
+<p>Does this or that.</p>
+
+<h4 id="rtfileexists">rt.fileExists()</h4>
+
+<p>Does this or that.</p>
+
+<h4 id="rtgetcookie">rt.getCookie()</h4>
+
+<p>Does this or that.</p>
+
+<h4 id="rtgetcurrentpath">rt.getCurrentPath()</h4>
+
+<p>Does this or that.</p>
+
+<h4 id="rtgetparams">rt.getParams</h4>
+
+<p>Does this or that.</p>
+
+<h4 id="rtheader">rt.header()</h4>
+
+<p>Does this or that.</p>
+
+<h4 id="rtmodule">rt.module()</h4>
+
+<p>Does this or that.</p>
+<ul>
+  <li>Absolute paths are not permitted.</li>
+</ul>
+
+<h4 id="rtmovefile">rt.moveFile()</h4>
+
+<p>Does this or that.</p>
+
+<h4 id="rtpostparams">rt.postParams</h4>
+
+<p>Does this or that.</p>
+
+<h4 id="rtprint">rt.print()</h4>
+
+<p>Does this or that.</p>
+
+<h4 id="rtreadfile">rt.readFile()</h4>
+
+<p>Does this or that.</p>
+
+<h4 id="rtredirectto">rt.redirectTo()</h4>
+
+<p>Does this or that.</p>
+
+<h4 id="rtrequestmethod">rt.requestMethod</h4>
+
+<p>Does this or that.</p>
+
+<h4 id="rtresetredirectto">rt.resetRedirectTo()</h4>
+
+<p>Does this or that.</p>
+
+<h4 id="rtrunafter">rt.runAfter()</h4>
+
+<p>Does this or that.</p>
+
+<h4 id="rtsetcookie">rt.setCookie()</h4>
+
+<p>Does this or that.</p>
+
+<h4 id="rtunsafeprint">rt.unsafePrint()</h4>
+
+<p>Does this or that.</p>
+
+<h4 id="rtuploadedfiles">rt.uploadedFiles</h4>
+
+<p>Does this or that.</p>
+
+<h4 id="rtwaitfor">rt.waitFor()</h4>
+
+<p>Does this or that.</p>
+
+<h2 id="rt-promises">RT Promises:</h2>
+<ul>
+  <li>Chain it with .rtOnSuccess() with a callback with the response as a parameter:
+ rt.readFile(path).rtOnSuccess((response) =&gt; { rt.print(response); });</li>
+  <li>Chain it with .rtOnError() with a callback with the error as a parameter:
+ rt.readFile(path)
+ .rtOnSuccess((response) =&gt; { rt.print(response); });
+ .rtOnError((err) =&gt; { rt.print(err.code); });
+    <ul>
+      <li>No need to wrap the callback with a waitFor().</li>
+    </ul>
+  </li>
+  <li>rtOnSuccess() and rtOnError() can be omitted (but if omitted, and an error occurs, the server will issue a runtime error.)
+    <ul>
+      <li>rtOnSuccess() and rtOnError() can omit their parameter (that is, their callback.)  This is not advisable from an application development standpoint, but it’s allowed.</li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+
+<p>Miscellaneous (where to put in this file?):</p>
+
+<ul>
+  <li>
+    <p>Never trust user input!</p>
+  </li>
+  <li>
+    <p>The file name is case-sensitive (if the file system allows it).  A file will be considered JSCP only if its extension is lower case (that is, .jscp is valid, but .JSCP is not.)  Same with JSCM.</p>
+  </li>
+  <li>
+    <p>Sanitization</p>
     <ul>
       <li>See symbolsToSanitize in code.</li>
     </ul>
   </li>
 </ul>
 
+<hr />
 <h2 id="logging-1">Logging</h2>
 
 <p>here we talk about logging</p>
