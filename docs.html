@@ -949,10 +949,10 @@ Thu, 12 Dec 2019 05:05:26 GMT - example.com - GET: / - 500
 
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rt.copyFile('my_source.txt', 'my_destination.txt')
   .rtOnSuccess(() =&gt; { rt.print('File copied successfully!'); })
-  .rtOnError((err) =&gt; { rt.print(`There was an error: ${err}`); })
+  .rtOnError((err) =&gt; { rt.print(`There was an error: ${err}`); });
 </code></pre></div></div>
 
-<p><code class="highlighter-rouge">source</code> and <code class="highlighter-rouge">destination</code> can be contain either absolute or relative paths.</p>
+<p><code class="highlighter-rouge">source</code> and <code class="highlighter-rouge">destination</code> can be either absolute or relative paths.</p>
 
 <p>If a relative path, it will be relative to the site’s <code class="highlighter-rouge">rootDirectoryName</code>.  For example:  if JSCause is installed in <code class="highlighter-rouge">/home/user_name/jscause/</code>, <code class="highlighter-rouge">rootDirectoryName</code> is <code class="highlighter-rouge">mysite</code>, and <code class="highlighter-rouge">source</code> is <code class="highlighter-rouge">./folder/file.txt</code>, then the latter will be intepreted as <code class="highlighter-rouge">/home/user_name/jscause/sites/mysite/folder/file.txt</code>.</p>
 
@@ -977,15 +977,98 @@ Thu, 12 Dec 2019 05:05:26 GMT - example.com - GET: / - 500
 
 <h4 id="rtdeletecookie">rt.deleteCookie()</h4>
 
-<p>Does this or that.</p>
+<p><em>Type</em>: Method.</p>
 
-<h4 id="rtdeletefile">rt.deleteFile()</h4>
+<p><em>Syntax</em>: <code class="highlighter-rouge">rt.deleteCookie(name:String)</code></p>
 
-<p>Does this or that.</p>
+<p><em>Returns</em>: Boolean.</p>
+
+<p>It deletes a browser cookie.</p>
+
+<p>Example:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rt.deleteCookie('my_cookie');
+</code></pre></div></div>
+
+<p>If it succeeds, it will return <code class="highlighter-rouge">true</code>.  Otherwise, it will return <code class="highlighter-rouge">false</code>.</p>
+
+<p>See also:</p>
+<ul>
+  <li><a href="#rtgetcookie">rt.getCookie</a></li>
+  <li><a href="#rtsetcookie">rt.setCookie</a></li>
+</ul>
+
+<p>#### rt.deleteFile()</p>
+
+<p><em>Type</em>: Method.</p>
+
+<p><em>Syntax</em>: <code class="highlighter-rouge">rt.deleteFile(filePath:String)</code></p>
+
+<p><em>Returns</em>: RT Promise.</p>
+
+<p>It deletes a file specified by <code class="highlighter-rouge">filePath</code>.</p>
+
+<p>Example:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rt.deleteFile('my_file.txt')
+  .rtOnSuccess(() =&gt; { rt.print('File deleted successfully!'); })
+  .rtOnError((err) =&gt; { rt.print(`There was an error: ${err}`); });
+</code></pre></div></div>
+
+<p><code class="highlighter-rouge">filePath</code> can be either absolute or relative.</p>
+
+<p><code class="highlighter-rouge">rt.deleteFiles()</code> will not delete directories.</p>
+
+<p>Please see the notes on <a href="#rtcopyfile">rt.copyFile()</a> for more information on file operations on relative paths, as well as the RT Promise type.</p>
+
+<p>This method relies on node’s <code class="highlighter-rouge">fs.unlink</code>.  Any strengths and limitations of the latter will apply to <code class="highlighter-rouge">rt.deleteFile</code> as well.</p>
+
+<p>See also:</p>
+<ul>
+  <li><a href="#rtdeletefile">rt.copyFile</a></li>
+  <li><a href="#rtmovefile">rt.moveFile</a></li>
+  <li><a href="#rtreadfile">rt.readFile</a></li>
+  <li><a href="#rtfileexists">rt.fileExists</a></li>
+  <li><a href="#rtuploadedfiles">rt.uploadedFiles</a></li>
+  <li><a href="#rtrunafter">rt.runAfter</a></li>
+  <li><a href="#rt-promises">RT Promises</a></li>
+</ul>
 
 <h4 id="rtfileexists">rt.fileExists()</h4>
 
-<p>Does this or that.</p>
+<p><em>Type</em>: Method.</p>
+
+<p><em>Syntax</em>: <code class="highlighter-rouge">rt.fileExists(filePath:String)</code></p>
+
+<p><em>Returns</em>: RT Promise.</p>
+
+<p>It determined whether a file specified by <code class="highlighter-rouge">filePath</code> exists or not.</p>
+
+<p>Example:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rt.fileExists('my_file.txt')
+  .rtOnSuccess(() =&gt; { rt.print('File exists!'); })
+  .rtOnError((err) =&gt; { rt.print((err === 'ENOENT') ? 'File does not exist' : `There was an error: ${err}`); });
+</code></pre></div></div>
+
+<p><code class="highlighter-rouge">filePath</code> can be either absolute or relative.</p>
+
+<p>As seen from the example above, <code class="highlighter-rouge">rtOnSuccess</code> is called if file exists.  <code class="highlighter-rouge">rtOnError</code> will be called if file does not exist, but <em>also</em> if some other error happens.  Always check the error.  When the file does not exist, the error will be <code class="highlighter-rouge">ENOENT</code>.  Anything different from <code class="highlighter-rouge">ENOENT</code> should be addressed.</p>
+
+<p>Please see the notes on <a href="#rtcopyfile">rt.copyFile()</a> for more information on file operations on relative paths, as well as the RT Promise type.</p>
+
+<p>This method relies on node’s <code class="highlighter-rouge">fs.stat</code>.  Any strengths and limitations of the latter will apply to <code class="highlighter-rouge">rt.fileExists</code> as well.</p>
+
+<p>See also:</p>
+<ul>
+  <li><a href="#rtdeletefile">rt.copyFile</a></li>
+  <li><a href="#rtmovefile">rt.moveFile</a></li>
+  <li><a href="#rtreadfile">rt.readFile</a></li>
+  <li><a href="#rtdeletefile">rt.deleteFile</a></li>
+  <li><a href="#rtuploadedfiles">rt.uploadedFiles</a></li>
+  <li><a href="#rtrunafter">rt.runAfter</a></li>
+  <li><a href="#rt-promises">RT Promises</a></li>
+</ul>
 
 <h4 id="rtgetcookie">rt.getCookie()</h4>
 
