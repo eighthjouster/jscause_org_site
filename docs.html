@@ -939,7 +939,7 @@ Thu, 12 Dec 2019 05:05:26 GMT - example.com - GET: / - 500
 
 <p><em>Type</em>: Method.</p>
 
-<p><em>Syntax</em>: <code class="highlighter-rouge">rt.copyFile(source:String, destination:String, [overwrite:Boolean = true])</code></p>
+<p><em>Syntax</em>: <code class="highlighter-rouge">rt.copyFile(source:String, destination:String[, overwrite:Boolean = true])</code></p>
 
 <p><em>Returns</em>: RT Promise.</p>
 
@@ -991,6 +991,8 @@ Thu, 12 Dec 2019 05:05:26 GMT - example.com - GET: / - 500
 </code></pre></div></div>
 
 <p>If it succeeds, it will return <code class="highlighter-rouge">true</code>.  Otherwise, it will return <code class="highlighter-rouge">false</code>.</p>
+
+<p>If <code class="highlighter-rouge">name</code> is not a string, <code class="highlighter-rouge">rt.deleteCookie</code> will return <code class="highlighter-rouge">false</code>.</p>
 
 <p>See also:</p>
 <ul>
@@ -1072,7 +1074,37 @@ Thu, 12 Dec 2019 05:05:26 GMT - example.com - GET: / - 500
 
 <h4 id="rtgetcookie">rt.getCookie()</h4>
 
-<p>Does this or that.</p>
+<p><em>Type</em>: Method.</p>
+
+<p><em>Syntax</em>: <code class="highlighter-rouge">rt.getCookie(name:String[, options:Object])</code></p>
+
+<p><em>Returns</em>: String.</p>
+
+<p>It reads the value of a browser cookie. <code class="highlighter-rouge">options</code> is optional, and it contains additional instructions to decode the cookie value before returning it.</p>
+
+<p>Example:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>const cookieValue1 = rt.getCookie('my_cookie');
+const cookieValue2 = rt.getCookie('my_cookie', { decodeURIValue: false });
+</code></pre></div></div>
+
+<p><code class="highlighter-rouge">options</code> may contain the <code class="highlighter-rouge">decodeURIValue</code> attribute, which is <code class="highlighter-rouge">true</code> by default. When <code class="highlighter-rouge">true</code>, the cookie value is URI-decoded before being returned.</p>
+
+<p>Example:</p>
+
+<p>Let’s assume that the <code class="highlighter-rouge">my_cookie</code> cookie has a raw value of <code class="highlighter-rouge">a%3Db</code>. In an URI, <code class="highlighter-rouge">%3D</code> refers to the <code class="highlighter-rouge">=</code> character:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>console.log(rt.getCookie('my_cookie'));  // ---&gt; Returns: "a=b"
+console.log(rt.getCookie('my_cookie'), { decodeURIValue: false }); // --&gt; Returns `a%3Db`.
+</code></pre></div></div>
+
+<p>If <code class="highlighter-rouge">name</code> is not a string, <code class="highlighter-rouge">rt.getCookie</code> will return an empty string.</p>
+
+<p>See also:</p>
+<ul>
+  <li><a href="#rtsetcookie">rt.setCookie</a></li>
+  <li><a href="#rtdeletecookie">rt.deleteCookie</a></li>
+</ul>
 
 <h4 id="rtgetcurrentpath">rt.getCurrentPath()</h4>
 
@@ -1127,7 +1159,98 @@ Thu, 12 Dec 2019 05:05:26 GMT - example.com - GET: / - 500
 
 <h4 id="rtsetcookie">rt.setCookie()</h4>
 
-<p>Does this or that.</p>
+<p><em>Type</em>: Method.</p>
+
+<p><em>Syntax</em>: <code class="highlighter-rouge">rt.setCookie(name:String, value:String[, options:Object])</code></p>
+
+<p><em>Returns</em>: String.</p>
+
+<p>It sets the value of a browser cookie. <code class="highlighter-rouge">options</code> is optional, and it contains additional instructions to create or update the cookie.</p>
+
+<p>Example:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>const cookieValue1 = rt.setCookie('my_cookie');
+const cookieValue2 = rt.getCookie('my_cookie', { path: '/' });
+</code></pre></div></div>
+
+<p><code class="highlighter-rouge">options</code> can be:</p>
+
+<ul>
+  <li>
+    <p><code class="highlighter-rouge">domain</code></p>
+
+    <p>e.g. <code class="highlighter-rouge">domain: 'example.com'</code>.</p>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">encodeURIValue</code></p>
+
+    <p>Optional. If <code class="highlighter-rouge">true</code>, then <code class="highlighter-rouge">value</code> will be URI-encoded.</p>
+
+    <p>Default: <code class="highlighter-rouge">true</code>.</p>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">expires</code></p>
+
+    <p>e.g. <code class="highlighter-rouge">expires: new Date(Date.now() + 300000)</code>.</p>
+
+    <p>If omitted, the cookie will last as long as the current browser session lasts).  If a value is passed, it must be a date object; otherwise a runtime exception will be thrown.</p>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">httpOnly</code></p>
+
+    <p>Optional. Boolean or equivalent truthy/falsy value.</p>
+
+    <p>e.g. <code class="highlighter-rouge">httpOnly: true</code>.</p>
+
+    <p>Default: <code class="highlighter-rouge">true</code>.</p>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">maxAge</code></p>
+
+    <p>Expiration in milliseconds from date of creation. This attribute is recommended over <code class="highlighter-rouge">expires</code>.  If <code class="highlighter-rouge">maxAge</code> is not a number, it will be ignored.  And if both <code class="highlighter-rouge">expires</code> and a valid <code class="highlighter-rouge">maxAge</code> are present, <code class="highlighter-rouge">expires</code> will be ignored.</p>
+
+    <p>e.g. <code class="highlighter-rouge">maxAge: 300000</code> (in milliseconds.)</p>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">path</code></p>
+
+    <p>e.g. <code class="highlighter-rouge">path: '/example_path'</code></p>
+
+    <p>Default: <code class="highlighter-rouge">/</code>.</p>
+
+    <p>Use <code class="highlighter-rouge">rt.getCurrentPath()</code> if you want to set the cookie for the request’s (current) path (e.g. <code class="highlighter-rouge">my_folder/</code>).  Use <code class="highlighter-rouge">null</code> if you want to omit setting up a path completely.</p>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">sameSite</code></p>
+
+    <p>Optional.  However, if provided, it must be either <code class="highlighter-rouge">lax</code> or <code class="highlighter-rouge">strict</code>.</p>
+
+    <p>e.g. <code class="highlighter-rouge">sameSite: "lax"</code>.</p>
+
+    <p>Any value other than <code class="highlighter-rouge">"lax"</code> or <code class="highlighter-rouge">"strict"</code> will throw an exception.</p>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">secure</code></p>
+
+    <p>Optional. Boolean or equivalent truthy/falsy value.</p>
+
+    <p>e.g. <code class="highlighter-rouge">secure: true</code>.</p>
+
+    <p>An exception will be thrown if <code class="highlighter-rouge">secure</code> is <code class="highlighter-rouge">true</code> in non-HTTPS request.</p>
+  </li>
+</ul>
+
+<p>The values of the <code class="highlighter-rouge">value</code> parameter, as well as those of the <code class="highlighter-rouge">domain</code> and <code class="highlighter-rouge">path</code> attributes of <code class="highlighter-rouge">option</code>, should be of the string type.  Numbers can be used, but they will be converted to strings.  Anything else will be converted to its <code class="highlighter-rouge">.toString()</code> equivalent.  For instance, objects will be assumed <code class="highlighter-rouge">"[object Object]"</code>, arrays will be converted to a string with its values comma-separated (e.g. <code class="highlighter-rouge">"[1,2,3]"</code>).</p>
+
+<p>If <code class="highlighter-rouge">name</code> is not a string, <code class="highlighter-rouge">rt.setCookie</code> will return <code class="highlighter-rouge">false</code>.</p>
+
+<p>To handle unexpected scenarios which could potentially throw exceptions (and therefore send an error 500 status code to the browser), <code class="highlighter-rouge">rt.setCookie()</code> could be wrapped in a <code class="highlighter-rouge">try/catch</code> block. If you do this, always check for exceptions and handle accordingly.</p>
+
+<p>See also:</p>
+<ul>
+  <li><a href="#rtgetcookie">rt.getCookie</a></li>
+  <li><a href="#rtdeletecookie">rt.deleteCookie</a></li>
+</ul>
 
 <h4 id="rtunsafeprint">rt.unsafePrint()</h4>
 
