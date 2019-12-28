@@ -1108,21 +1108,97 @@ console.log(rt.getCookie('my_cookie'), { decodeURIValue: false }); // --&gt; Ret
 
 <h4 id="rtgetcurrentpath">rt.getCurrentPath()</h4>
 
-<p>Does this or that.</p>
+<p><em>Type</em>: Method.</p>
+
+<p><em>Syntax</em>: <code class="highlighter-rouge">rt.getCurrentPath()</code></p>
+
+<p><em>Returns</em>: String.</p>
+
+<p>It yields the client request’s path without the resource (file name) portion.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>const currentPath = rt.getCurrentPath();
+</code></pre></div></div>
+
+<p>For example, if the request url is <code class="highlighter-rouge">/some/directory/hello.jscp</code>, rt.getCurrentPath() will return <code class="highlighter-rouge">'/some/directory'</code>.</p>
 
 <h4 id="rtgetparams">rt.getParams</h4>
 
-<p>Does this or that.</p>
+<p><em>Type</em>: Object.</p>
+
+<p>This is an object containing the client request’s GET query parameters.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>const name = rt.getParams['txt_name'];
+</code></pre></div></div>
+
+<p>For example, if the request’s url is <code class="highlighter-rouge">https://www.example.com/home?message=hello</code>, then <code class="highlighter-rouge">rt.getParams['message']</code> will contain <code class="highlighter-rouge">'hello'</code>.</p>
+
+<p>See also:</p>
+<ul>
+  <li><a href="#rtpostparams">rt.postParams</a></li>
+</ul>
 
 <h4 id="rtheader">rt.header()</h4>
 
-<p>Does this or that.</p>
+<p><em>Type</em>: Method.</p>
+
+<p><em>Syntax</em>: <code class="highlighter-rouge">rt.header(name:String, value:String)</code>; <code class="highlighter-rouge">rt.header(collection:Object)</code></p>
+
+<p><em>Returns</em>: Nothing (<code class="highlighter-rouge">undefined</code>).</p>
+
+<p>It sets a response’s HTTP header entry.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rt.header('Last-Modified', 'Fri, 20 Dec 2019 12:00:00 GMT');
+</code></pre></div></div>
+
+<p>You can set up multiple header entries if you provide an object as a parameter:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{
+  &lt;Header name 1&gt;: &lt;value 1&gt;,
+  &lt;Header name 2&gt;: &lt;value 2&gt;,
+  etc
+}
+</code></pre></div></div>
+
+<p>For example:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rt.header({
+  'Last-Modified': 'Fri, 20 Dec 2019 12:00:00 GMT',
+  'Content-Language': 'en',
+  'X-App-Greeting': 'hello!'
+});
+</code></pre></div></div>
+
+<p>You can call <code class="highlighter-rouge">rt.header</code> as many times as needed.</p>
+
+<p>See also:</p>
+<ul>
+  <li><a href="#rtgetcookie">rt.getCookie</a></li>
+  <li><a href="#rtsetcookie">rt.setCookie</a></li>
+  <li><a href="#rtdeletecookie">rt.deleteCookie</a></li>
+  <li><a href="#rtcontenttype">rt.contentType</a></li>
+  <li><a href="#rtredirectto">rt.redirectTo</a></li>
+  <li><a href="#rtresetredirectto">rt.resetRedirectTo</a></li>
+  <li><a href="#rtrequestmethod">rt.requestMethod</a></li>
+</ul>
 
 <h4 id="rtmodule">rt.module()</h4>
 
-<p>Does this or that.</p>
+<p><em>Type</em>: Method.</p>
+
+<p><em>Syntax</em>: <code class="highlighter-rouge">rt.module(moduleName:String)</code></p>
+
+<p><em>Returns</em>: Any value (typically an object or function.)</p>
+
+<p>It imports a module.  It technically is syntactic sugar for: <code class="highlighter-rouge">require('./moduleName.jscm')</code>.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>const sumModule = rt.module('sum.jscm');
+</code></pre></div></div>
+
+<p><code class="highlighter-rouge">moduleName</code> may omit the file module’s <code class="highlighter-rouge">.jscm</code> extension.  Its path is relative to the website directory.  Absolute paths are not permitted.  Attempting to use an absolute path will log an error and cause <code class="highlighter-rouge">rt.module()</code> to return <code class="highlighter-rouge">null</code> (a future version may throw an HTTP error 500.)</p>
+
+<p>See also:</p>
 <ul>
-  <li>Absolute paths are not permitted.</li>
+  <li><a href="#jscause-modules-jscm-files">JSCause modules: JSCM files</a></li>
 </ul>
 
 <h4 id="rtmovefile">rt.moveFile()</h4>
@@ -1131,11 +1207,46 @@ console.log(rt.getCookie('my_cookie'), { decodeURIValue: false }); // --&gt; Ret
 
 <h4 id="rtpostparams">rt.postParams</h4>
 
-<p>Does this or that.</p>
+<p><em>Type</em>: Object.</p>
+
+<p>This is an object containing the client request’s POST form-encoded parameters or JSON parameters.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>const name = rt.postParams['txt_name'];
+</code></pre></div></div>
+
+<p>For example, given the following form in a web browser:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;form method="post"&gt;
+  Name: &lt;input type="text" name="txt_name" value="" /&gt;
+  &lt;input type="submit" name="b_submit" value="Send" /&gt;
+&lt;/form&gt;
+</code></pre></div></div>
+
+<p>If a user fills the “Name” field with “Mary,” then submits the form, then <code class="highlighter-rouge">rt.postParams['txt_name']</code> will contain <code class="highlighter-rouge">'Mary'</code>.</p>
+
+<p>If the POST request has a mime type of <code class="highlighter-rouge">application/json</code>, <code class="highlighter-rouge">postParams</code> will contain the parsed JSON payload.  If for some reason the JSON payload cannot be parsed, <code class="highlighter-rouge">rt.addidional.jsonParseError</code> will be set to <code class="highlighter-rouge">true</code>.</p>
+
+<p>For example, given a POST request with the following payload:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{
+  "some_data": ["a", "b", "c]
+}
+</code></pre></div></div>
+
+<p>Then <code class="highlighter-rouge">postParams['some_data']</code> will contain the following array <code class="highlighter-rouge">['a', 'b', 'c']</code>.</p>
+
+<p>See also:</p>
+<ul>
+  <li><a href="#rtgetparams">rt.getParams</a></li>
+  <li><a href="#rtadditiona">rt.additional</a></li>
+</ul>
 
 <h4 id="rtprint">rt.print()</h4>
 
-<p>Does this or that.</p>
+<p>[TO-DO!!!!]</p>
+<ul>
+  <li>print will escape symbols such as ‘&lt;’ and ‘&gt;’ so that they can be safely printed as such, so that they’re not confused with being part of an HTML tag.  This is also good to avoid XSS attachs:  Use it to print user input.  If you want to print everything unescaped, use rt.unsafePrint().</li>
+</ul>
 
 <h4 id="rtreadfile">rt.readFile()</h4>
 
@@ -1145,13 +1256,28 @@ console.log(rt.getCookie('my_cookie'), { decodeURIValue: false }); // --&gt; Ret
 
 <p>Does this or that.</p>
 
+<p>See also:</p>
+<ul>
+  <li><a href="#rtresetredirectto">rt.resetRedirectTo</a></li>
+</ul>
+
 <h4 id="rtrequestmethod">rt.requestMethod</h4>
 
 <p>Does this or that.</p>
 
+<p>See also:</p>
+<ul>
+  <li><a href="#rtcontenttype">rt.contentType</a></li>
+</ul>
+
 <h4 id="rtresetredirectto">rt.resetRedirectTo()</h4>
 
 <p>Does this or that.</p>
+
+<p>See also:</p>
+<ul>
+  <li><a href="#rtredirectto">rt.redirectTo</a></li>
+</ul>
 
 <h4 id="rtrunafter">rt.runAfter()</h4>
 
