@@ -947,7 +947,7 @@ Thu, 12 Dec 2019 05:05:26 GMT - example.com - GET: / - 500
 
 <p>Example:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rt.copyFile('my_source.txt', 'my_destination.txt')
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rt.copyFile('my_file.txt', 'my_copied_file.txt')
   .rtOnSuccess(() =&gt; { rt.print('File copied successfully!'); })
   .rtOnError((err) =&gt; { rt.print(`There was an error: ${err}`); });
 </code></pre></div></div>
@@ -960,9 +960,18 @@ Thu, 12 Dec 2019 05:05:26 GMT - example.com - GET: / - 500
 
 <p><code class="highlighter-rouge">rt.copyFile</code> returns an RT Promise, which consists in two chainable methods, <code class="highlighter-rouge">rtOnSuccess()</code> and <code class="highlighter-rouge">rtOnError()</code>.  Only one of them will apply depending on whether the copy operation succeeds or fails.  When the copy operation succeeds, JSCause will invoke the callback specified by <code class="highlighter-rouge">rtOnSuccess()</code>.  If it fails, JSCause will invole the callback specified by <code class="highlighter-rouge">rtOnError()</code>.</p>
 
-<p>Note:  You will read elsewhere in this document that callbacks must be wrapped with <code class="highlighter-rouge">rt.waitFor()</code>.  When you use <code class="highlighter-rouge">rtOnSuccess()</code> and <code class="highlighter-rouge">rtOnError()</code>, no such wrapping is necessary.  You can <a href="#rt-promises">read more about RT Promises here</a>.</p>
+<p>This method relies on node’s <code class="highlighter-rouge">fs.copyFile</code>.  Any strengths and limitations of the latter will apply to <code class="highlighter-rouge">rt.copyFile</code> as well.</p>
 
-<p>This method relies on node’s <code class="highlighter-rouge">fs.readFile</code>.  Any strengths and limitations of the latter will apply to <code class="highlighter-rouge">rt.readFile</code> as well.</p>
+<p>Notes:</p>
+
+<ul>
+  <li>
+    <p>You will read elsewhere in this document that callbacks must be wrapped with <code class="highlighter-rouge">rt.waitFor()</code>.  When you use <code class="highlighter-rouge">rtOnSuccess()</code> and <code class="highlighter-rouge">rtOnError()</code>, no such wrapping is necessary.  You can <a href="#rt-promises">read more about RT Promises here</a>.</p>
+  </li>
+  <li>
+    <p>If <code class="highlighter-rouge">overwrite</code> is <code class="highlighter-rouge">false</code> and the destination exists, the error thrown, <code class="highlighter-rouge">err</code>, is not native.  JSCause will try to mimmick what <code class="highlighter-rouge">copyFile</code> does as much as possible.  The <code class="highlighter-rouge">errno</code> attribute won’t be available.  This is because the POSIX’s <code class="highlighter-rouge">rename</code> operation will always overwrite.  JSCause checks for file existence first, then acts accordingly.</p>
+  </li>
+</ul>
 
 <p>See also:</p>
 <ul>
@@ -1203,7 +1212,37 @@ console.log(rt.getCookie('my_cookie'), { decodeURIValue: false }); // --&gt; Ret
 
 <h4 id="rtmovefile">rt.moveFile()</h4>
 
-<p>Does this or that.</p>
+<p><em>Type</em>: Method.</p>
+
+<p><em>Syntax</em>: <code class="highlighter-rouge">rt.moveFile(source:String, destination:String[, overwrite:Boolean = true])</code></p>
+
+<p><em>Returns</em>: RT Promise.</p>
+
+<p>It moves a file from <code class="highlighter-rouge">source</code> to <code class="highlighter-rouge">destination</code>.  <code class="highlighter-rouge">overwrite</code> is optional, and <code class="highlighter-rouge">true</code> by default.</p>
+
+<p>Example:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rt.moveFile('my_source.txt', 'my_destination.txt')
+  .rtOnSuccess(() =&gt; { rt.print('File moved successfully!'); })
+  .rtOnError((err) =&gt; { rt.print(`There was an error: ${err}`); });
+</code></pre></div></div>
+
+<p><code class="highlighter-rouge">source</code> and <code class="highlighter-rouge">destination</code> can be either absolute or relative paths.</p>
+
+<p>Please see the notes on <a href="#rtcopyfile">rt.copyFile()</a> for more information on file operations on relative paths, as well as the RT Promise type, and overwrite errors.</p>
+
+<p>This method relies on node’s <code class="highlighter-rouge">fs.rename</code>.  Any strengths and limitations of the latter will apply to <code class="highlighter-rouge">rt.rename</code> as well.</p>
+
+<p>See also:</p>
+<ul>
+  <li><a href="#rtcopyfile">rt.copyFile</a></li>
+  <li><a href="#rtreadfile">rt.readFile</a></li>
+  <li><a href="#rtdeletefile">rt.deleteFile</a></li>
+  <li><a href="#rtfileexists">rt.fileExists</a></li>
+  <li><a href="#rtuploadedfiles">rt.uploadedFiles</a></li>
+  <li><a href="#rtrunafter">rt.runAfter</a></li>
+  <li><a href="#rt-promises">RT Promises</a></li>
+</ul>
 
 <h4 id="rtpostparams">rt.postParams</h4>
 
@@ -1243,9 +1282,54 @@ console.log(rt.getCookie('my_cookie'), { decodeURIValue: false }); // --&gt; Ret
 
 <h4 id="rtprint">rt.print()</h4>
 
-<p>[TO-DO!!!!]</p>
+<p><em>Type</em>: Method.</p>
+
+<p><em>Syntax</em>: <code class="highlighter-rouge">rt.print(value:String)</code></p>
+
+<p><em>Returns</em>: Undefined.</p>
+
+<p>It prints to the response body.  A web browser will display <code class="highlighter-rouge">value</code> in the page it renders.</p>
+
+<p>Example:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rt.print('Hello, world');
+</code></pre></div></div>
+
+<p>Use <code class="highlighter-rouge">rt.print</code> as many times as you need to render dynamic values to a page:</p>
+
+<p>Another example:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;h1&gt;&lt;js rt.print('Hello, ', rt.postParams['txt_name']); /js&gt;&lt;/h1&gt;
+&lt;p&gt;&lt;js
+rt.print(`The value of PI is: ${Math.PI}`);
+/js&gt;&lt;/p&gt;
+</code></pre></div></div>
+
+<p><code class="highlighter-rouge">rt.print</code> will escape symbols such as ‘&lt;’ and ‘&gt;’ so that they can be safely printed as such (the web browser will not erroneously render them as part of an HTML tag.)
+For instance, the following:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;js rt.print('&lt;b&gt;Hello&lt;/b&gt;'); /js&gt;
+</code></pre></div></div>
+
+<p>Will output <code class="highlighter-rouge">&amp;lt;b&amp;gt;Hello&amp;lt;b&amp;gt;</code>.  Instead of printing it as bold <b>Hello</b>, a web browser will literally display it as <code class="highlighter-rouge">&lt;b&gt;Hello&lt;/b&gt;</code>.</p>
+
+<p>If you want to print without escaping, use <a href="#rtunsafeprint">rt.unsafePrint()</a> instead (but please be careful and know what you’re doing.)</p>
+
+<p>List of escaped symbols:</p>
 <ul>
-  <li>print will escape symbols such as ‘&lt;’ and ‘&gt;’ so that they can be safely printed as such, so that they’re not confused with being part of an HTML tag.  This is also good to avoid XSS attachs:  Use it to print user input.  If you want to print everything unescaped, use rt.unsafePrint().</li>
+  <li><code class="highlighter-rouge">&amp;</code> (ampersand): Escaped as <code class="highlighter-rouge">&amp;amp;</code>.</li>
+  <li><code class="highlighter-rouge">&lt;</code> (less-than symbol): Escaped as <code class="highlighter-rouge">&amp;lt;</code>.</li>
+  <li><code class="highlighter-rouge">&gt;</code> (greater-than symbol): Escaped as <code class="highlighter-rouge">&amp;gt;</code>.</li>
+  <li><code class="highlighter-rouge">"</code> (double quotation mark): Escaped as <code class="highlighter-rouge">&amp;quot;</code>.</li>
+  <li><code class="highlighter-rouge">\</code> (backslash): Escaped as <code class="highlighter-rouge">&amp;#39;</code>.</li>
+  <li><code class="highlighter-rouge">/</code> (slash): Escaped as <code class="highlighter-rouge">&amp;#x2F;</code>.</li>
+  <li>` (backtick): Escaped as <code class="highlighter-rouge">&amp;#x60;</code>.</li>
+  <li><code class="highlighter-rouge">=</code> (equals sign): Escaped as <code class="highlighter-rouge">&amp;#x3D;</code>.</li>
+</ul>
+
+<p>See also:</p>
+<ul>
+  <li><a href="#rtunsafeprint">rt.unsafePrint</a></li>
 </ul>
 
 <h4 id="rtreadfile">rt.readFile()</h4>
@@ -1381,6 +1465,9 @@ const cookieValue2 = rt.getCookie('my_cookie', { path: '/' });
 <h4 id="rtunsafeprint">rt.unsafePrint()</h4>
 
 <p>Does this or that.</p>
+
+<p>Be cautious and know what you are doing when using this method!
+Avoid XSS attacks! If you need to print content that could be deemed unsafe (e.g. user input), use rt.print instead.</p>
 
 <h4 id="rtuploadedfiles">rt.uploadedFiles</h4>
 
