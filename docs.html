@@ -435,7 +435,7 @@
 
 <p><strong><em>tempWorkDirectory:</em></strong></p>
 
-<p>This attribute indicates the location of a temporary directory JSCause can use for internal operation purposes (e.g. file uploads.)</p>
+<p>This attribute indicates the location of a temporary directory JSCause can use for internal operation purposes (e.g. file uploads.)  Avoid reading or manipulating this directory directly in your application.</p>
 
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"tempWorkDirectory": "./workbench"
 </code></pre></div></div>
@@ -1334,7 +1334,41 @@ For instance, the following:</p>
 
 <h4 id="rtreadfile">rt.readFile()</h4>
 
-<p>Does this or that.</p>
+<p><em>Type</em>: Method.</p>
+
+<p><em>Syntax</em>: <code class="highlighter-rouge">rt.readFile(path:String, encoding:String)</code></p>
+
+<p><em>Returns</em>: RT Promise.</p>
+
+<p>It reads the contents of a file specified by <code class="highlighter-rouge">path</code>.  <code class="highlighter-rouge">encoding</code> is optional, and <code class="highlighter-rouge">null </code> by default.</p>
+
+<p>Example:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rt.readFile('my_source.txt', 'utf-8')
+  .rtOnSuccess((response) =&gt; { rt.print('File read successfully!'); console.log(response); })
+  .rtOnError((err) =&gt; { rt.print(`There was an error: ${err}`); });
+</code></pre></div></div>
+
+<p><code class="highlighter-rouge">path</code> can be either absolute or relative.</p>
+
+<p><code class="highlighter-rouge">encoding</code> indicates the file encoding (e.g. ‘utf-8’, usually good for text data).  If not specified, then raw bytes are assumed (good for binary files.)</p>
+
+<p>Please see the notes on <a href="#rtcopyfile">rt.copyFile()</a> for more information on file operations on relative paths, as well as the RT Promise type, and overwrite errors.</p>
+
+<p>This method relies on node’s <code class="highlighter-rouge">fs.readFile</code>.  Any strengths and limitations of the latter will apply to <code class="highlighter-rouge">rt.readFile</code> as well.</p>
+
+<p>Notice that this version of JSCause will accept an <code class="highlighter-rouge">encoding</code> object that can be passed directly to <code class="highlighter-rouge">rt.readFile</code>.  This <em>will</em> change. Future versions of JSCause will only accept a string.</p>
+
+<p>See also:</p>
+<ul>
+  <li><a href="#rtcopyfile">rt.copyFile</a></li>
+  <li><a href="#rtmovefile">rt.moveFile</a></li>
+  <li><a href="#rtdeletefile">rt.deleteFile</a></li>
+  <li><a href="#rtfileexists">rt.fileExists</a></li>
+  <li><a href="#rtuploadedfiles">rt.uploadedFiles</a></li>
+  <li><a href="#rtrunafter">rt.runAfter</a></li>
+  <li><a href="#rt-promises">RT Promises</a></li>
+</ul>
 
 <h4 id="rtredirectto">rt.redirectTo()</h4>
 
@@ -1479,6 +1513,7 @@ Avoid XSS attacks! If you need to print content that could be deemed unsafe (e.g
 
 <h2 id="rt-promises">RT Promises:</h2>
 <ul>
+  <li>rt.readFile()’s can be nested.</li>
   <li>Chain it with .rtOnSuccess() with a callback with the response as a parameter:
  rt.readFile(path).rtOnSuccess((response) =&gt; { rt.print(response); });</li>
   <li>Chain it with .rtOnError() with a callback with the error as a parameter:
