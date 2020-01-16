@@ -1406,7 +1406,11 @@ For instance, the following:</p>
 
 <h4 id="rtrequestmethod">rt.requestMethod</h4>
 
-<p>Does this or that.</p>
+<p><em>Type</em>: String.</p>
+
+<p>It contains the type of the HTTP request.  The supported values are <code class="highlighter-rouge">get</code> and <code class="highlighter-rouge">post</code>.</p>
+
+<p>The HTTP requests PUT and DELETE are not supported.  Therefore, if a web client attempts to make a request with them, JSCause will return an HTTP (method not allowed) 405 error.</p>
 
 <p>See also:</p>
 <ul>
@@ -1415,18 +1419,13 @@ For instance, the following:</p>
 
 <h4 id="rtresetredirectto">rt.resetRedirectTo()</h4>
 
-<p>Does this or that.</p>
-<ul>
-  <li>rt.resetRedirectTo() (no parameters.)
-    <ul>
-      <li>It will cancel any scheduled redirections.
-        <ul>
-          <li>No effect if no redirects are scheduled to happen.</li>
-        </ul>
-      </li>
-    </ul>
-  </li>
-</ul>
+<p><em>Type</em>: Method.</p>
+
+<p><em>Syntax</em>: <code class="highlighter-rouge">rt.resetRedirectTo()</code></p>
+
+<p><em>Returns</em>: Undefined.</p>
+
+<p>It instructs will cancel any redirections scheduled via <code class="highlighter-rouge">rt.redirectTo()</code>.  If there are no scheduled redirections, this method has no effect.</p>
 
 <p>See also:</p>
 <ul>
@@ -1436,7 +1435,25 @@ For instance, the following:</p>
 
 <h4 id="rtrunafter">rt.runAfter()</h4>
 
-<p>Does this or that.</p>
+<p><em>Type</em>: Method.</p>
+
+<p><em>Syntax</em>: <code class="highlighter-rouge">rt.runAfter(callback:Function)</code></p>
+
+<p><em>Returns</em>: Undefined.</p>
+
+<p>It will enqueue the call to <code class="highlighter-rouge">callback</code> after all <code class="highlighter-rouge">rt.waitFor()</code> callbacks are run.  <code class="highlighter-rouge">rt.runAfter()</code> is especially useful for file operations.</p>
+
+<p>Both implicit and explicit <code class="highlighter-rouge">rt.waitFor()</code> callbacks are taken into account before running <code class="highlighter-rouge">rt.runAfter()</code> code.  Most JSCause methods that expect a callback (e.g. <code class="highlighter-rouge">rt.readFile()</code>) imply a <code class="highlighter-rouge">rt.waitFor()</code> call.</p>
+
+<p><code class="highlighter-rouge">rt.runAfter()</code> can be called more than once.  Each callback will be run sequentially (i.e., not concurrently) and in the order that were specified.</p>
+
+<p><code class="highlighter-rouge">rt.waitFor()</code> can be used inside <code class="highlighter-rouge">rt.runAfter()</code> callbacks.  Because the former takes precedence, any enqueued <code class="highlighter-rouge">rt.runAfter()</code> callbacks will again wait until those new <code class="highlighter-rouge">rt.waitFor()</code> callbacks are run.</p>
+
+<p>See also:</p>
+<ul>
+  <li><a href="#rtwaitfor">rt.waitFor</a></li>
+  <li><a href="#callbacks">Callbacks</a></li>
+</ul>
 
 <h4 id="rtsetcookie">rt.setCookie()</h4>
 
@@ -1548,9 +1565,17 @@ Avoid XSS attacks! If you need to print content that could be deemed unsafe (e.g
 
 <p>Does this or that.</p>
 
+<p>See also:</p>
+<ul>
+  <li><a href="#rtrunafter">rt.runAfter</a></li>
+  <li><a href="#callbacks">Callbacks</a></li>
+</ul>
+
 <h2 id="redirection">Redirection:</h2>
 
 <p>Yay.</p>
+
+<h2 id="callbacks">Callbacks</h2>
 
 <h2 id="rt-promises">RT Promises:</h2>
 <ul>
