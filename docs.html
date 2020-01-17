@@ -796,6 +796,14 @@ rt.print('Hello, Javascript');
 &lt;p&gt;&lt;js rt.print(message); /js&gt;&lt;/p&gt;
 </code></pre></div></div>
 
+<h3 id="the-rt-runtime-object">The rt runtime object</h3>
+
+<p><code class="highlighter-rouge">rt</code> stands for “runtime,” and it’s the object that contains a library of convenient methods and variables to make things easier for you, the developer.</p>
+
+<p><code class="highlighter-rouge">rt</code> exists in every JSCP file.  To use it in JSCM modules, the calling JSCP file will need to pass it <code class="highlighter-rouge">rt</code> as a parameter - see the previous section, <a href="#rt-in-modules">rt in modules</a>.</p>
+
+<p>A complete reference <a href="#the-rt-runtime-object-reference">can be found here</a>.</p>
+
 <h3 id="jscause-modules-jscm-files">JSCause modules: JSCM files</h3>
 
 <p>JSCM files have the <code class="highlighter-rouge">.jscm</code> extension.  They are essentially regular Javascript modules.  You can import them in your program with the <code class="highlighter-rouge">rt.module()</code> instruction:</p>
@@ -881,11 +889,82 @@ Thu, 12 Dec 2019 05:05:26 GMT - example.com - GET: / - 500
 
 <p>We’ll no longer get an HTTP error 500, and the browser will display <code class="highlighter-rouge">3</code>.</p>
 
-<h3 id="the-rt-runtime-object">The rt runtime object</h3>
+<h2 id="redirection">Redirection:</h2>
 
-<p><code class="highlighter-rouge">rt</code> stands for “runtime,” and it’s the object that contains a library of convenient methods and variables to make things easier for you, the developer.</p>
+<p>Yay.</p>
 
-<p><code class="highlighter-rouge">rt</code> exists in every JSCP file.  To use it in JSCM modules, the calling JSCP file will need to pass it <code class="highlighter-rouge">rt</code> as a parameter - see the previous section, <a href="#rt-in-modules">rt in modules</a>.</p>
+<h2 id="callbacks">Callbacks</h2>
+
+<h2 id="rt-promises">RT Promises:</h2>
+<ul>
+  <li>rt.readFile()’s can be nested.</li>
+  <li>Chain it with .rtOnSuccess() with a callback with the response as a parameter:
+ rt.readFile(path).rtOnSuccess((response) =&gt; { rt.print(response); });</li>
+  <li>Chain it with .rtOnError() with a callback with the error as a parameter:
+ rt.readFile(path)
+ .rtOnSuccess((response) =&gt; { rt.print(response); });
+ .rtOnError((err) =&gt; { rt.print(err.code); });
+    <ul>
+      <li>No need to wrap the callback with a waitFor().</li>
+    </ul>
+  </li>
+  <li>rtOnSuccess() and rtOnError() can be omitted (but if omitted, and an error occurs, the server will issue a runtime error.)
+    <ul>
+      <li>rtOnSuccess() and rtOnError() can omit their parameter (that is, their callback.)  This is not advisable from an application development standpoint, but it’s allowed.</li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+
+<p>Miscellaneous (where to put in this file?):</p>
+
+<ul>
+  <li>
+    <p>Never trust user input!</p>
+  </li>
+  <li>
+    <p>The file name is case-sensitive (if the file system allows it).  A file will be considered JSCP only if its extension is lower case (that is, .jscp is valid, but .JSCP is not.)  Same with JSCM.</p>
+  </li>
+  <li>
+    <p>Sanitization</p>
+    <ul>
+      <li>See symbolsToSanitize in code.</li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+<h2 id="logging-1">Logging</h2>
+
+<p>here we talk about logging</p>
+<ul>
+  <li>What kind of data is logged.</li>
+</ul>
+
+<h3 id="log-file-compression-and-rotation">Log file compression and rotation</h3>
+
+<ul>
+  <li>If files, how the files are created and rotated (if not covered in the configuration files.)</li>
+</ul>
+
+<h2 id="httpsssl-configuration">HTTPS/SSL configuration</h2>
+
+<p>here we talk about configuring SSL.</p>
+
+<h2 id="jscvendor-jscause-vendor-directory">jscvendor: JSCause vendor directory</h2>
+
+<p>In a typical installation workflow, all you need to get JSCause up and running is to download the zip file, unzip it and run it.  No need to run an <code class="highlighter-rouge">npm install</code> command, or generate some usually big <code class="highlighter-rouge">node_modules/</code> directory that requires maintaining.</p>
+
+<p>Of course, if you prefer to install via <code class="highlighter-rouge">npm</code>, <a href="/download.html">you can still do so</a>.</p>
+
+<h2 id="symbolic-links-in-configuration-and-websites">Symbolic links in configuration and websites</h2>
+
+<p>Here we’ll talk about how to handle symoblic links.</p>
+
+<h3 id="the-rt-runtime-object-reference">The rt runtime object reference</h3>
+
+<p>Here’s the complete list of methods and variables available in the <code class="highlighter-rouge">rt</code> object:</p>
 
 <h4 id="rtadditional">rt.additional</h4>
 
@@ -1295,7 +1374,7 @@ console.log(rt.getCookie('my_cookie'), { decodeURIValue: false }); // --&gt; Ret
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rt.print('Hello, world');
 </code></pre></div></div>
 
-<p>Use <code class="highlighter-rouge">rt.print</code> as many times as you need to render dynamic values to a page:</p>
+<p>Use <code class="highlighter-rouge">rt.print</code> as many times as you need to render dynamic content to a page:</p>
 
 <p>Another example:</p>
 
@@ -1552,10 +1631,29 @@ const cookieValue2 = rt.getCookie('my_cookie', { path: '/' });
 
 <h4 id="rtunsafeprint">rt.unsafePrint()</h4>
 
-<p>Does this or that.</p>
+<p><em>Type</em>: Method.</p>
 
-<p>Be cautious and know what you are doing when using this method!
-Avoid XSS attacks! If you need to print content that could be deemed unsafe (e.g. user input), use rt.print instead.</p>
+<p><em>Syntax</em>: <code class="highlighter-rouge">rt.unsafePrint(value:String)</code></p>
+
+<p><em>Returns</em>: Undefined.</p>
+
+<p>It prints to the response body.  A web browser will display <code class="highlighter-rouge">value</code> in the page it renders.</p>
+
+<p>Example:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rt.unsafePrint('Hello, world');
+</code></pre></div></div>
+
+<p>Use <code class="highlighter-rouge">rt.unsafePrint</code> as many times as you need to render dynamic content to a page.</p>
+
+<p>Unlike <code class="highlighter-rouge">rt.print</code>, <code class="highlighter-rouge">rt.unsafePrint</code> will not escape <code class="highlighter-rouge">value</code>, or alter it in any way.</p>
+
+<p>Know what you are doing when using this method.  Be cautious, avoid XSS attacks! If you need to print content that could be deemed unsafe, or expose your application to vulnerabilities (e.g. to print back user input), use <code class="highlighter-rouge">rt.print</code> instead.</p>
+
+<p>See also:</p>
+<ul>
+  <li><a href="#rtprint">rt.print</a></li>
+</ul>
 
 <h4 id="rtuploadedfiles">rt.uploadedFiles</h4>
 
@@ -1571,79 +1669,6 @@ Avoid XSS attacks! If you need to print content that could be deemed unsafe (e.g
   <li><a href="#callbacks">Callbacks</a></li>
 </ul>
 
-<h2 id="redirection">Redirection:</h2>
-
-<p>Yay.</p>
-
-<h2 id="callbacks">Callbacks</h2>
-
-<h2 id="rt-promises">RT Promises:</h2>
-<ul>
-  <li>rt.readFile()’s can be nested.</li>
-  <li>Chain it with .rtOnSuccess() with a callback with the response as a parameter:
- rt.readFile(path).rtOnSuccess((response) =&gt; { rt.print(response); });</li>
-  <li>Chain it with .rtOnError() with a callback with the error as a parameter:
- rt.readFile(path)
- .rtOnSuccess((response) =&gt; { rt.print(response); });
- .rtOnError((err) =&gt; { rt.print(err.code); });
-    <ul>
-      <li>No need to wrap the callback with a waitFor().</li>
-    </ul>
-  </li>
-  <li>rtOnSuccess() and rtOnError() can be omitted (but if omitted, and an error occurs, the server will issue a runtime error.)
-    <ul>
-      <li>rtOnSuccess() and rtOnError() can omit their parameter (that is, their callback.)  This is not advisable from an application development standpoint, but it’s allowed.</li>
-    </ul>
-  </li>
-</ul>
-
-<hr />
-
-<p>Miscellaneous (where to put in this file?):</p>
-
-<ul>
-  <li>
-    <p>Never trust user input!</p>
-  </li>
-  <li>
-    <p>The file name is case-sensitive (if the file system allows it).  A file will be considered JSCP only if its extension is lower case (that is, .jscp is valid, but .JSCP is not.)  Same with JSCM.</p>
-  </li>
-  <li>
-    <p>Sanitization</p>
-    <ul>
-      <li>See symbolsToSanitize in code.</li>
-    </ul>
-  </li>
-</ul>
-
-<hr />
-<h2 id="logging-1">Logging</h2>
-
-<p>here we talk about logging</p>
-<ul>
-  <li>What kind of data is logged.</li>
-</ul>
-
-<h3 id="log-file-compression-and-rotation">Log file compression and rotation</h3>
-
-<ul>
-  <li>If files, how the files are created and rotated (if not covered in the configuration files.)</li>
-</ul>
-
-<h2 id="httpsssl-configuration">HTTPS/SSL configuration</h2>
-
-<p>here we talk about configuring SSL.</p>
-
-<h2 id="jscvendor-jscause-vendor-directory">jscvendor: JSCause vendor directory</h2>
-
-<p>In a typical installation workflow, all you need to get JSCause up and running is to download the zip file, unzip it and run it.  No need to run an <code class="highlighter-rouge">npm install</code> command, or generate some usually big <code class="highlighter-rouge">node_modules/</code> directory that requires maintaining.</p>
-
-<p>Of course, if you prefer to install via <code class="highlighter-rouge">npm</code>, <a href="/download.html">you can still do so</a>.</p>
-
-<h2 id="symbolic-links-in-configuration-and-websites">Symbolic links in configuration and websites</h2>
-
-<p>Here we’ll talk about how to handle symoblic links.</p>
-
 <h2 id="troubleshooting-jscause">Troubleshooting JSCause</h2>
 
 <p>Troubleshooting here.</p>
@@ -1651,7 +1676,6 @@ Avoid XSS attacks! If you need to print content that could be deemed unsafe (e.g
 <h2 id="more-resources">More resources</h2>
 
 <p>Where to find more information about JSCause?</p>
-
 
       </div>
       <div class="topmenu">
