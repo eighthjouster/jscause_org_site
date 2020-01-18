@@ -363,7 +363,7 @@
 
 <p>The valid values are <code class="highlighter-rouge">true</code> and <code class="highlighter-rouge">false</code>.</p>
 
-<p>If <code class="highlighter-rouge">true</code>, POST requests and uploads are accepted.  If <code class="highlighter-rouge">false</code>, the server will respond with an HTTP 403 (forbidden) error.</p>
+<p>If <code class="highlighter-rouge">true</code>, POST requests and uploads are accepted.  If <code class="highlighter-rouge">false</code>, the server will attempt to respond with an HTTP 403 (forbidden) error.  At the same time as the response attempt, it will certainly and immediately close the connection.</p>
 
 <p><strong><em>maxPayloadSizeBytes:</em></strong></p>
 
@@ -372,9 +372,9 @@
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"maxPayloadSizeBytes": 1024
 </code></pre></div></div>
 
-<p>If a payload size exceeds the amount specified in <code class="highlighter-rouge">maxPayloadSizeBytes</code>, JSCause will respond with an HTTP 413 (payload too large) error.</p>
+<p>If a payload size exceeds the amount specified in <code class="highlighter-rouge">maxPayloadSizeBytes</code>, JSCause will attempt to respond with an HTTP 413 (payload too large) error.  At the same time as the response attempt, it will certainly and immediately close the connection.  If this is not desired, it is advised that an upper limit is set and handled within the application.  Also, the application could warn the visitor beforehand.</p>
 
-<p>If <code class="highlighter-rouge">maxPayloadSizeBytes</code> is 0, then JSCause assumes no payload size limit.</p>
+<p>If <code class="highlighter-rouge">maxPayloadSizeBytes</code> is 0, then JSCause assumes no payload size limit (use this with caution.)  If it’s less than 0, JSCause will treat is as if <code class="highlighter-rouge">canUpload</code> is <code class="highlighter-rouge">false</code>.</p>
 
 <p><strong><em>jscpExtensionRequired:</em></strong></p>
 
@@ -442,9 +442,11 @@
 
 <p>Make sure that this directory is writeable by JSCause.</p>
 
-<p>The path can be absolute (e.g. <code class="highlighter-rouge">/home/user_name/server_data/my_site/workbench</code>) or relative (e.g. <code class="highlighter-rouge">./workbench</code>).  If relative, it will be relative to the site’s <code class="highlighter-rouge">rootDirectoryName</code>.</p>
+<p>The path MUST be relative (e.g. <code class="highlighter-rouge">./workbench</code>).  It will be relative to the site’s <code class="highlighter-rouge">rootDirectoryName</code>.</p>
 
 <p>For example:  if JSCause is installed in <code class="highlighter-rouge">/home/user_name/jscause/</code>, <code class="highlighter-rouge">rootDirectoryName</code> is <code class="highlighter-rouge">mysite</code>, and <code class="highlighter-rouge">tempWorkDirectory</code> is <code class="highlighter-rouge">./workbench</code>, then the latter will be located at <code class="highlighter-rouge">/home/user_name/jscause/sites/mysite/workbench</code>.</p>
+
+<p><code class="highlighter-rouge">rootDirectoryName</code> must be valid if <code class="highlighter-rouge">canUpload</code> is <code class="highlighter-rouge">true</code>.</p>
 
 <p><strong><em>mimeTypes:</em></strong></p>
 
@@ -1353,10 +1355,13 @@ console.log(rt.getCookie('my_cookie'), { decodeURIValue: false }); // --&gt; Ret
 
 <p>Then <code class="highlighter-rouge">postParams['some_data']</code> will contain the following array <code class="highlighter-rouge">['a', 'b', 'c']</code>.</p>
 
+<p>If the request contains file uploads, they’ll be available via <a href="#rtuploadedfiles">rt.uploadedFiles</a>.</p>
+
 <p>See also:</p>
 <ul>
   <li><a href="#rtgetparams">rt.getParams</a></li>
   <li><a href="#rtadditiona">rt.additional</a></li>
+  <li><a href="#rtuploadedfiles">rt.uploadedFiles</a></li>
 </ul>
 
 <h4 id="rtprint">rt.print()</h4>
@@ -1657,7 +1662,57 @@ const cookieValue2 = rt.getCookie('my_cookie', { path: '/' });
 
 <h4 id="rtuploadedfiles">rt.uploadedFiles</h4>
 
-<p>Does this or that.</p>
+<p><em>Type</em>: Object.</p>
+
+<p>This is an object containing the client request’s POST multipart form-encoded file uploads.</p>
+
+<p>Each form file element’s name is represented as a key is <code class="highlighter-rouge">rt.uploadedFiles</code>.</p>
+
+<p>For example, given the following form:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;form method="post" enctype="multipart/form-data"&gt;
+  &lt;input name="myFile" type="file" value="" /&gt;
+  &lt;input type="submit" name="uploadIt" value="Upload" /&gt;
+&lt;/form&gt;
+</code></pre></div></div>
+
+<p>The uploaded file would be available via <code class="highlighter-rouge">rt.uploadedFiles['myFile']</code>:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rt.print(`The uploaded file's name is: ${rt.uploadedFiles['myFile']}`);
+</code></pre></div></div>
+
+<p>Each value in <code class="highlighter-rouge">rt.uploadedFiles</code> is either an object containing the file’s information, or an array of files, if the form accepts multiple files per field.</p>
+
+<p>Examples:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  const oneFileName = rt.uploadedFiles['myFile'].name;
+  const anotherFileName = rt.uploadedFiles['multipleFileField'][0].name;
+  const yetAnotherFileName = rt.uploadedFiles['multipleFileField'][1].name;
+</code></pre></div></div>
+
+<p>A file object contains:</p>
+
+<ul>
+  <li><code class="highlighter-rouge">name</code>:  The file’s name.  The name has been sanitized to avoid common XSS attacks.  The sanitization is based on the <code class="highlighter-rouge">sanitize-filename</code> NPM package.</li>
+  <li><code class="highlighter-rouge">unsafeName</code>:  The file’s name without sanitization.  Use with caution.</li>
+  <li><code class="highlighter-rouge">path</code>:  The file’s location in the filesystem after it has been uploaded.  This path is temporary (see below.)</li>
+  <li><code class="highlighter-rouge">size</code>:  The file’s size in bytes.</li>
+  <li><code class="highlighter-rouge">type</code>:  The file’s MIME type.</li>
+  <li><code class="highlighter-rouge">lastModifiedDate</code>:  the file’s last modified date in the form of a Date object.</li>
+</ul>
+
+<p>The file’s <code class="highlighter-rouge">path</code> refers to a temporary location (specified by the <code class="highlighter-rouge">tempWorkDirectory</code> configuration value) and random file name (assigned by JSCause).  This random file name differs from the file name specified by the client during uploading, and thus is different from <code class="highlighter-rouge">.name</code> and <code class="highlighter-rouge">.unsafeName</code>.</p>
+
+<p>If the application needs to preserve the uploaded files, it must either move it or copy to a different location.  Once the script is done (and all the <code class="highlighter-rouge">rt.waitFor()</code> callbacks completed), the files will be deleted from their temporary location.  The most performant way to preserve the files would be to move them asynchronously (in combination with <code class="highlighter-rouge">rt.waitFor()</code>, if needed.)</p>
+
+<p>See also:</p>
+<ul>
+  <li><a href="#rtreadfile">rt.readFile</a></li>
+  <li><a href="#rtmovefile">rt.moveFile</a></li>
+  <li><a href="#rtcopyfile">rt.copyFile</a></li>
+  <li><a href="#rtpostparams">rt.postParams</a></li>
+  <li><a href="#rtrequestmethod">rt.requestMethod</a></li>
+  <li><a href="#rtcontenttype">rt.contentType</a></li>
+</ul>
 
 <h4 id="rtwaitfor">rt.waitFor()</h4>
 
