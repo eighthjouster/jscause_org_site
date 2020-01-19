@@ -57,6 +57,8 @@
       <div class="content">
           <p>(TO-DO: Address all the TO-DO’s before publishing)</p>
 
+<p>(And put an index here?)</p>
+
 <h2 id="what-is-jscause">What is JSCause?</h2>
 
 <p>JSCause is a web framework and engine built on top of NodeJS which can be used to create simple websites.  Or complex ones, if you so desire.</p>
@@ -817,8 +819,7 @@ rt.print('Hello, Javascript');
 
 <p>Let’s create a <code class="highlighter-rouge">sum.jscm</code> module file with the following contents:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>module.exports =
-{
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>module.exports = {
   addTwo(a, b)
   {
     return a + b;
@@ -847,8 +848,7 @@ rt.print(sumModule.numberFive);
 
 <p>Consider this module:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>module.exports =
-{
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>module.exports = {
   twoSum(a, b)
   {
     rt.print(a,b);
@@ -876,8 +876,7 @@ Thu, 12 Dec 2019 05:05:26 GMT - example.com - GET: / - 500
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>module.exports = function(rt)
 {
   return {
-    twoSum(a, b)
-    {
+    twoSum(a, b) {
       rt.print(a,b);
     }
   };
@@ -1716,11 +1715,68 @@ const cookieValue2 = rt.getCookie('my_cookie', { path: '/' });
 
 <h4 id="rtwaitfor">rt.waitFor()</h4>
 
-<p>Does this or that.</p>
+<p><em>Type</em>: Method.</p>
+
+<p><em>Syntax</em>: <code class="highlighter-rouge">rt.waitFor(callback:Function)</code></p>
+
+<p><em>Returns</em>: A callback function.</p>
+
+<p>It will signal JSCause that it must wait for <code class="highlighter-rouge">callback</code> to complete before sending a response back to the web client.  <code class="highlighter-rouge">rt.waitFor()</code> must usually be used in any circumstance in which a callback is expected.  For example, with <code class="highlighter-rouge">setTimeout()</code>.</p>
+
+<p>Example:</p>
+
+<p>Instead of doing this:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  setTimeout(() =&gt; { console.log('Send response after 2 seconds.'); }, 2000);
+</code></pre></div></div>
+
+<p>Do:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  setTimeout(rt.waitFor(() =&gt; { console.log('Send response after 2 seconds.'); }), 2000);
+</code></pre></div></div>
+
+<p>If a callback is not enclosed with <code class="highlighter-rouge">rt.waitFor()</code>, JSCause will not wait for it to complete, which may be undesirable if its operation is needed to return a correct response back to the web client.</p>
+
+<p><code class="highlighter-rouge">rt.waitFor()</code> will correctly rely the arguments it receives to its callback parameter:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  // Assuming that someAsyncOperation() requires a callback handling a "response" parameter.
+  someAsyncOperation(rt.waitFor((response) =&gt; { console.log(`The response is: ${response}`); }));
+</code></pre></div></div>
+
+<p><code class="highlighter-rouge">rt.waitFor()</code> can be nested.  For example:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  setTimeout(rt.waitFor(() =&gt; {
+    console.log('2 seconds have passed.  Let\'s wait for 2 more seconds.');
+    setTimeout(rt.waitFor(() =&gt; {
+      console.log('Send response after 4 seconds.');
+    }), 2000);
+  }), 2000);
+</code></pre></div></div>
+
+<p><code class="highlighter-rouge">rt</code> methods expecting a callback, such as file operations, must not use <code class="highlighter-rouge">rt.waitFor()</code>:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// This is incorrect:
+rt.readFile('my_source.txt', 'utf-8')
+  .rtOnSuccess(rt.waitFor(() =&gt; { rt.print('File read successfully!'); }))
+
+// This is correct:
+rt.readFile('my_source.txt', 'utf-8')
+  .rtOnSuccess(() =&gt; { rt.print('File read successfully!'); })
+</code></pre></div></div>
+
+<p>If a runtime exception happens while a callback is still pending, JSCause will wait until the blocking operation completes.  When it does, it won’t execute the code inside the callback:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  const timeInSeconds = 10;
+  setTimeout(() =&gt; {
+    console.log('JSCause will wait ${timeInSeconds} seconds for the setTimeout() to complete.');
+    console.log('However, if a runtime error happened in that period, these two console outputs will never occur');
+  }, timeInSeconds * 1000);
+</code></pre></div></div>
+
+<p>Remember that the <a href="#requesttimeoutsecs"><code class="highlighter-rouge">requestTimeoutSecs</code></a> (<code class="highlighter-rouge">requesttimeoutsecs</code>) server config value dictates how many seconds the JSCause will wait for a request to complete.</p>
 
 <p>See also:</p>
 <ul>
   <li><a href="#rtrunafter">rt.runAfter</a></li>
+  <li><a href="#requesttimeoutsecs">requestTimeoutSecs</a></li>
   <li><a href="#callbacks">Callbacks</a></li>
 </ul>
 
