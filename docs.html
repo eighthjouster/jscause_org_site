@@ -57,7 +57,7 @@
       <div class="content">
           <p>(TO-DO: Address all the TO-DO’s before publishing)</p>
 
-<p>(And put an index here?)</p>
+<p>(TO-DO:And put an index here?)</p>
 
 <h2 id="what-is-jscause">What is JSCause?</h2>
 
@@ -868,7 +868,7 @@ rt.print(sumModule.numberFive);
 ReferenceError: rt is not defined
     at Object.addTwo (/jscause_path/sites/mysite/website/sum.jscm:5:7)
     at ... [etc]
-Thu, 12 Dec 2019 05:05:26 GMT - example.com - GET: / - 500
+Fri, 17 Jan 2020 05:05:26 GMT - example.com - GET: / - 500
 </code></pre></div></div>
 
 <p>To overcome that, we can pass the <code class="highlighter-rouge">rt</code> object to the module as a function parameter:</p>
@@ -892,11 +892,77 @@ Thu, 12 Dec 2019 05:05:26 GMT - example.com - GET: / - 500
 
 <h2 id="redirection">Redirection:</h2>
 
-<p>Yay.</p>
+<p>To redirect to a different URL, use <code class="highlighter-rouge">[rt.redirectTo()](#rtredirectto)</code>.</p>
+
+<p>Example:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rt.redirectTo('https://www.example.com', 5); // Redirect after five seconds.
+</code></pre></div></div>
+
+<p>The redirection will happen right after JSCause executes all the code in the current JSCP file. That’s when the content is delivered to the web browser, including the redirection instruction.</p>
+
+<p>If, later in your code, it is determined that you no longer need to redirect, you can use <code class="highlighter-rouge">[rt.resetRedirectTo()](#rtresetredirectto)</code>.</p>
+
+<p>Example:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rt.redirectTo('https://www.example.com');
+
+const coinFlipIsTails = (Math.random() &gt;= 0.5);
+if (coinFlipIsTails) {
+  rt.resetRedirectTo();
+}
+</code></pre></div></div>
 
 <h2 id="callbacks">Callbacks</h2>
 
+<p>If your code invokes callbacks, chances are they won’t be run in time before JSCause delivers the response to the web client.</p>
+
+<p>Take this example:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>function andThree() {
+  rt.print('And three!');
+}
+
+rt.print('One! ');
+setTimeout(andThree, 10);
+rt.print('Two! ');
+</code></pre></div></div>
+
+<p>When making this request, the browser will display the following:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>One! Two!
+</code></pre></div></div>
+
+<p>We were expecting to see “One! Two! And three!”.  The <code class="highlighter-rouge">andThree()</code> callback _ did run_, but too late - JSCause had already sent the response to the browser.</p>
+
+<p>We must signal JSCause that it must wait for the callback to complete.  We do that by enclosing it with <a href="#rtwaitfor">rt.waitFor</a>:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>function andThree() {
+  rt.print('And three!');
+}
+
+rt.print('One! ');
+setTimeout(rt.waitFor(andThree), 10);
+rt.print('Two! ');
+</code></pre></div></div>
+
+<p>When making this request, the browser will correctly display the following:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>One! Two! And three!
+</code></pre></div></div>
+
+<p>Notice that <code class="highlighter-rouge">rt</code> methods, such as <code class="highlighter-rouge">rtOnSuccess()</code>, do <em>not</em> require their callbacks to be enclosed with <code class="highlighter-rouge">rt.waitFor()</code>:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>function reportSuccess() {
+  rt.print('File read successfully!');
+}
+rt.readFile('my_source.txt', 'utf-8')
+  .rtOnSuccess(reportSuccess); // This is correct.  No need for rt.waitFor() here.
+</code></pre></div></div>
+
 <h2 id="rt-promises">RT Promises:</h2>
+
+<p>(TO-DO:)</p>
 <ul>
   <li>rt.readFile()’s can be nested.</li>
   <li>Chain it with .rtOnSuccess() with a callback with the response as a parameter:
@@ -918,7 +984,8 @@ Thu, 12 Dec 2019 05:05:26 GMT - example.com - GET: / - 500
 
 <hr />
 
-<p>Miscellaneous (where to put in this file?):</p>
+<p>(TO-DO:)
+Miscellaneous (where to put in this file?):</p>
 
 <ul>
   <li>
@@ -936,22 +1003,26 @@ Thu, 12 Dec 2019 05:05:26 GMT - example.com - GET: / - 500
 </ul>
 
 <hr />
+
 <h2 id="logging-1">Logging</h2>
 
-<p>here we talk about logging</p>
+<p>(TO-DO:)
+here we talk about logging</p>
 <ul>
   <li>What kind of data is logged.</li>
 </ul>
 
 <h3 id="log-file-compression-and-rotation">Log file compression and rotation</h3>
 
+<p>(TO-DO:)</p>
 <ul>
   <li>If files, how the files are created and rotated (if not covered in the configuration files.)</li>
 </ul>
 
 <h2 id="httpsssl-configuration">HTTPS/SSL configuration</h2>
 
-<p>here we talk about configuring SSL.</p>
+<p>(TO-DO:)
+here we talk about configuring SSL.</p>
 
 <h2 id="jscvendor-jscause-vendor-directory">jscvendor: JSCause vendor directory</h2>
 
@@ -961,7 +1032,8 @@ Thu, 12 Dec 2019 05:05:26 GMT - example.com - GET: / - 500
 
 <h2 id="symbolic-links-in-configuration-and-websites">Symbolic links in configuration and websites</h2>
 
-<p>Here we’ll talk about how to handle symoblic links.</p>
+<p>(TO-DO:)
+Here we’ll talk about how to handle symoblic links.</p>
 
 <h3 id="the-rt-runtime-object-reference">The rt runtime object reference</h3>
 
@@ -1236,7 +1308,7 @@ console.log(rt.getCookie('my_cookie'), { decodeURIValue: false }); // --&gt; Ret
 
 <p>It sets a response’s HTTP header entry.</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rt.header('Last-Modified', 'Fri, 20 Dec 2019 12:00:00 GMT');
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rt.header('Last-Modified', 'Fri, 20 Dec 2020 12:00:00 GMT');
 </code></pre></div></div>
 
 <p>You can set up multiple header entries if you provide an object as a parameter:</p>
@@ -1251,7 +1323,7 @@ console.log(rt.getCookie('my_cookie'), { decodeURIValue: false }); // --&gt; Ret
 <p>For example:</p>
 
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rt.header({
-  'Last-Modified': 'Fri, 20 Dec 2019 12:00:00 GMT',
+  'Last-Modified': 'Fri, 20 Dec 2020 12:00:00 GMT',
   'Content-Language': 'en',
   'X-App-Greeting': 'hello!'
 });
@@ -1472,7 +1544,7 @@ For instance, the following:</p>
 
 <p><code class="highlighter-rouge">delayInSeconds</code> is optional, and will instruct the web client to wait that many seconds before performing the actual redirection.  This time is in addition to the time the JSCP code is run, as previously stated.  Its value must be a number.  Otherwise, it will be ignored.</p>
 
-<p>JSCause typically sets the <code class="highlighter-rouge">Location</code> HTTP header to do the redirect.  If delayInSeconds is provided and is valid, the <code class="highlighter-rouge">Refresh</code> header will be used instead.  This is not a standard header, although most modern browsers support it.</p>
+<p>JSCause sets an HTTP 302 (found) status code to perform the redirect.  It also typically sets the <code class="highlighter-rouge">Location</code> HTTP header.  If delayInSeconds is provided and is valid, the <code class="highlighter-rouge">Refresh</code> header will be used instead.  This is not a standard header, although most modern browsers support it.</p>
 
 <p>If more than one <code class="highlighter-rouge">rt.redirectTo</code> call are made, only the last one will be taken into account.</p>
 
@@ -1755,11 +1827,11 @@ const cookieValue2 = rt.getCookie('my_cookie', { path: '/' });
 
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// This is incorrect:
 rt.readFile('my_source.txt', 'utf-8')
-  .rtOnSuccess(rt.waitFor(() =&gt; { rt.print('File read successfully!'); }))
+  .rtOnSuccess(rt.waitFor(() =&gt; { rt.print('File read successfully!'); }));
 
 // This is correct:
 rt.readFile('my_source.txt', 'utf-8')
-  .rtOnSuccess(() =&gt; { rt.print('File read successfully!'); })
+  .rtOnSuccess(() =&gt; { rt.print('File read successfully!'); });
 </code></pre></div></div>
 
 <p>If a runtime exception happens while a callback is still pending, JSCause will wait until the blocking operation completes.  When it does, it won’t execute the code inside the callback:</p>
@@ -1782,11 +1854,15 @@ rt.readFile('my_source.txt', 'utf-8')
 
 <h2 id="troubleshooting-jscause">Troubleshooting JSCause</h2>
 
-<p>Troubleshooting here.</p>
+<p>(TO-DO:)
+Troubleshooting here.</p>
 
 <h2 id="more-resources">More resources</h2>
 
-<p>Where to find more information about JSCause?</p>
+<p>(TO-DO:)
+Where to find more information about JSCause?</p>
+
+<p>Give credit here.</p>
 
       </div>
       <div class="topmenu">
@@ -1828,7 +1904,7 @@ rt.readFile('my_source.txt', 'utf-8')
 
       </div>
       <footer>
-          &copy; 2019 EighthJouster
+          &copy; 2020 EighthJouster
       </footer>
   </body>
 </html>
