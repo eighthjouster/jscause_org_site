@@ -892,7 +892,7 @@ Fri, 17 Jan 2020 05:05:26 GMT - example.com - GET: / - 500
 
 <h2 id="redirection">Redirection:</h2>
 
-<p>To redirect to a different URL, use <code class="highlighter-rouge">[rt.redirectTo()](#rtredirectto)</code>.</p>
+<p>To redirect to a different URL, use <a href="#rtredirectto"><code class="highlighter-rouge">rt.redirectTo()</code></a>.</p>
 
 <p>Example:</p>
 
@@ -901,7 +901,7 @@ Fri, 17 Jan 2020 05:05:26 GMT - example.com - GET: / - 500
 
 <p>The redirection will happen right after JSCause executes all the code in the current JSCP file. That’s when the content is delivered to the web browser, including the redirection instruction.</p>
 
-<p>If, later in your code, it is determined that you no longer need to redirect, you can use <code class="highlighter-rouge">[rt.resetRedirectTo()](#rtresetredirectto)</code>.</p>
+<p>If, later in your code, it is determined that you no longer need to redirect, you can use <a href="#rtresetredirectto"><code class="highlighter-rouge">rt.resetRedirectTo()</code></a>.</p>
 
 <p>Example:</p>
 
@@ -935,7 +935,7 @@ rt.print('Two! ');
 
 <p>We were expecting to see “One! Two! And three!”.  The <code class="highlighter-rouge">andThree()</code> callback _ did run_, but too late - JSCause had already sent the response to the browser.</p>
 
-<p>We must signal JSCause that it must wait for the callback to complete.  We do that by enclosing it with <a href="#rtwaitfor">rt.waitFor</a>:</p>
+<p>We must signal JSCause that it must wait for the callback to complete.  We do that by enclosing it with <a href="#rtwaitfor"><code class="highlighter-rouge">rt.waitFor()</code></a>:</p>
 
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>function andThree() {
   rt.print('And three!');
@@ -960,21 +960,49 @@ rt.readFile('my_source.txt', 'utf-8')
   .rtOnSuccess(reportSuccess); // This is correct.  No need for rt.waitFor() here.
 </code></pre></div></div>
 
+<p>You can read more about this behavior in the next section about <a href="#rt-promises">RT Promises</a>.</p>
+
 <h2 id="rt-promises">RT Promises:</h2>
 
-<p>(TO-DO:)</p>
+<p>RT Promises refers to the mechanism some <code class="highlighter-rouge">rt</code> methods use to deal with the asynchronous nature of their operations.  They seek to emulate Javascript’s Promises.</p>
+
+<p>As an example, let’s assume that <code class="highlighter-rouge">promisedReadFile()</code> reads a file and returns a Javascript Promise.  In that case, we can write the following code:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>promisedReadFile('some_file.txt')
+  .then((response) =&gt; {
+    console.log('File reading succeeded:');
+    console.log(response);
+  })
+  .catch((err) =&gt; {
+    console.log('File reading failed:');
+    console.log(err);
+  });
+</code></pre></div></div>
+
+<p>The JSCause way to do the above would be:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rt.readFile('some_file.txt')
+  .rtOnSuccess((response) =&gt; {
+    console.log('File reading succeeded:');
+    console.log(response);
+  })
+  .rtOnError((err) =&gt; {
+    console.log('File reading failed:');
+    console.log(err);
+  });
+</code></pre></div></div>
+
+<p>So, RT Promises, instead of expecting a <code class="highlighter-rouge">then()/catch()</code> chains, they expect <code class="highlighter-rouge">rtOnSuccess()/rtOnError()</code> chains.  But the major difference is that the callbacks are guaranteed to complete before JSCause sends a response to the web client.  That is, RT Promises do not need callbacks to be enclosed with <code class="highlighter-rouge">rt.waitFor()</code> - see the previous section about <a href="#callbacks">Callbacks</a>.</p>
+
+<p>(TO-DO:)
+(CONTINUE DEVELOPING THIS SECTION HERE.)</p>
 <ul>
-  <li>rt.readFile()’s can be nested.</li>
+  <li>rt.readFile()’s can be nested. (TO-DO: SHOULDN’T THIS BE PUT IN THE ACTUAL rt.readFile section?)</li>
   <li>Chain it with .rtOnSuccess() with a callback with the response as a parameter:
  rt.readFile(path).rtOnSuccess((response) =&gt; { rt.print(response); });</li>
   <li>Chain it with .rtOnError() with a callback with the error as a parameter:
  rt.readFile(path)
  .rtOnSuccess((response) =&gt; { rt.print(response); });
- .rtOnError((err) =&gt; { rt.print(err.code); });
-    <ul>
-      <li>No need to wrap the callback with a waitFor().</li>
-    </ul>
-  </li>
+ .rtOnError((err) =&gt; { rt.print(err.code); });</li>
   <li>rtOnSuccess() and rtOnError() can be omitted (but if omitted, and an error occurs, the server will issue a runtime error.)
     <ul>
       <li>rtOnSuccess() and rtOnError() can omit their parameter (that is, their callback.)  This is not advisable from an application development standpoint, but it’s allowed.</li>
