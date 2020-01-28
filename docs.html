@@ -670,6 +670,8 @@ Terminated.
 
 <p>JSCause will only run JSCP files only if they are located in a site’s <code class="highlighter-rouge">website</code> directory.  If you need to run files outside of <code class="highlighter-rouge">website</code>, use symlinks (use this feature with caution.)</p>
 
+<p><strong>Important</strong>: JSCP file names are case-sensitive (if the file system allows it.)  A file will be considered JSCP only if its extension is lower case (that is, <code class="highlighter-rouge">.jscp</code> is valid, but <code class="highlighter-rouge">.JSCP</code> is not.)</p>
+
 <h3 id="jscm-files">JSCM files</h3>
 
 <p>Files ending in <code class="highlighter-rouge">.jscm</code> are considered executable modules, which can be called by <code class="highlighter-rouge">.jscp</code> files.</p>
@@ -679,6 +681,8 @@ Terminated.
 <p><code class="highlighter-rouge">https://www.example.com/module.jscp --&gt; 404 error</code></p>
 
 <p>JSCause will only run JSCM files only if they are located in a site’s <code class="highlighter-rouge">website</code> directory.  If you need to run files outside of <code class="highlighter-rouge">website</code>, use symlinks (use this feature with caution.)</p>
+
+<p><strong>Important</strong>: Just like JSCP file names, JSCM file names are case-sensitive (if the file system allows it.)  A file will be considered JSCM only if its extension is lower case (that is, <code class="highlighter-rouge">.jscm</code> is valid, but <code class="highlighter-rouge">.JSCM</code> is not.)</p>
 
 <h3 id="index-files">Index files</h3>
 
@@ -964,9 +968,9 @@ rt.readFile('my_source.txt', 'utf-8')
 
 <h2 id="rt-promises">RT Promises:</h2>
 
-<p>RT Promises refers to the mechanism some <code class="highlighter-rouge">rt</code> methods use to deal with the asynchronous nature of their operations.  They seek to emulate Javascript’s Promises.</p>
+<p>RT Promises refers to the mechanism some <code class="highlighter-rouge">rt</code> methods use to deal with the asynchronous nature of their operations.  They seek to emulate Javascript’s Promises.  One important difference is that RT Promises will always involve two methods, <code class="highlighter-rouge">rtOnSuccess()</code> and <code class="highlighter-rouge">rtOnError()</code>.</p>
 
-<p>As an example, let’s assume that <code class="highlighter-rouge">promisedReadFile()</code> reads a file and returns a Javascript Promise.  In that case, we can write the following code:</p>
+<p>Here’s an example.  First, let’s use regular Javascript promises.  Let’s assume that <code class="highlighter-rouge">promisedReadFile()</code> reads a file and returns a Promise object.  In that case, we can write the following code:</p>
 
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>promisedReadFile('some_file.txt')
   .then((response) =&gt; {
@@ -991,46 +995,55 @@ rt.readFile('my_source.txt', 'utf-8')
   });
 </code></pre></div></div>
 
-<p>So, RT Promises, instead of expecting a <code class="highlighter-rouge">then()/catch()</code> chains, they expect <code class="highlighter-rouge">rtOnSuccess()/rtOnError()</code> chains.  But the major difference is that the callbacks are guaranteed to complete before JSCause sends a response to the web client.  That is, RT Promises do not need callbacks to be enclosed with <code class="highlighter-rouge">rt.waitFor()</code> - see the previous section about <a href="#callbacks">Callbacks</a>.</p>
+<p>As mentioned, RT Promises, instead of expecting a <code class="highlighter-rouge">then()/catch()</code> chains, they expect <code class="highlighter-rouge">rtOnSuccess()/rtOnError()</code> chains.  Apart from the name, the major distinction is that the callbacks are guaranteed to complete before JSCause sends a response to the web client.  That is, operations involving RT Promises do not need callbacks to be enclosed with <code class="highlighter-rouge">rt.waitFor()</code> - see the previous section about <a href="#callbacks">Callbacks</a>.</p>
 
-<p>(TO-DO:)
-(CONTINUE DEVELOPING THIS SECTION HERE.)</p>
-<ul>
-  <li>rt.readFile()’s can be nested. (TO-DO: SHOULDN’T THIS BE PUT IN THE ACTUAL rt.readFile section?)</li>
-  <li>Chain it with .rtOnSuccess() with a callback with the response as a parameter:
- rt.readFile(path).rtOnSuccess((response) =&gt; { rt.print(response); });</li>
-  <li>Chain it with .rtOnError() with a callback with the error as a parameter:
- rt.readFile(path)
- .rtOnSuccess((response) =&gt; { rt.print(response); });
- .rtOnError((err) =&gt; { rt.print(err.code); });</li>
-  <li>rtOnSuccess() and rtOnError() can be omitted (but if omitted, and an error occurs, the server will issue a runtime error.)
-    <ul>
-      <li>rtOnSuccess() and rtOnError() can omit their parameter (that is, their callback.)  This is not advisable from an application development standpoint, but it’s allowed.</li>
-    </ul>
-  </li>
-</ul>
-
-<hr />
-
-<p>(TO-DO:)
-Miscellaneous (where to put in this file?):</p>
+<p>Here is a list of JSCause methods that use RT Promises:</p>
 
 <ul>
-  <li>
-    <p>Never trust user input!</p>
-  </li>
-  <li>
-    <p>The file name is case-sensitive (if the file system allows it).  A file will be considered JSCP only if its extension is lower case (that is, .jscp is valid, but .JSCP is not.)  Same with JSCM.</p>
-  </li>
-  <li>
-    <p>Sanitization</p>
-    <ul>
-      <li>See symbolsToSanitize in code.</li>
-    </ul>
-  </li>
+  <li><a href="#rtcopyfile">rt.copyFile()</a></li>
+  <li><a href="#rtdeletefile">rt.deleteFile()</a></li>
+  <li><a href="#rtfileexists">rt.fileExists()</a></li>
+  <li><a href="#rtmovefile">rt.moveFile()</a></li>
+  <li><a href="#rtreadfile">rt.readFile()</a></li>
 </ul>
 
-<hr />
+<p>In summary:</p>
+
+<p>Chain any of the above calls with <code class="highlighter-rouge">.rtOnSuccess(callback)</code> to examine the result (or response).  <code class="highlighter-rouge">callback</code> has a parameter (<code class="highlighter-rouge">response</code>) with the result of the operation.</p>
+
+<p>Chain it with <code class="highlighter-rouge">.rtOnError(callback)</code> to handle any errors in the operation.  <code class="highlighter-rouge">callback</code> has a parameter (<code class="highlighter-rouge">err</code>) with the error in question.</p>
+
+<p>Notes:</p>
+
+<p>These types of operations can be nested.  For example:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rt.copyFile('my_file.txt', 'my_copied_file.txt')
+  .rtOnSuccess(() =&gt; {
+    console.log('File copying succeeded.  Let\'s read the copy.');
+    rt.readFile('my_copied_file.txt')
+      .rtOnSuccess((contents) =&gt; {
+        console.log('File reading succeeded!');
+        console.log(contents);
+      })
+      .rtOnError(() =&gt; {
+        console.log('File reading failed.');
+      });
+  })
+  .rtOnError((err) =&gt; {
+    console.log('File copying failed:');
+    console.log(err);
+  });
+</code></pre></div></div>
+
+<p>Both <code class="highlighter-rouge">rtOnSuccess()</code> and <code class="highlighter-rouge">rtOnError()</code> can be omitted.  But if any error occurs, the server will throw a runtime error:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  rt.copyFile('my_file.txt', 'my_copied_file.txt');
+  // The above operation is fine.
+  // However, if an error occurs, the web client will inform of
+  // an HTTP 500 (internal server error) error.
+</code></pre></div></div>
+
+<p>Both <code class="highlighter-rouge">rtOnSuccess()</code> and <code class="highlighter-rouge">rtOnError()</code> can omit their parameter, that is, their callback.  Although allowed, this is not advisable from an application development standpoint.  For example, you may want to handle any potential errors.</p>
 
 <h2 id="logging-1">Logging</h2>
 
@@ -1038,6 +1051,65 @@ Miscellaneous (where to put in this file?):</p>
 here we talk about logging</p>
 <ul>
   <li>What kind of data is logged.</li>
+  <li>Use the log config definition for more hints on what to document.</li>
+  <li>Document whatever is not documented below before deleting.
+    <ul>
+      <li>Site-wide:
+        <ul>
+          <li>Logging type: {
+  general: {
+    fileOutput: ‘enabled|disabled’, [enabled by default.]
+    directoryName: ‘’, [‘jscause/logs’ by default.]
+    consoleOutput: ‘enabled|disabled’ [enabled by default]
+  },
+  perSite: {
+    fileOutput: ‘enabled|disabled|per site’ [disabled by default.]
+    consoleOutput: ‘enabled|disabled|per site’ enabled by default. (per site = let the site configuration decide)
+  }</li>
+          <li>Per site:</li>
+          <li>Logging type:
+{
+  fileOutput: ‘enabled|disabled’, [disabled by default] [Might be overridden by site-wide config]
+  directoryName: ‘’, [‘website/logs’ by default.] [if either fileOutput above or site-wide fileOutput perSite config is enabled, you MUST provide a name here.]
+    - Remember:
+      - Test with paths that aren’t directories. - Done.
+      - Test with read-only directories. - Done.
+      - Test with symbolic links. - Done.
+  consoleOutput: ‘enabled|disabled’ enabled by default. [Might be overridden by site-wide config]
+}</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p>If there are reading/writing errors to log files, no further logging will take place until it’s time to rotate the files.  If console output is enabled, the server will emit warnings on file operation errors.</p>
+  </li>
+  <li>Overrides.</li>
+  <li>Site-wide allowances/prohibitions.</li>
+  <li>Mandatory values (e.g. logging output if site-wide mandates it.)</li>
+  <li>logging key in jscause.conf is optional, unlike “sites”.</li>
+  <li>Per-site: Even if file logging is disabled, if a file name/path is provided, it must be valid.
+    <ul>
+      <li>You can comment it out if you’d rather not provide one.  But logging MUST be disabled.</li>
+    </ul>
+  </li>
+  <li>General: A missing or empty directoryname will be assumed “logs”.  A logging directory must exist regardless of whether logging is enabled or disabled.</li>
+  <li>Compression of log files will happen four at a time.  The rest will be queued.
+    <ul>
+      <li>The process of determining log compressing on a specific site will happen only when there is something to log.  If there are uncompressed log files, and the site is never accessed, or nothing is logged, the files will remain uncompressed.</li>
+    </ul>
+  </li>
+  <li>Document: logFileSizeThreshold
+    <ul>
+      <li>
+        <p>general logging only.  perSite logging does not allow it.</p>
+      </li>
+      <li>Max size of uncompressed log files? (default: 1 MB).
+*- -1, -2, -3 for the same date. - Done.</li>
+      <li>Log files can be limited by size.  When the limit is reached, a new log file will be created, with identical name as the previous one, but with a numeric suffix (e.g. –1, –2, etc).  The previous file will be compressed.</li>
+      <li>If you move compressed log files to another location, and JSCause is writing to a suffixed file, then it will reset writing to a non-suffixed file.  This will cause log entries that will appear as out of sync with the files they’re in.  Worse, next time a move occurs, the newly created log file will overwrite the one previously existing in the destination.  To avoid this, your move procedure should leave all the compressed suffixed files associated with the current (non-compressed) log file.</li>
+    </ul>
+  </li>
 </ul>
 
 <h3 id="log-file-compression-and-rotation">Log file compression and rotation</h3>
@@ -1062,6 +1134,17 @@ here we talk about configuring SSL.</p>
 
 <p>(TO-DO:)
 Here we’ll talk about how to handle symoblic links.</p>
+
+<h2 id="terminating-an-jscause-instance">Terminating an JSCause instance</h2>
+
+<p>(TO-DO:)
+Documentation: Ctrl+C or SIGINT will terminate the server gracefully:</p>
+<ul>
+  <li>It will close the log files.</li>
+  <li>If there are any log files being compressed at that very moment, it will wait until the operation completes.  Any pending log files to compress will be ignored after that.</li>
+  <li>A second Ctrl+C during cleanup will let the user know that cleanup is still happening.</li>
+  <li>A third Ctrl+C will terminate the program immediately, even if cleanup was happening.</li>
+</ul>
 
 <h3 id="the-rt-runtime-object-reference">The rt runtime object reference</h3>
 
@@ -1752,7 +1835,7 @@ const cookieValue2 = rt.getCookie('my_cookie', { path: '/' });
 
 <p>Unlike <code class="highlighter-rouge">rt.print</code>, <code class="highlighter-rouge">rt.unsafePrint</code> will not escape <code class="highlighter-rouge">value</code>, or alter it in any way.</p>
 
-<p>Know what you are doing when using this method.  Be cautious, avoid XSS attacks! If you need to print content that could be deemed unsafe, or expose your application to vulnerabilities (e.g. to print back user input), use <code class="highlighter-rouge">rt.print</code> instead.</p>
+<p>Be sure to know all the risks, and that you know what you are doing when using this method.  Be cautious; avoid XSS attacks; never trust data coming from outside, like user input! If you need to print content that could be deemed unsafe, or expose your application to vulnerabilities (e.g. to print back user input), use <code class="highlighter-rouge">rt.print</code> instead.</p>
 
 <p>See also:</p>
 <ul>
