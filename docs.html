@@ -213,7 +213,7 @@
 }
 </code></pre></div></div>
 
-<p>To learn more about what type of data JSCause logs, please check out the <a href="#logging">logging section</a>.</p>
+<p>To learn more about what type of data JSCause logs, please check out the <a href="#logging-features">Logging Features</a> section.</p>
 
 <p><strong><em>general</em></strong></p>
 
@@ -1045,11 +1045,76 @@ rt.readFile('my_source.txt', 'utf-8')
 
 <p>Both <code class="highlighter-rouge">rtOnSuccess()</code> and <code class="highlighter-rouge">rtOnError()</code> can omit their parameter, that is, their callback.  Although allowed, this is not advisable from an application development standpoint.  For example, you may want to handle any potential errors.</p>
 
-<h2 id="logging-1">Logging</h2>
+<h2 id="logging-features">Logging features</h2>
+
+<p>When JSCause is running, it can log the activity related to requests, application messages and errors to the terminal and/or to files for archiving, later review or analysis.</p>
+
+<p>Notice:  Any console output from the actual user application (e.g. <code class="highlighter-rouge">console.log()</code> from <code class="highlighter-rouge">index.jscp</code>) will never be captured in the log files, and will always be printed in the terminal.</p>
+
+<p>JSCause can log activity in a global way, or per site.</p>
+
+<p>The <a href="#logging">configuration of global logging</a> resides in the <code class="highlighter-rouge">jscause.conf</code> file.</p>
+
+<p>When JSCause receives a request, it will generate a log entry indicating the time of the request, the type (e.g. GET or POST), the path requested, and the type of HTTP response generated and to be sent when the request completes (e.g. 200 OK, 404, etc.)</p>
+
+<p>Here is a sample:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Thu, 12 Dec 2019 05:00:01 GMT - example.com - GET: /some_folder - 200
+</code></pre></div></div>
+
+<p>Depending on the configuration, said entry will be added to a file store in the directory specified by <code class="highlighter-rouge">directoryName</code> in the <code class="highlighter-rouge">jscause.conf</code> file, and only if <code class="highlighter-rouge">fileOutput</code> is set to <code class="highlighter-rouge">enabled</code>.  Read more about the characteristics of this file in the following section about <a href="#log-file-compression-and-rotation">file compression and rotation</a>.</p>
+
+<p>If <code class="highlighter-rouge">consoleOutput</code> is also <code class="highlighter-rouge">enabled</code>, the entry will be printed to the terminal window JSCause is running in.</p>
+
+<p>When configuring logging, you must specify what operations occur globally, and what operations occur per site.</p>
+
+<p>Operations occurring globally are configured inside the <code class="highlighter-rouge">logging</code> / <code class="highlighter-rouge">general</code> section of the <code class="highlighter-rouge">jscause.conf</code> file:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"logging": {
+  "general": {
+    // Attributes pertaining application-wide logging.
+  }
+}
+</code></pre></div></div>
+
+<p>Here you can specify <code class="highlighter-rouge">consoleOutput</code> to <code class="highlighter-rouge">enabled</code> if you want the logging to appear in the terminal, or <code class="highlighter-rouge">disabled</code> if not.  <code class="highlighter-rouge">fileOutput</code> is the same as <code class="highlighter-rouge">consoleOutput</code>, but with all the logging being saved to a directory specified by <code class="highlighter-rouge">directoryName</code>.  Here’s an example configuration:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  "logging": {
+    "general": {
+      "directoryName": "./logs",
+      "fileOutput": "enabled",
+      "consoleOutput": "enabled"
+    }
+  }
+</code></pre></div></div>
+
+<h3 id="per-site-logging">Per site logging</h3>
+
+<p>You can also dictate whether individual sites must do logging or not.  This is done under the <code class="highlighter-rouge">logging</code> / <code class="highlighter-rouge">perSite</code> section.  It’s similar to <code class="highlighter-rouge">general</code>, except that no <code class="highlighter-rouge">directoryName</code> can be defined here (this is done in each site’s individual <code class="highlighter-rouge">site.json</code> configuration file.)  Also, both <code class="highlighter-rouge">fileOutput</code> and <code class="highlighter-rouge">consoleOutput</code> allow a third option, <code class="highlighter-rouge">per site</code>, to indicate that each site will determine wheteher to log or not (again, in their corresponding <code class="highlighter-rouge">site.json</code> file.)</p>
+
+<p>Here’s a typical configuration:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  "logging": {
+    "general": {
+      // General options here.
+    },
+    "perSite": {
+      "fileOutput": "enabled", // Every site must log to a file.
+      "consoleOutput": "per site"
+    },
+  }
+</code></pre></div></div>
 
 <p>(TO-DO:)
-here we talk about logging</p>
+Talk a bit about the site’s configuration side of things.</p>
+
+<h3 id="log-file-compression-and-rotation">Log file compression and rotation</h3>
+
+<p>(TO-DO:)</p>
 <ul>
+  <li>
+    <p>If files, how the files are created and rotated (if not covered in the configuration files.)</p>
+  </li>
   <li>What kind of data is logged.</li>
   <li>Use the log config definition for more hints on what to document.</li>
   <li>Document whatever is not documented below before deleting.
@@ -1071,10 +1136,6 @@ here we talk about logging</p>
 {
   fileOutput: ‘enabled|disabled’, [disabled by default] [Might be overridden by site-wide config]
   directoryName: ‘’, [‘website/logs’ by default.] [if either fileOutput above or site-wide fileOutput perSite config is enabled, you MUST provide a name here.]
-    - Remember:
-      - Test with paths that aren’t directories. - Done.
-      - Test with read-only directories. - Done.
-      - Test with symbolic links. - Done.
   consoleOutput: ‘enabled|disabled’ enabled by default. [Might be overridden by site-wide config]
 }</li>
         </ul>
@@ -1084,9 +1145,6 @@ here we talk about logging</p>
   <li>
     <p>If there are reading/writing errors to log files, no further logging will take place until it’s time to rotate the files.  If console output is enabled, the server will emit warnings on file operation errors.</p>
   </li>
-  <li>Overrides.</li>
-  <li>Site-wide allowances/prohibitions.</li>
-  <li>Mandatory values (e.g. logging output if site-wide mandates it.)</li>
   <li>logging key in jscause.conf is optional, unlike “sites”.</li>
   <li>Per-site: Even if file logging is disabled, if a file name/path is provided, it must be valid.
     <ul>
@@ -1110,13 +1168,6 @@ here we talk about logging</p>
       <li>If you move compressed log files to another location, and JSCause is writing to a suffixed file, then it will reset writing to a non-suffixed file.  This will cause log entries that will appear as out of sync with the files they’re in.  Worse, next time a move occurs, the newly created log file will overwrite the one previously existing in the destination.  To avoid this, your move procedure should leave all the compressed suffixed files associated with the current (non-compressed) log file.</li>
     </ul>
   </li>
-</ul>
-
-<h3 id="log-file-compression-and-rotation">Log file compression and rotation</h3>
-
-<p>(TO-DO:)</p>
-<ul>
-  <li>If files, how the files are created and rotated (if not covered in the configuration files.)</li>
 </ul>
 
 <h2 id="httpsssl-configuration">HTTPS/SSL configuration</h2>
