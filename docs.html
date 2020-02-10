@@ -1105,8 +1105,44 @@ rt.readFile('my_source.txt', 'utf-8')
   }
 </code></pre></div></div>
 
-<p>(TO-DO:)
-Talk a bit about the site’s configuration side of things.</p>
+<p>When sites are allowed to determine their own logging configuration, JSCause will examine their corresponding <code class="highlighter-rouge">site.json</code> for a <code class="highlighter-rouge">logging</code> section:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  "logging": {
+    // Site options here.
+  }
+</code></pre></div></div>
+
+<p>Just like in <code class="highlighter-rouge">jscause.conf</code> file, here you can specify three values for <code class="highlighter-rouge">consoleOutput</code> (<code class="highlighter-rouge">enabled</code>, <code class="highlighter-rouge">disabled</code>), <code class="highlighter-rouge">fileOutput</code> (<code class="highlighter-rouge">enabled</code>, <code class="highlighter-rouge">disabled</code>) and <code class="highlighter-rouge">directoryName</code>.</p>
+
+<p>Another difference is, <code class="highlighter-rouge">directoryName</code> must be relative to the site’s <code class="highlighter-rouge">rootDirectoryName</code>.  For example:  if JSCause is installed in <code class="highlighter-rouge">/home/user_name/jscause/</code>, <code class="highlighter-rouge">rootDirectoryName</code> is <code class="highlighter-rouge">mysite</code>, and <code class="highlighter-rouge">directoryName</code> is <code class="highlighter-rouge">./localLogs</code>, then the latter will be intepreted as <code class="highlighter-rouge">/home/user_name/jscause/sites/mysite/localLogs</code>.  Here is an example:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  "logging": {
+    "directoryName": "./localLogs",
+    "consoleOutput": "disabled",
+    "fileOutput": "enabled"
+  }
+</code></pre></div></div>
+
+<p>Finally, these values will only apply if they are marked as <code class="highlighter-rouge">per site</code> in the global <code class="highlighter-rouge">perSite</code> configuration.  Otherwise, they will have no effect.  For example, consider the following <code class="highlighter-rouge">jscause.conf</code> example:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  "logging": {
+    "perSite": {
+      "fileOutput": "enabled",
+      "consoleOutput": "per site"
+    },
+  }
+</code></pre></div></div>
+
+<p>And <code class="highlighter-rouge">site.json</code>:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  "logging": {
+    "fileOutput": "disabled",
+    "consoleOutput": "disabled",
+    "directoryName": "./localLogs"
+  }
+</code></pre></div></div>
+
+<p>In this case, the site’s <code class="highlighter-rouge">fileOutput</code> will be <code class="highlighter-rouge">enabled</code>, and <code class="highlighter-rouge">consoleOutput</code> will be <code class="highlighter-rouge">disabled</code>.</p>
 
 <h3 id="log-file-compression-and-rotation">Log file compression and rotation</h3>
 
