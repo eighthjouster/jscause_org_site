@@ -232,6 +232,8 @@
   <li><code class="highlighter-rouge">disabled</code>:  No creating log files or writing to them.  In this case, <code class="highlighter-rouge">directoryName</code> can be optional.</li>
 </ul>
 
+<p>Log files have the following file name format: <code class="highlighter-rouge">jsc_YYYY-MM-DD_HH-00-00.log</code>.  For example:  <code class="highlighter-rouge">jsc_2020-02-08_23-00-00.log</code> indicates a log file for Feb 08, 2020, at 11pm.</p>
+
 <p><strong>- directoryName</strong></p>
 
 <p>This is the path of the directory to be used to store JSCause’s log data.</p>
@@ -255,6 +257,19 @@
   <li><code class="highlighter-rouge">enabled</code>:  Print to the terminal.</li>
   <li><code class="highlighter-rouge">disabled</code>:  No printing to the terminal whatsoever.</li>
 </ul>
+
+<p><strong>- logFileSizeThreshold</strong></p>
+
+<p>This attribute indicates the maximum size in bytes the log file can reach before being compressed and archived away.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"logFileSizeThreshold": 131072 // 128 * 1024 = 128 KB
+</code></pre></div></div>
+
+<p>When the threshold is reached, JSCause will stop writing to the log file, and compress it.  Then, it will create a new log file, and use it to continue logging.</p>
+
+<p>For example, let’s say that the current log file is <code class="highlighter-rouge">jsc_2020-02-08_09-00-00.log</code>, indicating that it was created on Feb 8, 2020 at 9am.  Let’s suppose that the log file has reached the size threshold at 11:14am.  JSCause will compress <code class="highlighter-rouge">jsc_2020-02-08_09-00-00.log</code> and rename it to <code class="highlighter-rouge">jsc_2020-02-08_09-00-00.log.gz</code>, and continue logging to a new file named <code class="highlighter-rouge">jsc_2020-02-08_11-00-00.log</code>.  As you can see, the time in the log file refers to the current hour.  Minutes and seconds are ignored.</p>
+
+<p>You can read more information about how JSCause handles log files and thresholds in the <a href="#log-file-compression-and-rotation">Log file compression and rotation</a> section.</p>
 
 <p><strong><em>perSite</em></strong></p>
 
@@ -1145,6 +1160,13 @@ rt.readFile('my_source.txt', 'utf-8')
 <p>In this case, the site’s <code class="highlighter-rouge">fileOutput</code> will be <code class="highlighter-rouge">enabled</code>, and <code class="highlighter-rouge">consoleOutput</code> will be <code class="highlighter-rouge">disabled</code>.</p>
 
 <h3 id="log-file-compression-and-rotation">Log file compression and rotation</h3>
+
+<p>JSCause has the ability to split the log files in several files, too keep them manageable from a backup and systems administration’s point of view.</p>
+
+<p>This is accomplished via the <code class="highlighter-rouge">logFileSizeThreshold</code>.</p>
+
+<p>(TO-DO:  USE THIS AS GUIDE - TAKEN FROM THE ATTRIBUTE DESCRIPTION FROM EARLIER)
+For example, let’s say that the current log file is <code class="highlighter-rouge">jsc_2020-02-08_09-00-00.log</code>, indicating that it was created on Feb 8, 2020 at 9am.  Let’s suppose that the log file has reached the size threshold at 11:14am.  JSCause will compress <code class="highlighter-rouge">jsc_2020-02-08_09-00-00.log</code> and rename it to <code class="highlighter-rouge">jsc_2020-02-08_09-00-00.log.gz</code>, and continue logging to a new file named <code class="highlighter-rouge">jsc_2020-02-08_11-00-00.log</code>.  As you can see, the time in the log file refers to the current hour.  Minutes and seconds are ignored.</p>
 
 <p>(TO-DO:)</p>
 <ul>
