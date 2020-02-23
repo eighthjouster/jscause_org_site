@@ -232,7 +232,7 @@
   <li><code class="highlighter-rouge">disabled</code>:  No creating log files or writing to them.  In this case, <code class="highlighter-rouge">directoryName</code> can be optional.</li>
 </ul>
 
-<p>Log files have the following file name format: <code class="highlighter-rouge">jsc_YYYY-MM-DD_HH-00-00.log</code>.  For example:  <code class="highlighter-rouge">jsc_2020-02-08_23-00-00.log</code> indicates a log file for Feb 08, 2020, at 11pm.</p>
+<p>Log files have the following file name format: <code class="highlighter-rouge">jsc_YYYY-MM-DD_HH-00-00.log</code>.  For example:  <code class="highlighter-rouge">jsc_2020-02-08_22-00-00.log</code> indicates a log file for Feb 08, 2020, at 10pm.  When the hour changes (in our example, from 10pm to 11pm), a new log file is created (in our case, <code class="highlighter-rouge">jsc_2020-02-08_23-00-00.log</code>)</p>
 
 <p><strong>- directoryName</strong></p>
 
@@ -267,9 +267,9 @@
 
 <p>When the threshold is reached, JSCause will stop writing to the log file, and compress it.  Then, it will create a new log file, and use it to continue logging.</p>
 
-<p>For example, let’s say that the current log file is <code class="highlighter-rouge">jsc_2020-02-08_09-00-00.log</code>, indicating that it was created on Feb 8, 2020 at 9am.  Let’s suppose that the log file has reached the size threshold at 11:14am.  JSCause will compress <code class="highlighter-rouge">jsc_2020-02-08_09-00-00.log</code> and rename it to <code class="highlighter-rouge">jsc_2020-02-08_09-00-00.log.gz</code>, and continue logging to a new file named <code class="highlighter-rouge">jsc_2020-02-08_11-00-00.log</code>.  As you can see, the time in the log file refers to the current hour.  Minutes and seconds are ignored.</p>
+<p>For example, let’s say that the current log file is <code class="highlighter-rouge">jsc_2020-02-08_09-00-00.log</code>, indicating that it was created on Feb 8, 2020 at 9am.  Let’s suppose that the log file has reached the size threshold at 9:14am.  JSCause will compress <code class="highlighter-rouge">jsc_2020-02-08_09-00-00.log</code> and rename it to <code class="highlighter-rouge">jsc_2020-02-08_09-00-00.log.gz</code>, and continue logging to a new file named <code class="highlighter-rouge">jsc_2020-02-08_09-00-00--1.log</code>.  Notice the <code class="highlighter-rouge">--1</code> suffix.  If new files are needed, the suffix value will increment as well (<code class="highlighter-rouge">--2</code>, <code class="highlighter-rouge">--3</code>, etc.), until the time changes (in our example, to 10am).  As you can see, the time in the log files refers to the current hour.  Minutes and seconds are ignored.</p>
 
-<p>You can read more information about how JSCause handles log files and thresholds in the <a href="#log-file-compression-and-rotation">Log file compression and rotation</a> section.</p>
+<p>You can read more information about how JSCause handles log files and thresholds in the <a href="#log-file-compression">Log file compression</a> section.</p>
 
 <p><strong><em>perSite</em></strong></p>
 
@@ -1074,10 +1074,10 @@ rt.readFile('my_source.txt', 'utf-8')
 
 <p>Here is a sample:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Thu, 12 Dec 2019 05:00:01 GMT - example.com - GET: /some_folder - 200
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Sun, 23 Feb 2020 00:21:17 GMT - example.com - GET: /some_folder - 200
 </code></pre></div></div>
 
-<p>Depending on the configuration, said entry will be added to a file store in the directory specified by <code class="highlighter-rouge">directoryName</code> in the <code class="highlighter-rouge">jscause.conf</code> file, and only if <code class="highlighter-rouge">fileOutput</code> is set to <code class="highlighter-rouge">enabled</code>.  Read more about the characteristics of this file in the following section about <a href="#log-file-compression-and-rotation">file compression and rotation</a>.</p>
+<p>Depending on the configuration, said entry will be added to a file store in the directory specified by <code class="highlighter-rouge">directoryName</code> in the <code class="highlighter-rouge">jscause.conf</code> file, and only if <code class="highlighter-rouge">fileOutput</code> is set to <code class="highlighter-rouge">enabled</code>.  Read more about the characteristics of this file in the following section about <a href="#log-file-compression">file compression</a>.</p>
 
 <p>If <code class="highlighter-rouge">consoleOutput</code> is also <code class="highlighter-rouge">enabled</code>, the entry will be printed to the terminal window JSCause is running in.</p>
 
@@ -1101,6 +1101,32 @@ rt.readFile('my_source.txt', 'utf-8')
       "consoleOutput": "enabled"
     }
   }
+</code></pre></div></div>
+
+<h3 id="types-of-data-logged">Types of data logged</h3>
+
+<ul>
+  <li>Whenever JSCause is started.  Example:</li>
+</ul>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>INFO: Site 'My Site' at https://example.com:3000/ assigned to server 0
+INFO: Server 0 listening on port 3000
+</code></pre></div></div>
+
+<ul>
+  <li>Client requests will be logged, as well as their HTTP response status.  Example:</li>
+</ul>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Sun, 23 Feb 2020 00:21:17 GMT - example.com - GET: /some_folder - 200
+</code></pre></div></div>
+
+<ul>
+  <li>Runtime errors.  Example:</li>
+</ul>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ERROR: Site: My Site: Runtime error on file /some_file.jscp: some_invalid_funcion is not defined at line 17
+ReferenceError: some_invalid_funcion is not defined
+Sun, 23 Feb 2020 00:32:04 GMT - jscausesite1 - GET: /some_file.jscp - 500
 </code></pre></div></div>
 
 <h3 id="per-site-logging">Per site logging</h3>
@@ -1138,7 +1164,7 @@ rt.readFile('my_source.txt', 'utf-8')
   }
 </code></pre></div></div>
 
-<p>Finally, these values will only apply if they are marked as <code class="highlighter-rouge">per site</code> in the global <code class="highlighter-rouge">perSite</code> configuration.  Otherwise, they will have no effect.  For example, consider the following <code class="highlighter-rouge">jscause.conf</code> example:</p>
+<p>Finally, these values will only apply if they are marked as <code class="highlighter-rouge">per site</code> in the global <code class="highlighter-rouge">perSite</code> configuration.  Otherwise, they will have no effect (will be overridden.)  For example, consider the following <code class="highlighter-rouge">jscause.conf</code> example:</p>
 
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  "logging": {
     "perSite": {
@@ -1159,47 +1185,24 @@ rt.readFile('my_source.txt', 'utf-8')
 
 <p>In this case, the site’s <code class="highlighter-rouge">fileOutput</code> will be <code class="highlighter-rouge">enabled</code>, and <code class="highlighter-rouge">consoleOutput</code> will be <code class="highlighter-rouge">disabled</code>.</p>
 
-<h3 id="log-file-compression-and-rotation">Log file compression and rotation</h3>
+<h3 id="log-file-compression">Log file compression</h3>
 
-<p>JSCause has the ability to split the log files in several files, too keep them manageable from a backup and systems administration’s point of view.</p>
+<p>Log files have the following file name format: <code class="highlighter-rouge">jsc_YYYY-MM-DD_HH-00-00.log</code> (YYYY represents the current year, MM the current month, DD the current day, HH the current hour in 24-hour format,)  For example, a log file with the name <code class="highlighter-rouge">jsc_2020-02-08_09-00-00.log</code> indicates that it was created on Feb 08, 2020 at 9am.</p>
 
-<p>This is accomplished via the <code class="highlighter-rouge">logFileSizeThreshold</code>.</p>
+<p>When the hour changes (in hour example, from 9am to 10am), JSCause creates a new file with the new hour, and continues logging in it.</p>
 
-<p>(TO-DO:  USE THIS AS GUIDE - TAKEN FROM THE ATTRIBUTE DESCRIPTION FROM EARLIER)
-For example, let’s say that the current log file is <code class="highlighter-rouge">jsc_2020-02-08_09-00-00.log</code>, indicating that it was created on Feb 8, 2020 at 9am.  Let’s suppose that the log file has reached the size threshold at 11:14am.  JSCause will compress <code class="highlighter-rouge">jsc_2020-02-08_09-00-00.log</code> and rename it to <code class="highlighter-rouge">jsc_2020-02-08_09-00-00.log.gz</code>, and continue logging to a new file named <code class="highlighter-rouge">jsc_2020-02-08_11-00-00.log</code>.  As you can see, the time in the log file refers to the current hour.  Minutes and seconds are ignored.</p>
+<p>Since minutes and seconds are ignored, then if only a few web requests per hour are made, a new log file will be created once per hour.  If no requests are made at a specific hour, then no log file will be generated for that particular hour.</p>
+
+<p>On the other hand, high volume sites may generate a lot of logging in one hour.  If you want to keep log files from getting too large, you can instruct JSCause to divide them up.  This is helpful for administration operations such as backing up.</p>
+
+<p>To ensure that log files don’t go past a certain size, use the <code class="highlighter-rouge">logFileSizeThreshold</code> logging configuration option in <code class="highlighter-rouge">jscause.conf</code> (this option is not allowed in <code class="highlighter-rouge">sites.json</code>.)  It receives a numeric value representing the maximum size a log file can be - in bytes.  When this size is reached, JSCause will stop using it, and will create another empty log file, and continue logging in it.</p>
+
+<p>The new file will be appended a numeric suffix to distinguish it from the old file, if it’s generated in the same hour.  For example, if it’s 5pm, then the log file may have a name such as <code class="highlighter-rouge">jsc_2020-02-08_17-00-00.log</code> (17:00, or 5pm.)  If the file reaches its maximum size at 5:25pm, then a new log file will be created, and named <code class="highlighter-rouge">jsc_2020-02-08_17-00-00--1.log</code>.  If that one gets filled up at 5:55pm, then a new log file is created with the name <code class="highlighter-rouge">jsc_2020-02-08_17-00-00--2.log</code>.  At 6pm, a new log file is then created with the name <code class="highlighter-rouge">jsc_2020-02-08_18-00-00.log</code> (18:00, or 6pm), and the cycle resets.</p>
+
+<p>JSCause will compress old log files in order to save space.  When they are compressed, they are renamed so they have the <code class="highlighter-rouge">.log.gz</code> extension (for example, <code class="highlighter-rouge">jsc_2020-02-08_09-00-00--3.log.gz</code>.)  They will become smaller.  However, you should regularly move these older files to a backup media (or delete them, if you consider you don’t need them anymore), so that the storage medium they are being created on will not fill up.  A file rotation feature, in which only the most recent N files are kept, will be added in a future version.</p>
 
 <p>(TO-DO:)</p>
 <ul>
-  <li>
-    <p>If files, how the files are created and rotated (if not covered in the configuration files.)</p>
-  </li>
-  <li>What kind of data is logged.</li>
-  <li>Use the log config definition for more hints on what to document.</li>
-  <li>Document whatever is not documented below before deleting.
-    <ul>
-      <li>Site-wide:
-        <ul>
-          <li>Logging type: {
-  general: {
-    fileOutput: ‘enabled|disabled’, [enabled by default.]
-    directoryName: ‘’, [‘jscause/logs’ by default.]
-    consoleOutput: ‘enabled|disabled’ [enabled by default]
-  },
-  perSite: {
-    fileOutput: ‘enabled|disabled|per site’ [disabled by default.]
-    consoleOutput: ‘enabled|disabled|per site’ enabled by default. (per site = let the site configuration decide)
-  }</li>
-          <li>Per site:</li>
-          <li>Logging type:
-{
-  fileOutput: ‘enabled|disabled’, [disabled by default] [Might be overridden by site-wide config]
-  directoryName: ‘’, [‘website/logs’ by default.] [if either fileOutput above or site-wide fileOutput perSite config is enabled, you MUST provide a name here.]
-  consoleOutput: ‘enabled|disabled’ enabled by default. [Might be overridden by site-wide config]
-}</li>
-        </ul>
-      </li>
-    </ul>
-  </li>
   <li>
     <p>If there are reading/writing errors to log files, no further logging will take place until it’s time to rotate the files.  If console output is enabled, the server will emit warnings on file operation errors.</p>
   </li>
@@ -1215,17 +1218,7 @@ For example, let’s say that the current log file is <code class="highlighter-r
       <li>The process of determining log compressing on a specific site will happen only when there is something to log.  If there are uncompressed log files, and the site is never accessed, or nothing is logged, the files will remain uncompressed.</li>
     </ul>
   </li>
-  <li>Document: logFileSizeThreshold
-    <ul>
-      <li>
-        <p>general logging only.  perSite logging does not allow it.</p>
-      </li>
-      <li>Max size of uncompressed log files? (default: 1 MB).
-*- -1, -2, -3 for the same date. - Done.</li>
-      <li>Log files can be limited by size.  When the limit is reached, a new log file will be created, with identical name as the previous one, but with a numeric suffix (e.g. –1, –2, etc).  The previous file will be compressed.</li>
-      <li>If you move compressed log files to another location, and JSCause is writing to a suffixed file, then it will reset writing to a non-suffixed file.  This will cause log entries that will appear as out of sync with the files they’re in.  Worse, next time a move occurs, the newly created log file will overwrite the one previously existing in the destination.  To avoid this, your move procedure should leave all the compressed suffixed files associated with the current (non-compressed) log file.</li>
-    </ul>
-  </li>
+  <li>If you move compressed log files to another location, and JSCause is writing to a suffixed file, then it will reset writing to a non-suffixed file.  This will cause log entries that will appear as out of sync with the files they’re in.  Worse, next time a move occurs, the newly created log file will overwrite the one previously existing in the destination.  To avoid this, your move procedure should leave all the compressed suffixed files associated with the current (non-compressed) log file.</li>
 </ul>
 
 <h2 id="httpsssl-configuration">HTTPS/SSL configuration</h2>
