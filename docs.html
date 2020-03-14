@@ -693,7 +693,7 @@ Terminated.
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Hello, number 4
 </code></pre></div></div>
 
-<p>JSCause will only run JSCP files only if they are located in a site’s <code class="highlighter-rouge">website</code> directory.  If you need to run files outside of <code class="highlighter-rouge">website</code>, use symlinks (use this feature with caution.)</p>
+<p>JSCause will only run JSCP files only if they are located in a site’s <code class="highlighter-rouge">website</code> directory.  If you need to run files outside of <code class="highlighter-rouge">website</code>, <a href="#site-contents-files-and-directories">use symlinks</a> (use this feature with caution.)</p>
 
 <p><strong>Important</strong>: JSCP file names are case-sensitive (if the file system allows it.)  A file will be considered JSCP only if its extension is lower case (that is, <code class="highlighter-rouge">.jscp</code> is valid, but <code class="highlighter-rouge">.JSCP</code> is not.)</p>
 
@@ -705,7 +705,7 @@ Terminated.
 
 <p><code class="highlighter-rouge">https://www.example.com/module.jscp --&gt; 404 error</code></p>
 
-<p>JSCause will only run JSCM files only if they are located in a site’s <code class="highlighter-rouge">website</code> directory.  If you need to run files outside of <code class="highlighter-rouge">website</code>, use symlinks (use this feature with caution.)</p>
+<p>JSCause will only run JSCM files only if they are located in a site’s <code class="highlighter-rouge">website</code> directory.  If you need to run files outside of <code class="highlighter-rouge">website</code>, <a href="#site-contents-files-and-directories">use symlinks</a> (use this feature with caution.)</p>
 
 <p><strong>Important</strong>: Just like JSCP file names, JSCM file names are case-sensitive (if the file system allows it.)  A file will be considered JSCM only if its extension is lower case (that is, <code class="highlighter-rouge">.jscm</code> is valid, but <code class="highlighter-rouge">.JSCM</code> is not.)</p>
 
@@ -1298,8 +1298,53 @@ Sun, 23 Feb 2020 00:32:04 GMT - jscausesite1 - GET: /some_file.jscp - 500
 
 <h2 id="symbolic-links-in-configuration-and-websites">Symbolic links in configuration and websites</h2>
 
-<p>(TO-DO:)
-Here we’ll talk about how to handle symoblic links.</p>
+<p>JSCause allows the use of symbolic links (symlinks) in many circumstances.  This allows you to have more flexibility on where to place your configuration files, as well as your website’s files, be it in the same storage media, or a different one.</p>
+
+<p>It is important to note that JSCause will be constrained to the rules of both of the operating system and the file system where the symlinks reside.</p>
+
+<h3 id="where-symlinks-can-be-used">Where symlinks can be used</h3>
+
+<p>Symlinks can be used in the following scenarios:</p>
+
+<h3 id="jscauseconf-rootdirectoryname">jscause.conf: rootDirectoryName</h3>
+
+<p>Your website’s root directory can be a symlink.</p>
+
+<p>For example, let’s assume that the location of your site is in <code class="highlighter-rouge">/mnt/great_sites/a_great_site</code>, and your JSCause installation is in <code class="highlighter-rouge">/home/user_name/jscause</code>.  This would mean that the <code class="highlighter-rouge">sites</code> directory is in <code class="highlighter-rouge">/home/user_name/jscause/sites</code>.  You can create a symlink to <code class="highlighter-rouge">a_great_site</code> by issuing the following in the terminal:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ ln -s /mnt/great_sites/a_great_site /home/user_name/jscause/sites/a_great_site_link
+</code></pre></div></div>
+
+<p>Then you can configure the root directory name as:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"rootDirectoryName": "a_great_site_link"
+</code></pre></div></div>
+
+<h3 id="site-contents-files-and-directories">Site contents files and directories</h3>
+
+<p>You can use symlinks in place of files and directories within your site’s <code class="highlighter-rouge">website</code> directory.  JSCause will treat them as if they were being called right on the symlink’s spot.</p>
+
+<p>For example, let’s assume that your website uses a JSCP file located at <code class="highlighter-rouge">/mnt/great_sites/utlities/time.jscp</code>.  However, the actual website is located at <code class="highlighter-rouge">/home/user_name/jscause/sites/a_great_site/website/</code>.  You can create a symlink to <code class="highlighter-rouge">time.jscp</code> by issuing the following command in the terminal:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ ln -s /mnt/great_sites/utlities/time.jscp /home/user_name/jscause/sites/a_great_site/website/time_link.jscp
+</code></pre></div></div>
+
+<p>Then, assuming your site’s domain name is <code class="highlighter-rouge">example.com</code>, you can refer to that file from a web browser by visiting: <code class="highlighter-rouge">http://example.com/time_link.jscp</code>.</p>
+
+<p>Please note that we’re using a <code class="highlighter-rouge">_link</code> suffix here for demonstration purposes.  In reality, you can name the symlink any way you want.</p>
+
+<h3 id="settempworkdirectory">setTempWorkDirectory</h3>
+
+<p>(TO-DO:) CONTINUE HERE. REVISE TITLE ABOVE.</p>
+
+<h3 id="fileoutput-logging-server-wide-and-per-site">fileOutput logging (server-wide and per-site)</h3>
+
+<p>If a symlink is not listed in any of the scenarios above, then JSCause will not accept it.  For instance
+(TO-DO:) LIST ONE OR TWO EXAMPLES IN WHICH JSCAUSE WILL REJECT SYMLINKS</p>
+
+<p>(TO-DO:) Windows?</p>
+
+<p>(TO-DO:) Back up this doc, please?</p>
 
 <h2 id="terminating-an-jscause-instance">Terminating an JSCause instance</h2>
 
