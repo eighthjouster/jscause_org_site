@@ -1306,7 +1306,7 @@ Sun, 23 Feb 2020 00:32:04 GMT - jscausesite1 - GET: /some_file.jscp - 500
 
 <p>Symlinks can be used in the following scenarios:</p>
 
-<h3 id="jscauseconf-rootdirectoryname">jscause.conf: rootDirectoryName</h3>
+<h4 id="jscauseconf-rootdirectoryname">jscause.conf: rootDirectoryName</h4>
 
 <p>Your website’s root directory can be a symlink.</p>
 
@@ -1320,7 +1320,7 @@ Sun, 23 Feb 2020 00:32:04 GMT - jscausesite1 - GET: /some_file.jscp - 500
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"rootDirectoryName": "a_great_site_link"
 </code></pre></div></div>
 
-<h3 id="site-contents-files-and-directories">Site contents files and directories</h3>
+<h4 id="site-contents-files-and-directories">Site contents files and directories</h4>
 
 <p>You can use symlinks in place of files and directories within your site’s <code class="highlighter-rouge">website</code> directory.  JSCause will treat them as if they were being called right on the symlink’s spot.</p>
 
@@ -1333,11 +1333,18 @@ Sun, 23 Feb 2020 00:32:04 GMT - jscausesite1 - GET: /some_file.jscp - 500
 
 <p>Please note that we’re using a <code class="highlighter-rouge">_link</code> suffix here for demonstration purposes.  In reality, you can name the symlink any way you want.</p>
 
-<h3 id="settempworkdirectory">setTempWorkDirectory</h3>
+<h4 id="sitejson-tempworkdirectory">site.json: tempWorkDirectory</h4>
 
-<p>(TO-DO:) CONTINUE HERE. REVISE TITLE ABOVE.</p>
+<p>You can use a symlink for your website’s temporary work directory.  For example:</p>
 
-<h3 id="fileoutput-logging-server-wide-and-per-site">fileOutput logging (server-wide and per-site)</h3>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ ln -s /mnt/great_sites/one_great_site/workbench /home/user_name/jscause/sites/a_great_site/workbench
+</code></pre></div></div>
+
+<p><strong>Be mindful where you place this directory.</strong>  It should be a location outside of your site’s <code class="highlighter-rouge">/website</code> directory.  It should never be public.</p>
+
+<h4 id="fileoutput-logging-server-wide-and-per-site">fileOutput logging (server-wide and per-site)</h4>
+
+<p>(TO-DO:) CONTINUE HERE.</p>
 
 <p>If a symlink is not listed in any of the scenarios above, then JSCause will not accept it.  For instance
 (TO-DO:) LIST ONE OR TWO EXAMPLES IN WHICH JSCAUSE WILL REJECT SYMLINKS</p>
