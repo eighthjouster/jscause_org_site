@@ -637,7 +637,7 @@ INFO: Server 0 listening on port 80
 
 <p>If the last line is about a server listening on a port, then everything was configured correctly.  Having said that, do check for warning messages (for example: <code class="highlighter-rouge">WARNING: Site configuration: Site 'My Site' has file logging enabled while the server has per-site file logging disabled.</code>)</p>
 
-<p>If you get a warning or an error, refer to the <a href="#troubleshooting-jscause">troubleshooting section</a> to find out how to address it.</p>
+<p>If you get a warning or an error, refer to the <a href="#faq-and-troubleshooting-jscause">troubleshooting section</a> to find out how to address it.</p>
 
 <h2 id="stopping-jscause">Stopping JSCause</h2>
 
@@ -1378,14 +1378,16 @@ Sun, 23 Feb 2020 00:32:04 GMT - jscausesite1 - GET: /some_file.jscp - 500
 
 <h2 id="terminating-an-jscause-instance">Terminating an JSCause instance</h2>
 
-<p>(TO-DO:)
-Documentation: Ctrl+C or SIGINT will terminate the server gracefully:</p>
-<ul>
-  <li>It will close the log files.</li>
-  <li>If there are any log files being compressed at that very moment, it will wait until the operation completes.  Any pending log files to compress will be ignored after that.</li>
-  <li>A second Ctrl+C during cleanup will let the user know that cleanup is still happening.</li>
-  <li>A third Ctrl+C will terminate the program immediately, even if cleanup was happening.</li>
-</ul>
+<p>JSCause will gracefully terminate when the Ctrl+C keyboard combination is used in the terminal window it is running on.  Alternatively, you can send a SIGTERM or SIGNINT kill signal to JSCause’s process to do the same thing.</p>
+
+<p>When JSCause is instructed to terminate, it will close the log files. If there are any log files being compressed at that very moment, it will wait until the operation completes.  Any pending log files to compress will be ignored after that.</p>
+
+<p>If JSCause receives a second Ctrl+C keyboard combination during termination and cleanup, it will display the following message:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Still cleaning on exit.  Try again to exit right away...
+</code></pre></div></div>
+
+<p>At that point, if you press Ctrl+C again (a third time), JSCause will terminate immediately, interrupting any cleanup operation.  Avoid getting to this point as much as possible, since compressed log files being created at that point may be rendered unusable.</p>
 
 <h2 id="the-rt-runtime-object-reference">The rt runtime object reference</h2>
 
@@ -2204,27 +2206,319 @@ rt.readFile('my_source.txt', 'utf-8')
   <li><a href="#callbacks">Callbacks</a></li>
 </ul>
 
-<h2 id="troubleshooting-jscause">Troubleshooting JSCause</h2>
+<h2 id="faq-and-troubleshooting-jscause">FAQ and Troubleshooting JSCause</h2>
+
+<h3 id="why-doesnt-jscause-complain-when-a-certificate-or-key-file-is-invalid">Why doesn’t JSCause complain when a certificate or key file is invalid?</h3>
+
+<p>You may have configured the site as HTTP, not HTTPS.  When the site is configured as HTTP, JSCause will ignore these files.</p>
+
+<p>If the site is indeed HTTPS, then another reason could be that it’s sharing the port with another, correctly configured HTTPS site.  In this case, the browser will alert the end users about the misconfiguration.</p>
+
+<h3 id="sitejson-accepts-a-hostname-that-could-already-be-used-in-another-sites-sitejson--is-this-a-bug"><code class="highlighter-rouge">site.json</code> accepts a hostName that could already be used in another site’s site.json.  Is this a bug?</h3>
+
+<p>This is fine as long as both sites use different ports.</p>
+
+<h3 id="jscause-says-a-file-does-not-exist-but-i-can-see-it-in-the-file-system">JSCause says a file does not exist, but I can see it in the file system</h3>
+
+<p>It may be a broken symlink that doesn’t point to a valid file anymore.</p>
+
+<h2 id="list-of-errors-and-warnings-reported-by-jscause">List of errors and warnings reported by JSCause</h2>
+
+<p>Here is a list of errors and warnings that JSCause may report in the logs, or directly in the terminal.  This list is not completely exhaustive.  It may not include errors that are fairly easy to fix (e.g. “Missing rootDirectoryName”) or that could only show up during internal testing.</p>
 
 <p>(TO-DO:)
-Troubleshooting here.</p>
-<ul>
-  <li>FAQ: Why aren’t httpsCertFile and/or httpsKeyFile reported as invalid when they are invalid?
-    <ul>
-      <li>The site is not HTTPS.</li>
-      <li>The site is HTTPS but is sharing the port with another HTTPS site which has valid httpsCertFile and httpsKeyFile.</li>
-    </ul>
-  </li>
-  <li>FAQ: site.json accepts a hostName that could already be being used in another site’s site.json.  Is this a bug?</li>
-  <li>
-    <p>This is fine as long as both sites use different ports.</p>
-  </li>
-  <li>JSCause says a file does not exist, but I can see it in the file system!
-    <ul>
-      <li>Could it be that it’s a broken link?</li>
-    </ul>
-  </li>
-</ul>
+        JSCLog(‘warning’, <code class="highlighter-rouge">Could not delete unhandled uploaded file: ${thisFile.name}</code>, jscLogConfig);
+        JSCLog(‘warning’, <code class="highlighter-rouge">(CONT) On the file system as: ${thisFile.path}</code>, Object.assign({ e: err }, jscLogConfig));</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>      JSCLog('warning', `Could not delete unhandled uploaded file: ${thisFile.name}`, jscLogConfig);
+      JSCLog('warning', `(CONT) On the file system as: ${thisFile.path}`, Object.assign({ e: err }, jscLogConfig));
+
+      JSCLog('warning', `Could not delete unhandled uploaded file: ${thisFile.name}`, jscLogConfig);
+      JSCLog('warning', `(CONT) On the file system as: ${thisFile.path}`, Object.assign({ e: err }, jscLogConfig));
+
+      JSCLog('warning', 'Site: <span class="nt">&lt;html/&gt;</span> keyword found in the middle of code.  Did you mean to put it in the beginning of an HTML section?', jscLogConfig);
+
+              JSCLog('warning', `Site configuration: ${mimeTypeName} mimetype value is empty.  Assumed application/octet-stream.`, jscLogConfig);
+
+JSCLog('warning', `Site configuration: Site ${getSiteNameOrNoName(siteName)} has file logging ${updatedConfigLogging.fileOutputEnabled ? 'enabled' : 'disabled'} while the server has per-site file logging ${(perSitePermanentFileOutputEnabled) ? 'enabled' : 'disabled'}.`, jscLogConfig);
+JSCLog('warning', '- Server configuration prevails.', jscLogConfig);
+
+JSCLog('warning', `Site configuration: Site ${getSiteNameOrNoName(siteName)} has console logging ${updatedConfigLogging.consoleOutputEnabled ? 'enabled' : 'disabled'} while the server has per-site console logging ${(perSitePermanentConsoleOutputEnabled) ? 'enabled' : 'disabled'}.`, jscLogConfig);
+JSCLog('warning', '- Server configuration prevails.', jscLogConfig);
+
+                  JSCLog('warning', `Site configuration: Site ${getSiteNameOrNoName(siteName)} is HTTPS, and would be sharing HTTPS port ${sitePort} with ${getSiteNameOrNoName(combo.siteName)}`, jscLogBase);
+                  JSCLog('warning', `Site configuration: Site ${getSiteNameOrNoName(siteName)} is using HTTPS in an already assigned HTTPS port, ${sitePort}`, jscLogSite);
+
+                JSCLog('warning', `Site configuration: Site ${getSiteNameOrNoName(siteName)} is HTTP, and is sharing HTTPS port ${sitePort} with ${getSiteNameOrNoName(combo.siteName)}`, jscLogBase);
+                JSCLog('warning', `Site configuration: Site ${getSiteNameOrNoName(siteName)} is using HTTP in an already assigned HTTPS port, ${sitePort}`, jscLogSite);
+
+                JSCLog('warning', `Site ${getSiteNameOrNoName(siteName)}: ${fileName} detected in ${currentDirectoryPath} subdirectory. Only error files in the root directory will be used to display custom errors.`, jscLogBaseWithSite);
+
+    JSCLog('error', 'CRITICAL:  An application error occurred when processing a callback.');
+
+JSCLog('error', `CRITICAL: Cannot load ${VENDOR_TEMPLATE_FILENAME} file. The JSCause installation might be corrupted.`, { e, toConsole: true });
+
+  JSCLog('error', `CRITICAL: Cannot load ${requireName} file. The JSCause installation might be corrupted.`, { e, toConsole: true });
+
+  JSCLog('error', `CRITICAL: Could not compile vendor module ${vendorModuleName}.`, { toConsole: true });
+
+JSCLog('error', `CRITICAL: Failed to load vendor module ${vendorModuleName}. The JSCause installation might be corrupted.`, { toConsole: true });
+
+
+JSCLog('error', `Invalid ${fileName} file format.`, jscLogConfig);
+JSCLog('error', e.message, jscLogConfig);
+
+    JSCLog('error', 'Error is around the following section of the file:', jscLogConfig);
+    JSCLog('error', excerpt.join(''), jscLogConfig);
+
+JSCLog('error', `Error parsing ${fileName}`, jscLogConfig);
+JSCLog('error', state.parseErrorDescription, jscLogConfig);
+
+  JSCLog('error', `Temporary work directory path ${tempWorkDirectory} must be specified as relative to ${getSiteNameOrNoName(siteName)}.`, jscLogConfig);
+
+  JSCLog('error', `Could not rename unhandled uploaded file: ${thisFile.name}`, jscLogConfig);
+  JSCLog('error', `(CONT) Renaming from: ${oldFilePath}`, jscLogConfig);
+  JSCLog('error', `(CONT) Renaming to: ${newFilePath}`, Object.assign({ e: err }, jscLogConfig));
+
+      JSCLog('error', `Site: ${siteName}: Application error when processing ${runFileName}.`, { e });
+
+    JSCLog('error', `Site: ${siteName}: Runtime error on file ${runFileName}: ${extractErrorFromRuntimeObject(runtimeException)}`,
+
+    JSCLog('error', `Module name and path ${moduleName} must be specified as relative.`, jscLogConfig);
+</code></pre></div></div>
+
+<p>JSCLog(‘error’, <code class="highlighter-rouge">Site ${getSiteNameOrNoName(siteName)}: Cannot serve ${fullPath} file.</code>,</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>      JSCLog('error', 'Form upload related error.',
+
+JSCLog('error', 'Request related error.',
+
+    JSCLog('error', 'CRITICAL:  An application error occurred when processing an incoming request.');
+    JSCLog('error', e);
+
+JSCLog('error', `Server ${serverName} could not start listening on port ${serverPort}.`, jscLogConfig);
+JSCLog('error', 'Error returned by the server follows:', jscLogConfig);
+JSCLog('error', e.message, jscLogConfig);
+JSCLog('error', `Server ${serverName} (port: ${serverPort}) not started.`, jscLogConfig);
+
+  JSCLog('error', `- Site ${getSiteNameOrNoName(site.siteName)} not started.`, jscLogConfig);
+
+    JSCLog('error', `Site ${getSiteNameOrNoName(siteName)}: Cannot read '${keyFileName}' SSL key file.`, jscLogConfig);
+
+    JSCLog('error', `Site ${getSiteNameOrNoName(siteName)}: Cannot read '${certFileName}' SSL cert file.`, jscLogConfig);
+
+      JSCLog('error', `Site ${getSiteNameOrNoName(siteName)}: An error occurred while attempting to start HTTPS server.`, jscLogConfig);
+      JSCLog('error', e.message, Object.assign({ e }, jscLogConfig));
+
+    JSCLog('error', `Site ${getSiteNameOrNoName(siteName)}: An error occurred while attempting to start HTTP server.`, jscLogConfig);
+    JSCLog('error', e.message, Object.assign({ e }, jscLogConfig));
+
+JSCLog('error', `Cannot find ${name} file.`, Object.assign({ e }, jscLogConfig));
+
+  JSCLog('error', `${name} is a directory.`, jscLogConfig);
+
+    JSCLog('error', `Cannot load ${name} file.`, Object.assign({ e }, jscLogConfig));
+
+  JSCLog('error', `"${configKeyLowerCase}"${casingReport}${emptyValueReport} is not a valid configuration key.`, jscLogConfig);
+
+JSCLog('error', `Check that all the keys and values in ${fileName} are valid.`, jscLogConfig);
+
+JSCLog('error', `${errorMsgIfFound}`, jscLogConfig);
+
+  JSCLog('error', `${configName}:  The following configuration attribute was not found:`, jscLogConfig);
+
+  JSCLog('error', `${configName}:  The following configuration attributes were not found:`, jscLogConfig);
+
+  JSCLog('error', `- ${keyName}`, jscLogConfig);
+
+  JSCLog('error', `Site: Compile error: ${extractErrorFromCompileObject(e)}`, Object.assign({ e }, jscLogConfig));
+
+JSCLog('error', 'Site: Parsing error, possibly internal.', Object.assign({ e }, jscLogConfig));
+
+JSCLog('error', `Site: Cannot find source file: ${sourcePath}`, Object.assign({ e }, jscLogConfig));
+
+  JSCLog('error', `Site: Entry point is a directory: ${sourcePath}`, jscLogConfig);
+
+    JSCLog('error', `Site: Cannot load source file: ${sourcePath}`, Object.assign({ e }, jscLogConfig));
+
+  JSCLog('error', `Site: Could not compile code for ${fsPath.join(...sourceFilePath)}.`, jscLogConfig);
+
+  JSCLog('error', `Site configuration: Site name ${getSiteNameOrNoName(siteName)} is missing rootdirectoryname.`, jscLogConfig);
+
+  JSCLog('error', `Site configuration: Site name ${getSiteNameOrNoName(siteName)}: rootdirectoryname cannot be empty.`, jscLogConfig);
+
+JSCLog('error', `Site configuration: Site name ${getSiteNameOrNoName(siteName)}: rootdirectoryname expects a string value.`, jscLogConfig);
+
+  JSCLog('error', 'Site configuration:  hostname cannot be empty.', jscLogConfig);
+
+  JSCLog('error', 'Site configuration:  Invalid maxpayloadsizebytes.  Integer number expected.', jscLogConfig);
+
+
+    JSCLog('error', `Site configuration:  mimetype has an invalid '${valueName}' name.  Expected: ${allowdNames.map(name =&gt; `'${name}'`).join(', ')}.`, jscLogConfig);
+
+    JSCLog('error', 'Site configuration:  mimetype has an invalid \'include\' attribute value. Object (key, value) expected.', jscLogConfig);
+
+    JSCLog('error', 'Site configuration:  mimetype has an invalid \'exclude\' attribute value. Array expected.', jscLogConfig);
+
+            JSCLog('error', `Site configuration:  mimetype has an invalid ${valueName} value for ${mimeTypeName}.  String expected.`, jscLogConfig);
+
+          JSCLog('error', 'Site configuration:  mimetype name cannot be empty.', jscLogConfig);
+
+        JSCLog('error', `Site configuration:  mimetype has an invalid ${valueName} name.  String expected.`, jscLogConfig);
+
+    JSCLog('error', 'Site configuration:  tempworkdirectory cannot be empty.', jscLogConfig);
+  
+      JSCLog('error', 'Site configuration:  Invalid jscpextensionrequired value.  Use \'never\' (recommended), \'optional\' or \'always\'.', jscLogConfig);
+
+  JSCLog('error', 'Site configuration:  jscpextensionrequired cannot be empty.  Use \'never\' (recommended), \'optional\' or \'always\'.', jscLogConfig);
+      JSCLog('error', 'Site configuration:  Invalid httppoweredbyheader value.  Use \'include\' or \'exclude\'.', jscLogConfig);
+
+  JSCLog('error', 'Site configuration:  httppoweredbyheader cannot be empty.  Use \'include\' or \'exclude\'.', jscLogConfig);
+
+  JSCLog('error', 'Site configuration:  httpscertfile cannot be empty.', jscLogConfig);
+
+
+  JSCLog('error', 'Site configuration:  httpskeyfile cannot be empty.', jscLogConfig);
+
+
+  JSCLog('error', `Site ${getSiteNameOrNoName(siteName)}: Cannot find link:`, jscLogConfig);
+  JSCLog('error', `- ${fullPath} --&gt; ${linkedFileName}`, Object.assign({ e }, jscLogConfig));
+
+
+      JSCLog('error', `Site ${getSiteNameOrNoName(siteName)}: Circular symbolic link reference:`, jscLogConfig);
+
+        JSCLog('error', `- ${symlinkPath}`, jscLogConfig);
+
+      JSCLog('error', `Site ${getSiteNameOrNoName(siteName)}: Too many files and/or directories (&gt; ${maxFilesOrDirInDirectory}) in directory (circular reference?):`, jscLogConfig);
+      JSCLog('error', `- ${currentDirectoryPath}`, jscLogConfig);
+
+  JSCLog('error', `Too many processed so far (&gt; ${MAX_DIRECTORIES_TO_PROCESS}) (circular reference?):`, jscLogConfig);
+  JSCLog('error', `- ${fullPath}`, jscLogConfig);
+
+  JSCLog('error', `Too many directories left to process (&gt; ${MAX_PROCESSED_DIRECTORIES_THRESHOLD}) (circular reference?):`, jscLogConfig);
+  JSCLog('error', `- ${fullPath}`,jscLogConfig);
+
+
+  JSCLog('error', `Site ${getSiteNameOrNoName(siteName)}: Too many files and/or directories (&gt; ${maxFilesOrDirInDirectory}) in directory:`, jscLogConfig);
+  JSCLog('error', `- ${currentDirectoryPath}`, jscLogConfig);
+
+
+    JSCLog('error', `Site ${getSiteNameOrNoName(siteName)}: Too many files and/or directories (&gt; ${maxFilesOrDirInDirectory}) in directory:`, jscLogConfig);
+    JSCLog('error', `- ${currentDirectoryPath}`, jscLogConfig);
+
+
+  JSCLog('error', `${errorMsgPrefix}Cannot find directory: ${directoryName}`, Object.assign({ e }, jscLogConfig));
+
+    JSCLog('error', `${errorMsgPrefix}Cannot find link:`, jscLogConfig);
+    JSCLog('error', `- ${directoryName} --&gt; ${linkedPath}`, Object.assign({ e }, jscLogConfig));
+
+    JSCLog('error', `${errorMsgPrefix}${directoryName}${(linkedPath) ? ` --&gt; ${linkedPath}` : ''} is not a directory.`, jscLogConfig);
+
+    JSCLog('error', `${errorMsgPrefix}${directoryName}${(linkedPath) ? ` --&gt; ${linkedPath}` : ''} is not writeable.`, jscLogConfig);
+
+
+  JSCLog('error', 'Configuration:  sites cannot be empty.', jscLogConfig);
+
+              JSCLog('error', `Configuration: logging: ${configKey}: ${attributeKey} is not a valid configuration key.`, jscLogConfig);
+
+        JSCLog('error', 'Configuration: logging:  Invalid value for general.  Object expected.', jscLogConfig);
+
+      JSCLog('error', `Configuration: logging:  ${configKey} is not a valid configuration key.`, jscLogConfig);
+
+  JSCLog('error', 'Server configuration:  Expected a valid logging configuration value.', jscLogConfig);
+
+  JSCLog('error', `Site configuration: Logging: '${infoKey}' is not a valid configuration key.`, jscLogConfig);
+
+    JSCLog('error', 'Site configuration: Logging: \'perSite\' section must not have a \'directoryName\' configuration key.', jscLogConfig);
+
+    JSCLog('error', 'Site configuration: Logging: \'perSite\' section must not have a \'logfilesizethreshold\' configuration key.', jscLogConfig);
+
+      JSCLog('error', 'Site configuration: Logging: \'logfilesizethreshold\' must be 0 or greater.', jscLogConfig);
+
+    JSCLog('error', 'Site configuration: Logging: \'logfilesizethreshold\' is invalid.  Integer number expected.', jscLogConfig);
+
+    JSCLog('error', `Site configuration: '${siteName}' site logging: 'perSite' section must not have a 'logfilesizethreshold' configuration key.`, jscLogConfig);
+
+
+    JSCLog('error', `Site configuration: '${siteName}' site logging: Invalid directoryname.  String expected.`, jscLogConfig);
+
+      JSCLog('error', `Site configuration: '${siteName}' site logging: directoryname must be a relative path.`, jscLogConfig);
+
+        JSCLog('error', `Site configuration: '${siteName}' site logging: directoryname is missing.`, jscLogConfig);
+
+        JSCLog('error', `Site configuration: '${siteName}' site logging: directoryname cannot be empty.`, jscLogConfig);
+
+  JSCLog('error', 'Site configuration: Logging: fileoutput must be either \'enabled\' or \'disabled\'.', jscLogConfig);
+
+  JSCLog('error', 'Site configuration: Logging: consoleOutput must be either \'enabled\' or \'disabled\'.', jscLogConfig);
+
+  JSCLog('error', `Site configuration: Site ${getSiteNameOrNoName(siteName)}: logging directoryname cannot be empty.`, jscLogConfig);
+
+JSCLog('error', 'CRITICAL: One or more vendor modules did not load.  JSCause will now terminate.');
+
+          JSCLog('error', `Site configuration: Site name '${siteName}' is not unique.`, jscLogBase);
+
+        JSCLog('error', `Site configuration: Site name has an invalid value, ${siteName}. String expected.`, jscLogBase);
+
+      JSCLog('error', 'Site configuration: Missing name.', jscLogBase);
+
+          JSCLog('error', `Site configuration:  Site name ${getSiteNameOrNoName(siteName)} has an invalid port.  Integer number expected.`, jscLogBase);
+
+        JSCLog('error', `Site configuration: Site name ${getSiteNameOrNoName(siteName)} is missing port.`, jscLogBase);
+
+        JSCLog('error', `Site configuration: ${getSiteNameOrNoName(siteName)}: Site root directory name ${siteRootDirectoryName} cannot be specified as an absolute path.  Directory name expected.`, jscLogBase);
+
+        JSCLog('error', `Site configuration: Site name ${getSiteNameOrNoName(siteName)} has an invalid 'enablehttps' value.  Boolean expected.`, jscLogBase);
+
+        JSCLog('error', `Site configuration: Site ${getSiteNameOrNoName(siteName)}: site.json is invalid.`, jscLogBase);
+
+              JSCLog('error', `Site configuration: Both sites ${getSiteNameOrNoName(combo.siteName)} and ${getSiteNameOrNoName(siteName)} have the same root directory and port combination - '${currentRootDirectoryName}', ${sitePort}`, jscLogBase);
+              JSCLog('error', `Site configuration: ${getSiteNameOrNoName(siteName)} is attempting to use an already existing root directory and port combination - '${currentRootDirectoryName}', ${sitePort}`, jscLogSite);
+
+
+                  JSCLog('error', `Site configuration: Site ${getSiteNameOrNoName(siteName)} is HTTPS, and would be sharing HTTP port ${sitePort} with ${getSiteNameOrNoName(combo.siteName)}`, jscLogBase);
+                  JSCLog('error', `Site configuration: Site ${getSiteNameOrNoName(siteName)} is attempting to use HTTPS in an already assigned HTTP port, ${sitePort}`, jscLogSite);
+
+                JSCLog('error', `Site configuration: Both sites ${getSiteNameOrNoName(combo.siteName)} and ${getSiteNameOrNoName(siteName)} have the same host name and port combination - '${currentSiteHostName}', ${sitePort}`, jscLogBase);
+                JSCLog('error', `Site configuration: ${getSiteNameOrNoName(siteName)}, ${sitePort} is already in use`, jscLogSite);
+
+
+            JSCLog('error', `Site ${getSiteNameOrNoName(siteName)}: Too many files and/or directories (&gt; ${maxFilesOrDirInDirectory}) in directory:`, jscLogSite);
+            JSCLog('error', `- ${currentDirectoryPath}`, jscLogSite);
+
+            JSCLog('error', `Site ${getSiteNameOrNoName(siteName)}: could not read directory: ${currentDirectoryPath}`, Object.assign({ e }, jscLogBaseWithSite));
+
+                JSCLog('error', `Site ${getSiteNameOrNoName(siteName)}: Cannot find ${fullPath}`, Object.assign({ e }, jscLogBaseWithSite));
+
+      JSCLog('error', 'Site configuration: invalid or missing rootDirectoryName.', jscLogBaseWithSite);
+
+
+      JSCLog('error', `Site ${getSiteNameOrNoName(siteName)} not started.`, jscLogBaseWithSite);
+
+
+  JSCLog('error', `Site ${getSiteNameOrNoName(siteName)} not started.`, jscLogBase);
+
+
+JSCLog('error', 'The following sites failed to run:', jscLogBase);
+
+  JSCLog('error', `- ${getSiteNameOrNoName(name)}`, jscLogBase);
+
+JSCLog('error', 'Server not started.  No sites are running.', jscLogBase);
+</code></pre></div></div>
+
+<p>sendRequestError(413, <code class="highlighter-rouge">Payload exceeded limit of ${maxPayloadSizeBytes} bytes</code>, req, res, serverConfig, identifiedSite, requestTickTockId);</p>
+
+<p>sendRequestError(408, <code class="highlighter-rouge">Timeout exceeded limit of ${requestTimeoutSecs} seconds</code>, req, res, serverConfig, identifiedSite, requestTickTockId);</p>
+
+<p>sendRequestError(403, ‘Uploading is forbidden.’, req, res, serverConfig, identifiedSite, requestTickTockId);</p>
+
+<p>Non-logged errors and warnings (terminal only):</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>console.error('Unrecognized command line switch. Server not started.');
+        console.error('ERROR:  Error on server listening termination:');
+console.warn('\nWARNING! Log message queue full.  No entries are being logged to file.  Check permissions, storage space and/or filesystem health.');
+    console.warn(`\nWARNING!  Reached the amount of log termination retries due to pending callbacks (${MAX_NUMBER_OF_JSCLOGTERMINATE_RETRIES}).  Giving up.`);
+</code></pre></div></div>
 
 <h2 id="more-resources">More resources</h2>
 
