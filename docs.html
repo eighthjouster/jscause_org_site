@@ -1304,7 +1304,7 @@ Sun, 23 Feb 2020 00:32:04 GMT - jscausesite1 - GET: /some_file.jscp - 500
 
 <h3 id="where-symlinks-can-be-used">Where symlinks can be used</h3>
 
-<p>Symlinks can be used in the following scenarios:</p>
+<p>Symlinks can be used in practically any scenario in which the underlying operating system (OS) allows them.  However, JSCause does extra checks (e.g. preemptively detecting circular references) in the following scenarios:</p>
 
 <h4 id="jscauseconf-rootdirectoryname">jscause.conf: rootDirectoryName</h4>
 
@@ -1337,21 +1337,44 @@ Sun, 23 Feb 2020 00:32:04 GMT - jscausesite1 - GET: /some_file.jscp - 500
 
 <p>You can use a symlink for your website’s temporary work directory.  For example:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ ln -s /mnt/great_sites/one_great_site/workbench /home/user_name/jscause/sites/a_great_site/workbench
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ ln -s /mnt/great_sites/one_great_site/workbench /home/user_name/jscause/sites/a_great_site/workbench_link
 </code></pre></div></div>
 
-<p><strong>Be mindful where you place this directory.</strong>  It should be a location outside of your site’s <code class="highlighter-rouge">/website</code> directory.  It should never be public.</p>
+<p><strong>Be mindful about where you place this directory.</strong>  It should be a location outside of your site’s <code class="highlighter-rouge">/website</code> directory.  It should never be public.</p>
 
-<h4 id="fileoutput-logging-server-wide-and-per-site">fileOutput logging (server-wide and per-site)</h4>
+<h4 id="logging-1">Logging</h4>
 
-<p>(TO-DO:) CONTINUE HERE.</p>
+<p>You can use a symlink when specifying a logging directory, in both a server-wide scenario as well as a site-wide scenario.</p>
 
-<p>If a symlink is not listed in any of the scenarios above, then JSCause will not accept it.  For instance
-(TO-DO:) LIST ONE OR TWO EXAMPLES IN WHICH JSCAUSE WILL REJECT SYMLINKS</p>
+<p>Here are two examples:</p>
 
-<p>(TO-DO:) Windows?</p>
+<p>In the case of server-wide logging, let’s assume that your logging directory is at <code class="highlighter-rouge">/mnt/all_server_logging/logging/</code>, and the JSCause installation is at <code class="highlighter-rouge">/home/user_name/jscause/</code>.  You can create a symlink to the logging directory by issuing the following command in the terminal:</p>
 
-<p>(TO-DO:) Back up this doc, please?</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ ln -s /mnt/all_server_logging/logging /home/user_name/jscause/server_logs_link
+</code></pre></div></div>
+
+<p>Then on <code class="highlighter-rouge">jscause.conf</code>, you can configure the logging directory as:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  "logging": {
+    "general": {
+      "directoryName": "./server_logs_link",
+      // etc
+    }
+  }
+</code></pre></div></div>
+
+<p>A similar procedure can be done for site-wide configurations.  Let’s assume that your site’s logging directory is at <code class="highlighter-rouge">/mnt/all_sites_logging/my_site/logging</code>, and your site is at <code class="highlighter-rouge">/home/user_name/jscause/sites/mysite</code>.  You can create a symlink to the logging directory by issuing the following command in the terminal:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ ln -s /mnt/all_sites_logging/my_site/logging /home/user_name/jscause/sites/mysite/logs_link
+</code></pre></div></div>
+
+<p>Then on <code class="highlighter-rouge">site.json</code> you can configure the logging directory as:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  "logging": {
+    "directoryName": "./logs_link",
+    // etc
+  }
+</code></pre></div></div>
 
 <h2 id="terminating-an-jscause-instance">Terminating an JSCause instance</h2>
 
@@ -1364,11 +1387,11 @@ Documentation: Ctrl+C or SIGINT will terminate the server gracefully:</p>
   <li>A third Ctrl+C will terminate the program immediately, even if cleanup was happening.</li>
 </ul>
 
-<h3 id="the-rt-runtime-object-reference">The rt runtime object reference</h3>
+<h2 id="the-rt-runtime-object-reference">The rt runtime object reference</h2>
 
 <p>Here’s the complete list of methods and variables available in the <code class="highlighter-rouge">rt</code> object:</p>
 
-<h4 id="rtadditional">rt.additional</h4>
+<h3 id="rtadditional">rt.additional</h3>
 
 <p><em>Type</em>: Object.</p>
 
@@ -1393,7 +1416,7 @@ Documentation: Ctrl+C or SIGINT will terminate the server gracefully:</p>
   <li><a href="#rtpostparams">rt.postParams</a></li>
 </ul>
 
-<h4 id="rtcontenttype">rt.contentType</h4>
+<h3 id="rtcontenttype">rt.contentType</h3>
 
 <p><em>Type</em>: String.</p>
 
@@ -1416,7 +1439,7 @@ Documentation: Ctrl+C or SIGINT will terminate the server gracefully:</p>
   <li><a href="#rtrequestmethod">rt.requestMethod</a></li>
 </ul>
 
-<h4 id="rtcopyfile">rt.copyFile()</h4>
+<h3 id="rtcopyfile">rt.copyFile()</h3>
 
 <p><em>Type</em>: Method.</p>
 
@@ -1465,7 +1488,7 @@ Documentation: Ctrl+C or SIGINT will terminate the server gracefully:</p>
   <li><a href="#rt-promises">RT Promises</a></li>
 </ul>
 
-<h4 id="rtdeletecookie">rt.deleteCookie()</h4>
+<h3 id="rtdeletecookie">rt.deleteCookie()</h3>
 
 <p><em>Type</em>: Method.</p>
 
@@ -1490,7 +1513,7 @@ Documentation: Ctrl+C or SIGINT will terminate the server gracefully:</p>
   <li><a href="#rtsetcookie">rt.setCookie</a></li>
 </ul>
 
-<p>#### rt.deleteFile()</p>
+<h3 id="rtdeletefile">rt.deleteFile()</h3>
 
 <p><em>Type</em>: Method.</p>
 
@@ -1526,7 +1549,7 @@ Documentation: Ctrl+C or SIGINT will terminate the server gracefully:</p>
   <li><a href="#rt-promises">RT Promises</a></li>
 </ul>
 
-<h4 id="rtfileexists">rt.fileExists()</h4>
+<h3 id="rtfileexists">rt.fileExists()</h3>
 
 <p><em>Type</em>: Method.</p>
 
@@ -1562,7 +1585,7 @@ Documentation: Ctrl+C or SIGINT will terminate the server gracefully:</p>
   <li><a href="#rt-promises">RT Promises</a></li>
 </ul>
 
-<h4 id="rtgetcookie">rt.getCookie()</h4>
+<h3 id="rtgetcookie">rt.getCookie()</h3>
 
 <p><em>Type</em>: Method.</p>
 
@@ -1596,7 +1619,7 @@ console.log(rt.getCookie('my_cookie'), { decodeURIValue: false }); // --&gt; Ret
   <li><a href="#rtdeletecookie">rt.deleteCookie</a></li>
 </ul>
 
-<h4 id="rtgetcurrentpath">rt.getCurrentPath()</h4>
+<h3 id="rtgetcurrentpath">rt.getCurrentPath()</h3>
 
 <p><em>Type</em>: Method.</p>
 
@@ -1611,7 +1634,7 @@ console.log(rt.getCookie('my_cookie'), { decodeURIValue: false }); // --&gt; Ret
 
 <p>For example, if the request url is <code class="highlighter-rouge">/some/directory/hello.jscp</code>, rt.getCurrentPath() will return <code class="highlighter-rouge">'/some/directory'</code>.</p>
 
-<h4 id="rtgetparams">rt.getParams</h4>
+<h3 id="rtgetparams">rt.getParams</h3>
 
 <p><em>Type</em>: Object.</p>
 
@@ -1627,7 +1650,7 @@ console.log(rt.getCookie('my_cookie'), { decodeURIValue: false }); // --&gt; Ret
   <li><a href="#rtpostparams">rt.postParams</a></li>
 </ul>
 
-<h4 id="rtheader">rt.header()</h4>
+<h3 id="rtheader">rt.header()</h3>
 
 <p><em>Type</em>: Method.</p>
 
@@ -1671,7 +1694,7 @@ console.log(rt.getCookie('my_cookie'), { decodeURIValue: false }); // --&gt; Ret
   <li><a href="#rtrequestmethod">rt.requestMethod</a></li>
 </ul>
 
-<h4 id="rtmodule">rt.module()</h4>
+<h3 id="rtmodule">rt.module()</h3>
 
 <p><em>Type</em>: Method.</p>
 
@@ -1691,7 +1714,7 @@ console.log(rt.getCookie('my_cookie'), { decodeURIValue: false }); // --&gt; Ret
   <li><a href="#jscause-modules-jscm-files">JSCause modules: JSCM files</a></li>
 </ul>
 
-<h4 id="rtmovefile">rt.moveFile()</h4>
+<h3 id="rtmovefile">rt.moveFile()</h3>
 
 <p><em>Type</em>: Method.</p>
 
@@ -1725,7 +1748,7 @@ console.log(rt.getCookie('my_cookie'), { decodeURIValue: false }); // --&gt; Ret
   <li><a href="#rt-promises">RT Promises</a></li>
 </ul>
 
-<h4 id="rtpostparams">rt.postParams</h4>
+<h3 id="rtpostparams">rt.postParams</h3>
 
 <p><em>Type</em>: Object.</p>
 
@@ -1764,7 +1787,7 @@ console.log(rt.getCookie('my_cookie'), { decodeURIValue: false }); // --&gt; Ret
   <li><a href="#rtuploadedfiles">rt.uploadedFiles</a></li>
 </ul>
 
-<h4 id="rtprint">rt.print()</h4>
+<h3 id="rtprint">rt.print()</h3>
 
 <p><em>Type</em>: Method.</p>
 
@@ -1816,7 +1839,7 @@ For instance, the following:</p>
   <li><a href="#rtunsafeprint">rt.unsafePrint</a></li>
 </ul>
 
-<h4 id="rtreadfile">rt.readFile()</h4>
+<h3 id="rtreadfile">rt.readFile()</h3>
 
 <p><em>Type</em>: Method.</p>
 
@@ -1854,7 +1877,7 @@ For instance, the following:</p>
   <li><a href="#rt-promises">RT Promises</a></li>
 </ul>
 
-<h4 id="rtredirectto">rt.redirectTo()</h4>
+<h3 id="rtredirectto">rt.redirectTo()</h3>
 
 <p><em>Type</em>: Method.</p>
 
@@ -1888,7 +1911,7 @@ For instance, the following:</p>
   <li><a href="#redirection">Redirection</a></li>
 </ul>
 
-<h4 id="rtrequestmethod">rt.requestMethod</h4>
+<h3 id="rtrequestmethod">rt.requestMethod</h3>
 
 <p><em>Type</em>: String.</p>
 
@@ -1901,7 +1924,7 @@ For instance, the following:</p>
   <li><a href="#rtcontenttype">rt.contentType</a></li>
 </ul>
 
-<h4 id="rtresetredirectto">rt.resetRedirectTo()</h4>
+<h3 id="rtresetredirectto">rt.resetRedirectTo()</h3>
 
 <p><em>Type</em>: Method.</p>
 
@@ -1917,7 +1940,7 @@ For instance, the following:</p>
   <li><a href="#redirection">Redirection</a></li>
 </ul>
 
-<h4 id="rtrunafter">rt.runAfter()</h4>
+<h3 id="rtrunafter">rt.runAfter()</h3>
 
 <p><em>Type</em>: Method.</p>
 
@@ -1939,7 +1962,7 @@ For instance, the following:</p>
   <li><a href="#callbacks">Callbacks</a></li>
 </ul>
 
-<h4 id="rtsetcookie">rt.setCookie()</h4>
+<h3 id="rtsetcookie">rt.setCookie()</h3>
 
 <p><em>Type</em>: Method.</p>
 
@@ -2034,7 +2057,7 @@ const cookieValue2 = rt.getCookie('my_cookie', { path: '/' });
   <li><a href="#rtdeletecookie">rt.deleteCookie</a></li>
 </ul>
 
-<h4 id="rtunsafeprint">rt.unsafePrint()</h4>
+<h3 id="rtunsafeprint">rt.unsafePrint()</h3>
 
 <p><em>Type</em>: Method.</p>
 
@@ -2060,7 +2083,7 @@ const cookieValue2 = rt.getCookie('my_cookie', { path: '/' });
   <li><a href="#rtprint">rt.print</a></li>
 </ul>
 
-<h4 id="rtuploadedfiles">rt.uploadedFiles</h4>
+<h3 id="rtuploadedfiles">rt.uploadedFiles</h3>
 
 <p><em>Type</em>: Object.</p>
 
@@ -2114,7 +2137,7 @@ const cookieValue2 = rt.getCookie('my_cookie', { path: '/' });
   <li><a href="#rtcontenttype">rt.contentType</a></li>
 </ul>
 
-<h4 id="rtwaitfor">rt.waitFor()</h4>
+<h3 id="rtwaitfor">rt.waitFor()</h3>
 
 <p><em>Type</em>: Method.</p>
 
@@ -2193,7 +2216,14 @@ Troubleshooting here.</p>
     </ul>
   </li>
   <li>FAQ: site.json accepts a hostName that could already be being used in another site’s site.json.  Is this a bug?</li>
-  <li>This is fine as long as both sites use different ports.</li>
+  <li>
+    <p>This is fine as long as both sites use different ports.</p>
+  </li>
+  <li>JSCause says a file does not exist, but I can see it in the file system!
+    <ul>
+      <li>Could it be that it’s a broken link?</li>
+    </ul>
+  </li>
 </ul>
 
 <h2 id="more-resources">More resources</h2>
