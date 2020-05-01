@@ -2227,298 +2227,169 @@ rt.readFile('my_source.txt', 'utf-8')
 <p>Here is a list of errors and warnings that JSCause may report in the logs, or directly in the terminal.  This list is not completely exhaustive.  It may not include errors that are fairly easy to fix (e.g. “Missing rootDirectoryName”) or that could only show up during internal testing.</p>
 
 <p>(TO-DO:)
-        JSCLog(‘warning’, <code class="highlighter-rouge">Could not delete unhandled uploaded file: ${thisFile.name}</code>, jscLogConfig);
-        JSCLog(‘warning’, <code class="highlighter-rouge">(CONT) On the file system as: ${thisFile.path}</code>, Object.assign({ e: err }, jscLogConfig));</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>      JSCLog('warning', `Could not delete unhandled uploaded file: ${thisFile.name}`, jscLogConfig);
-      JSCLog('warning', `(CONT) On the file system as: ${thisFile.path}`, Object.assign({ e: err }, jscLogConfig));
-
-      JSCLog('warning', `Could not delete unhandled uploaded file: ${thisFile.name}`, jscLogConfig);
-      JSCLog('warning', `(CONT) On the file system as: ${thisFile.path}`, Object.assign({ e: err }, jscLogConfig));
-
-      JSCLog('warning', 'Site: <span class="nt">&lt;html/&gt;</span> keyword found in the middle of code.  Did you mean to put it in the beginning of an HTML section?', jscLogConfig);
-
-              JSCLog('warning', `Site configuration: ${mimeTypeName} mimetype value is empty.  Assumed application/octet-stream.`, jscLogConfig);
-
-JSCLog('warning', `Site configuration: Site ${getSiteNameOrNoName(siteName)} has file logging ${updatedConfigLogging.fileOutputEnabled ? 'enabled' : 'disabled'} while the server has per-site file logging ${(perSitePermanentFileOutputEnabled) ? 'enabled' : 'disabled'}.`, jscLogConfig);
-JSCLog('warning', '- Server configuration prevails.', jscLogConfig);
-
-JSCLog('warning', `Site configuration: Site ${getSiteNameOrNoName(siteName)} has console logging ${updatedConfigLogging.consoleOutputEnabled ? 'enabled' : 'disabled'} while the server has per-site console logging ${(perSitePermanentConsoleOutputEnabled) ? 'enabled' : 'disabled'}.`, jscLogConfig);
-JSCLog('warning', '- Server configuration prevails.', jscLogConfig);
-
-                  JSCLog('warning', `Site configuration: Site ${getSiteNameOrNoName(siteName)} is HTTPS, and would be sharing HTTPS port ${sitePort} with ${getSiteNameOrNoName(combo.siteName)}`, jscLogBase);
-                  JSCLog('warning', `Site configuration: Site ${getSiteNameOrNoName(siteName)} is using HTTPS in an already assigned HTTPS port, ${sitePort}`, jscLogSite);
-
-                JSCLog('warning', `Site configuration: Site ${getSiteNameOrNoName(siteName)} is HTTP, and is sharing HTTPS port ${sitePort} with ${getSiteNameOrNoName(combo.siteName)}`, jscLogBase);
-                JSCLog('warning', `Site configuration: Site ${getSiteNameOrNoName(siteName)} is using HTTP in an already assigned HTTPS port, ${sitePort}`, jscLogSite);
-
-                JSCLog('warning', `Site ${getSiteNameOrNoName(siteName)}: ${fileName} detected in ${currentDirectoryPath} subdirectory. Only error files in the root directory will be used to display custom errors.`, jscLogBaseWithSite);
-
-    JSCLog('error', 'CRITICAL:  An application error occurred when processing a callback.');
-
-JSCLog('error', `CRITICAL: Cannot load ${VENDOR_TEMPLATE_FILENAME} file. The JSCause installation might be corrupted.`, { e, toConsole: true });
-
-  JSCLog('error', `CRITICAL: Cannot load ${requireName} file. The JSCause installation might be corrupted.`, { e, toConsole: true });
-
-  JSCLog('error', `CRITICAL: Could not compile vendor module ${vendorModuleName}.`, { toConsole: true });
-
-JSCLog('error', `CRITICAL: Failed to load vendor module ${vendorModuleName}. The JSCause installation might be corrupted.`, { toConsole: true });
-
-
-JSCLog('error', `Invalid ${fileName} file format.`, jscLogConfig);
-JSCLog('error', e.message, jscLogConfig);
-
-    JSCLog('error', 'Error is around the following section of the file:', jscLogConfig);
-    JSCLog('error', excerpt.join(''), jscLogConfig);
-
-JSCLog('error', `Error parsing ${fileName}`, jscLogConfig);
-JSCLog('error', state.parseErrorDescription, jscLogConfig);
-
-  JSCLog('error', `Temporary work directory path ${tempWorkDirectory} must be specified as relative to ${getSiteNameOrNoName(siteName)}.`, jscLogConfig);
-
-  JSCLog('error', `Could not rename unhandled uploaded file: ${thisFile.name}`, jscLogConfig);
-  JSCLog('error', `(CONT) Renaming from: ${oldFilePath}`, jscLogConfig);
-  JSCLog('error', `(CONT) Renaming to: ${newFilePath}`, Object.assign({ e: err }, jscLogConfig));
-
-      JSCLog('error', `Site: ${siteName}: Application error when processing ${runFileName}.`, { e });
-
-    JSCLog('error', `Site: ${siteName}: Runtime error on file ${runFileName}: ${extractErrorFromRuntimeObject(runtimeException)}`,
-
-    JSCLog('error', `Module name and path ${moduleName} must be specified as relative.`, jscLogConfig);
-</code></pre></div></div>
-
-<p>JSCLog(‘error’, <code class="highlighter-rouge">Site ${getSiteNameOrNoName(siteName)}: Cannot serve ${fullPath} file.</code>,</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>      JSCLog('error', 'Form upload related error.',
-
-JSCLog('error', 'Request related error.',
-
-    JSCLog('error', 'CRITICAL:  An application error occurred when processing an incoming request.');
-    JSCLog('error', e);
-
-JSCLog('error', `Server ${serverName} could not start listening on port ${serverPort}.`, jscLogConfig);
-JSCLog('error', 'Error returned by the server follows:', jscLogConfig);
-JSCLog('error', e.message, jscLogConfig);
-JSCLog('error', `Server ${serverName} (port: ${serverPort}) not started.`, jscLogConfig);
-
-  JSCLog('error', `- Site ${getSiteNameOrNoName(site.siteName)} not started.`, jscLogConfig);
-
-    JSCLog('error', `Site ${getSiteNameOrNoName(siteName)}: Cannot read '${keyFileName}' SSL key file.`, jscLogConfig);
-
-    JSCLog('error', `Site ${getSiteNameOrNoName(siteName)}: Cannot read '${certFileName}' SSL cert file.`, jscLogConfig);
-
-      JSCLog('error', `Site ${getSiteNameOrNoName(siteName)}: An error occurred while attempting to start HTTPS server.`, jscLogConfig);
-      JSCLog('error', e.message, Object.assign({ e }, jscLogConfig));
-
-    JSCLog('error', `Site ${getSiteNameOrNoName(siteName)}: An error occurred while attempting to start HTTP server.`, jscLogConfig);
-    JSCLog('error', e.message, Object.assign({ e }, jscLogConfig));
-
-JSCLog('error', `Cannot find ${name} file.`, Object.assign({ e }, jscLogConfig));
-
-  JSCLog('error', `${name} is a directory.`, jscLogConfig);
-
-    JSCLog('error', `Cannot load ${name} file.`, Object.assign({ e }, jscLogConfig));
-
-  JSCLog('error', `"${configKeyLowerCase}"${casingReport}${emptyValueReport} is not a valid configuration key.`, jscLogConfig);
-
-JSCLog('error', `Check that all the keys and values in ${fileName} are valid.`, jscLogConfig);
-
-JSCLog('error', `${errorMsgIfFound}`, jscLogConfig);
-
-  JSCLog('error', `${configName}:  The following configuration attribute was not found:`, jscLogConfig);
-
-  JSCLog('error', `${configName}:  The following configuration attributes were not found:`, jscLogConfig);
-
-  JSCLog('error', `- ${keyName}`, jscLogConfig);
-
-  JSCLog('error', `Site: Compile error: ${extractErrorFromCompileObject(e)}`, Object.assign({ e }, jscLogConfig));
-
-JSCLog('error', 'Site: Parsing error, possibly internal.', Object.assign({ e }, jscLogConfig));
-
-JSCLog('error', `Site: Cannot find source file: ${sourcePath}`, Object.assign({ e }, jscLogConfig));
-
-  JSCLog('error', `Site: Entry point is a directory: ${sourcePath}`, jscLogConfig);
-
-    JSCLog('error', `Site: Cannot load source file: ${sourcePath}`, Object.assign({ e }, jscLogConfig));
-
-  JSCLog('error', `Site: Could not compile code for ${fsPath.join(...sourceFilePath)}.`, jscLogConfig);
-
-  JSCLog('error', `Site configuration: Site name ${getSiteNameOrNoName(siteName)} is missing rootdirectoryname.`, jscLogConfig);
-
-  JSCLog('error', `Site configuration: Site name ${getSiteNameOrNoName(siteName)}: rootdirectoryname cannot be empty.`, jscLogConfig);
-
-JSCLog('error', `Site configuration: Site name ${getSiteNameOrNoName(siteName)}: rootdirectoryname expects a string value.`, jscLogConfig);
-
-  JSCLog('error', 'Site configuration:  hostname cannot be empty.', jscLogConfig);
-
-  JSCLog('error', 'Site configuration:  Invalid maxpayloadsizebytes.  Integer number expected.', jscLogConfig);
-
-
-    JSCLog('error', `Site configuration:  mimetype has an invalid '${valueName}' name.  Expected: ${allowdNames.map(name =&gt; `'${name}'`).join(', ')}.`, jscLogConfig);
-
-    JSCLog('error', 'Site configuration:  mimetype has an invalid \'include\' attribute value. Object (key, value) expected.', jscLogConfig);
-
-    JSCLog('error', 'Site configuration:  mimetype has an invalid \'exclude\' attribute value. Array expected.', jscLogConfig);
-
-            JSCLog('error', `Site configuration:  mimetype has an invalid ${valueName} value for ${mimeTypeName}.  String expected.`, jscLogConfig);
-
-          JSCLog('error', 'Site configuration:  mimetype name cannot be empty.', jscLogConfig);
-
-        JSCLog('error', `Site configuration:  mimetype has an invalid ${valueName} name.  String expected.`, jscLogConfig);
-
-    JSCLog('error', 'Site configuration:  tempworkdirectory cannot be empty.', jscLogConfig);
-  
-      JSCLog('error', 'Site configuration:  Invalid jscpextensionrequired value.  Use \'never\' (recommended), \'optional\' or \'always\'.', jscLogConfig);
-
-  JSCLog('error', 'Site configuration:  jscpextensionrequired cannot be empty.  Use \'never\' (recommended), \'optional\' or \'always\'.', jscLogConfig);
-      JSCLog('error', 'Site configuration:  Invalid httppoweredbyheader value.  Use \'include\' or \'exclude\'.', jscLogConfig);
-
-  JSCLog('error', 'Site configuration:  httppoweredbyheader cannot be empty.  Use \'include\' or \'exclude\'.', jscLogConfig);
-
-  JSCLog('error', 'Site configuration:  httpscertfile cannot be empty.', jscLogConfig);
-
-
-  JSCLog('error', 'Site configuration:  httpskeyfile cannot be empty.', jscLogConfig);
-
-
-  JSCLog('error', `Site ${getSiteNameOrNoName(siteName)}: Cannot find link:`, jscLogConfig);
-  JSCLog('error', `- ${fullPath} --&gt; ${linkedFileName}`, Object.assign({ e }, jscLogConfig));
-
-
-      JSCLog('error', `Site ${getSiteNameOrNoName(siteName)}: Circular symbolic link reference:`, jscLogConfig);
-
-        JSCLog('error', `- ${symlinkPath}`, jscLogConfig);
-
-      JSCLog('error', `Site ${getSiteNameOrNoName(siteName)}: Too many files and/or directories (&gt; ${maxFilesOrDirInDirectory}) in directory (circular reference?):`, jscLogConfig);
-      JSCLog('error', `- ${currentDirectoryPath}`, jscLogConfig);
-
-  JSCLog('error', `Too many processed so far (&gt; ${MAX_DIRECTORIES_TO_PROCESS}) (circular reference?):`, jscLogConfig);
-  JSCLog('error', `- ${fullPath}`, jscLogConfig);
-
-  JSCLog('error', `Too many directories left to process (&gt; ${MAX_PROCESSED_DIRECTORIES_THRESHOLD}) (circular reference?):`, jscLogConfig);
-  JSCLog('error', `- ${fullPath}`,jscLogConfig);
-
-
-  JSCLog('error', `Site ${getSiteNameOrNoName(siteName)}: Too many files and/or directories (&gt; ${maxFilesOrDirInDirectory}) in directory:`, jscLogConfig);
-  JSCLog('error', `- ${currentDirectoryPath}`, jscLogConfig);
-
-
-    JSCLog('error', `Site ${getSiteNameOrNoName(siteName)}: Too many files and/or directories (&gt; ${maxFilesOrDirInDirectory}) in directory:`, jscLogConfig);
-    JSCLog('error', `- ${currentDirectoryPath}`, jscLogConfig);
-
-
-  JSCLog('error', `${errorMsgPrefix}Cannot find directory: ${directoryName}`, Object.assign({ e }, jscLogConfig));
-
-    JSCLog('error', `${errorMsgPrefix}Cannot find link:`, jscLogConfig);
-    JSCLog('error', `- ${directoryName} --&gt; ${linkedPath}`, Object.assign({ e }, jscLogConfig));
-
-    JSCLog('error', `${errorMsgPrefix}${directoryName}${(linkedPath) ? ` --&gt; ${linkedPath}` : ''} is not a directory.`, jscLogConfig);
-
-    JSCLog('error', `${errorMsgPrefix}${directoryName}${(linkedPath) ? ` --&gt; ${linkedPath}` : ''} is not writeable.`, jscLogConfig);
-
-
-  JSCLog('error', 'Configuration:  sites cannot be empty.', jscLogConfig);
-
-              JSCLog('error', `Configuration: logging: ${configKey}: ${attributeKey} is not a valid configuration key.`, jscLogConfig);
-
-        JSCLog('error', 'Configuration: logging:  Invalid value for general.  Object expected.', jscLogConfig);
-
-      JSCLog('error', `Configuration: logging:  ${configKey} is not a valid configuration key.`, jscLogConfig);
-
-  JSCLog('error', 'Server configuration:  Expected a valid logging configuration value.', jscLogConfig);
-
-  JSCLog('error', `Site configuration: Logging: '${infoKey}' is not a valid configuration key.`, jscLogConfig);
-
-    JSCLog('error', 'Site configuration: Logging: \'perSite\' section must not have a \'directoryName\' configuration key.', jscLogConfig);
-
-    JSCLog('error', 'Site configuration: Logging: \'perSite\' section must not have a \'logfilesizethreshold\' configuration key.', jscLogConfig);
-
-      JSCLog('error', 'Site configuration: Logging: \'logfilesizethreshold\' must be 0 or greater.', jscLogConfig);
-
-    JSCLog('error', 'Site configuration: Logging: \'logfilesizethreshold\' is invalid.  Integer number expected.', jscLogConfig);
-
-    JSCLog('error', `Site configuration: '${siteName}' site logging: 'perSite' section must not have a 'logfilesizethreshold' configuration key.`, jscLogConfig);
-
-
-    JSCLog('error', `Site configuration: '${siteName}' site logging: Invalid directoryname.  String expected.`, jscLogConfig);
-
-      JSCLog('error', `Site configuration: '${siteName}' site logging: directoryname must be a relative path.`, jscLogConfig);
-
-        JSCLog('error', `Site configuration: '${siteName}' site logging: directoryname is missing.`, jscLogConfig);
-
-        JSCLog('error', `Site configuration: '${siteName}' site logging: directoryname cannot be empty.`, jscLogConfig);
-
-  JSCLog('error', 'Site configuration: Logging: fileoutput must be either \'enabled\' or \'disabled\'.', jscLogConfig);
-
-  JSCLog('error', 'Site configuration: Logging: consoleOutput must be either \'enabled\' or \'disabled\'.', jscLogConfig);
-
-  JSCLog('error', `Site configuration: Site ${getSiteNameOrNoName(siteName)}: logging directoryname cannot be empty.`, jscLogConfig);
-
-JSCLog('error', 'CRITICAL: One or more vendor modules did not load.  JSCause will now terminate.');
-
-          JSCLog('error', `Site configuration: Site name '${siteName}' is not unique.`, jscLogBase);
-
-        JSCLog('error', `Site configuration: Site name has an invalid value, ${siteName}. String expected.`, jscLogBase);
-
-      JSCLog('error', 'Site configuration: Missing name.', jscLogBase);
-
-          JSCLog('error', `Site configuration:  Site name ${getSiteNameOrNoName(siteName)} has an invalid port.  Integer number expected.`, jscLogBase);
-
-        JSCLog('error', `Site configuration: Site name ${getSiteNameOrNoName(siteName)} is missing port.`, jscLogBase);
-
-        JSCLog('error', `Site configuration: ${getSiteNameOrNoName(siteName)}: Site root directory name ${siteRootDirectoryName} cannot be specified as an absolute path.  Directory name expected.`, jscLogBase);
-
-        JSCLog('error', `Site configuration: Site name ${getSiteNameOrNoName(siteName)} has an invalid 'enablehttps' value.  Boolean expected.`, jscLogBase);
-
-        JSCLog('error', `Site configuration: Site ${getSiteNameOrNoName(siteName)}: site.json is invalid.`, jscLogBase);
-
-              JSCLog('error', `Site configuration: Both sites ${getSiteNameOrNoName(combo.siteName)} and ${getSiteNameOrNoName(siteName)} have the same root directory and port combination - '${currentRootDirectoryName}', ${sitePort}`, jscLogBase);
-              JSCLog('error', `Site configuration: ${getSiteNameOrNoName(siteName)} is attempting to use an already existing root directory and port combination - '${currentRootDirectoryName}', ${sitePort}`, jscLogSite);
-
-
-                  JSCLog('error', `Site configuration: Site ${getSiteNameOrNoName(siteName)} is HTTPS, and would be sharing HTTP port ${sitePort} with ${getSiteNameOrNoName(combo.siteName)}`, jscLogBase);
-                  JSCLog('error', `Site configuration: Site ${getSiteNameOrNoName(siteName)} is attempting to use HTTPS in an already assigned HTTP port, ${sitePort}`, jscLogSite);
-
-                JSCLog('error', `Site configuration: Both sites ${getSiteNameOrNoName(combo.siteName)} and ${getSiteNameOrNoName(siteName)} have the same host name and port combination - '${currentSiteHostName}', ${sitePort}`, jscLogBase);
-                JSCLog('error', `Site configuration: ${getSiteNameOrNoName(siteName)}, ${sitePort} is already in use`, jscLogSite);
-
-
-            JSCLog('error', `Site ${getSiteNameOrNoName(siteName)}: Too many files and/or directories (&gt; ${maxFilesOrDirInDirectory}) in directory:`, jscLogSite);
-            JSCLog('error', `- ${currentDirectoryPath}`, jscLogSite);
-
-            JSCLog('error', `Site ${getSiteNameOrNoName(siteName)}: could not read directory: ${currentDirectoryPath}`, Object.assign({ e }, jscLogBaseWithSite));
-
-                JSCLog('error', `Site ${getSiteNameOrNoName(siteName)}: Cannot find ${fullPath}`, Object.assign({ e }, jscLogBaseWithSite));
-
-      JSCLog('error', 'Site configuration: invalid or missing rootDirectoryName.', jscLogBaseWithSite);
-
-
-      JSCLog('error', `Site ${getSiteNameOrNoName(siteName)} not started.`, jscLogBaseWithSite);
-
-
-  JSCLog('error', `Site ${getSiteNameOrNoName(siteName)} not started.`, jscLogBase);
-
-
-JSCLog('error', 'The following sites failed to run:', jscLogBase);
-
-  JSCLog('error', `- ${getSiteNameOrNoName(name)}`, jscLogBase);
-
-JSCLog('error', 'Server not started.  No sites are running.', jscLogBase);
-</code></pre></div></div>
-
-<p>sendRequestError(413, <code class="highlighter-rouge">Payload exceeded limit of ${maxPayloadSizeBytes} bytes</code>, req, res, serverConfig, identifiedSite, requestTickTockId);</p>
-
-<p>sendRequestError(408, <code class="highlighter-rouge">Timeout exceeded limit of ${requestTimeoutSecs} seconds</code>, req, res, serverConfig, identifiedSite, requestTickTockId);</p>
-
-<p>sendRequestError(403, ‘Uploading is forbidden.’, req, res, serverConfig, identifiedSite, requestTickTockId);</p>
+$$ Syntax warnings:</p>
+
+<p>warning: Site: &lt;html/&gt; keyword found in the middle of code.  Did you mean to put it in the beginning of an HTML section?</p>
+
+<p>$$ Configuration warnings:</p>
+
+<p>warning: Site configuration: <mime type=""> mimetype value is empty.  Assumed application/octet-stream.
+warning: Site configuration: Site <site name=""> has <file or="" console=""> logging &lt;enabled | disabled&gt; while the server has per-site file logging &lt;disabled | enabled&gt;. - Server configuration prevails.
+warning: Site configuration: Site <site name=""> is HTTPS, and would be sharing HTTPS port <port> with <site name="">
+warning: Site configuration: Site <site name=""> is using <HTTP or="" HTTPS=""> in an already assigned HTTPS port, <port>
+warning: Site configuration: Site <site name=""> is HTTP, and is sharing HTTPS port <port> with <site name=""></site></port></site></port></HTTP></site></site></port></site></file></site></mime></p>
+
+<p>$$ Website layout warnings:</p>
+
+<p>warning: Site <site name="">: &lt;error4xx/error5xx file&gt; detected in <path> subdirectory. Only error files in the root directory will be used to display custom errors.
+warning: Could not delete unhandled uploaded file: <file name=""> (CONT) On the file system as: <path></path></file></path></site></p>
+
+<p>$$ Configuration files:</p>
+
+<p>error: Invalid <file name=""> file format. :: The file is not valid JscJSON (JSON with comments allowed.)
+error: Error parsing <file name=""> Duplicate key: <key name="">
+error: Error parsing <file name=""> <error description=""> :: Expected colons, commas, opening or closing brackets, etc, in JscJSON.
+error: "<name>" is not a valid configuration key.  Check that all the keys and values in <file name=""> are valid. :: Make sure that all the keys in your configuration files are valid.  For example, `jscause.conf` will accept the `sites`, `logging` and `requestTimeoutSecs` keys.  Check that there are no typos, e.g. `sitess` instead of `sites`, and that all the keys are known to JSCause (e.g. `cheeseTacos` may trigger this error.)
+error: <configuration name="">:  The following configuration attribute was not found: - <key name=""> :: Check that the required key specified by <key name=""> is present in the filename specified by <configuration name="">. For instance, if the `sites` global configuration key is missing from `jscause.conf`, JSCause will show this error.</configuration></key></key></configuration></file></name></error></file></key></file></file></p>
+
+<p>$$ Directories:</p>
+
+<p>error: Temporary work directory path <path> must be specified as relative to <site name="">.</site></path></p>
+
+<p>$$ Forms and uploads:</p>
+
+<p>error: Could not rename unhandled uploaded file: <file name=""> (CONT) Renaming from: <old path=""> (CONT) Renaming to: <new path=""> :: Occurs right after uploading.  Read only directory? Disk full? Disk became unavailable?
+error: Site: <name>: Application error when processing <file name="">. :: Happend if an errors occurs when deleting unhandled uploaded files.
+error: Form upload related error. :: An error ocurred while receiving the contents of an HTML form.  Usually this error is followed by more details about it, for example, an interrupted connection.</file></name></new></old></file></p>
+
+<p>$$ Runtime errors:</p>
+
+<p>error: Site: <name>: Runtime error on file <file name="">: <error description="">
+error: Site <site name="">: Cannot serve <path> file. :: The static file was deleted/unavailable after JSCause was launched.</path></site></error></file></name></p>
+
+<p>$$ Module errors:</p>
+
+<p>error: Module name and path <module path=""> must be specified as relative.</module></p>
+
+<p>$$ Request errors:</p>
+
+<p>error: Request related error. :: An error occured while receiving or processing the request.  Usually this error is followed by more details about it, for example, an interrupted connection.</p>
+
+<p>$$ Startup errors:</p>
+
+<p>error: Server <name> could not start listening on port <port>. - Error returned by the server follows: - Server <name> (port: <port>) not started. - Site <site name=""> not started. :: This error usually occurs when the port JSCause is trying to listen on is busy or unavailable (EADDRINUSE).  Another program may already be listening on that port.  If this is not the error displayed, JSCause will provide more information.
+error: Site <site name="">: An error occurred while attempting to start HTTP server.
+$ or:
+error: Site <site name="">: An error occurred while attempting to start HTTPS server. :: It is rare when this error occurs, especially since other errors will be emitted for similar causes.  JSCause will provide more information at the time this error occurs.  Probable causes are, the port is already in use, or there is not enough memory to run JSCause. 
+error: Cannot find <name> file. :: JSCause cannot find a configuration file, typically `jscause.conf` or one of the `site.json` files.  If `jscause.conf` can't be found, make sure it is in the same directory as the JSCause executable, `jscause.js`.  If a `site.json` file can't be found, make sure it is inside the `configuration` subdirectory of your website's directory.  [Read more in the site.json section](#sitejson-configuring-your-websites-details).
+error: <name> is a directory. :: JSCause is either trying to read a configuration file, such as `jscause.conf` or `site.json`, but the name refers to a directory instead.  Make sure that `jscause.conf` and every `site.json` file is actually a file and not a directory.
+error: Cannot load <name> file. :: JSCause attempted to read an existing configuration file, such as `jscause.conf` or `site.json`, and was unable to do so.  Make sure that JSCause has all the necessary access and permissions to read these files.
+error: Site: Compile error: <error> :: JSCause could not compile your program.  It's possibly due to a syntax error.  JSCause will try to display as much information about the error as possible.
+error: Site: Parsing error, possibly internal. :: JSCause may contain a bug.  If you get this error, [please let us know](#more-resources).</error></name></name></name></site></site></site></port></name></port></name></p>
+
+<p>$$ SSL-related errors:</p>
+
+<p>error: Site <site name="">: Cannot read '<file name="">' SSL key file. :: The SSL key file provided is missing or not found in the directory JSCause was expecting.  Refer to the `httpsKeyFile` sub-section of [the site.json section](#sitejson-configuring-your-websites-details) for more information.
+error: Site <site name="">: Cannot read '<file name="">' SSL cert file. :: The SSL cert file provided is missing or not found in the directory JSCause was expecting.  Refer to the `httpscertfile` sub-section of [the site.json section](#sitejson-configuring-your-websites-details) for more information.</file></site></file></site></p>
+
+<p>===</p>
+
+<p>error: Site: Cannot find source file: <path>
+error: Site: Entry point is a directory: <path>
+error: Site: Cannot load source file: <path>
+error: Site: Could not compile code for <path>.
+error: Site configuration: Site name <site name=""> is missing rootdirectoryname.
+error: Site configuration: Site name <site name="">: rootdirectoryname cannot be empty.
+error: Site configuration: Site name <site name="">: rootdirectoryname expects a string value.
+error: Site configuration:  hostname cannot be empty.
+error: Site configuration:  Invalid maxpayloadsizebytes.  Integer number expected.
+error: Site configuration:  mimetype has an invalid '<value name="">' name.  Expected: <allowed names="">.
+error: Site configuration:  mimetype has an invalid 'include' attribute value. Object (key, value) expected.
+error: Site configuration:  mimetype has an invalid 'exclude' attribute value. Array expected.
+error: Site configuration:  mimetype has an invalid <value name=""> value for <mime type="">.  String expected.
+error: Site configuration:  mimetype name cannot be empty.
+error: Site configuration:  mimetype has an invalid <value name=""> name.  String expected.
+error: Site configuration:  tempworkdirectory cannot be empty.
+error: Site configuration:  Invalid jscpextensionrequired value.  Use 'never' (recommended), 'optional' or 'always'.
+error: Site configuration:  jscpextensionrequired cannot be empty.  Use 'never' (recommended), 'optional' or 'always'.
+error: Site configuration:  Invalid httppoweredbyheader value.  Use 'include' or 'exclude'.
+error: Site configuration:  httppoweredbyheader cannot be empty.  Use 'include' or 'exclude'.
+error: Site configuration:  httpscertfile cannot be empty.
+error: Site configuration:  httpskeyfile cannot be empty.
+error: Site <site name="">: Cannot find link: - <path> --&gt; <linkedFileName>
+error: Site <site name="">: Circular symbolic link reference: - <symlinkPath>
+error: Site <site name="">: Too many files and/or directories (&gt; 2048) in directory (circular reference?): - <path>
+error: Too many processed so far (&gt; 4096) (circular reference?): - <path>
+error: Too many directories left to process (&gt; 1024) (circular reference?): - <path>
+error: Site <site name="">: Too many files and/or directories (&gt; 2048) in directory: - <path>
+error: Site <site name="">: Too many files and/or directories (&gt; 2048) in directory: - <path>
+error: Cannot find directory: <name>
+error: Cannot find link: - <name> --&gt; <path>
+error: <name> --&gt; <path> is not a directory.
+error: <name> --&gt; <path> is not writeable.
+error: Configuration:  sites cannot be empty.
+error: Configuration: logging: <key name="">: <key name=""> is not a valid configuration key.
+error: Configuration: logging:  Invalid value for general.  Object expected.
+error: Configuration: logging:  <key name=""> is not a valid configuration key.
+error: Server configuration:  Expected a valid logging configuration value.
+error: Site configuration: Logging: '<key name="">' is not a valid configuration key.
+error: Site configuration: Logging: 'perSite' section must not have a 'directoryName' configuration key.
+error: Site configuration: Logging: 'perSite' section must not have a 'logfilesizethreshold' configuration key.
+error: Site configuration: Logging: 'logfilesizethreshold' must be 0 or greater.
+error: Site configuration: Logging: 'logfilesizethreshold' is invalid.  Integer number expected.
+error: Site configuration: '<name>' site logging: 'perSite' section must not have a 'logfilesizethreshold' configuration key.
+error: Site configuration: '<name>' site logging: Invalid directoryname.  String expected.
+error: Site configuration: '<name>' site logging: directoryname must be a relative path.
+error: Site configuration: '<name>' site logging: directoryname is missing.
+error: Site configuration: '<name>' site logging: directoryname cannot be empty.
+error: Site configuration: Logging: fileoutput must be either 'enabled' or 'disabled'.
+error: Site configuration: Logging: consoleOutput must be either 'enabled' or 'disabled'.
+error: Site configuration: Site <site name="">: logging directoryname cannot be empty.
+error: Site configuration: Site name '<name>' is not unique.
+error: Site configuration: Site name has an invalid value, <name>. String expected.
+error: Site configuration: Missing name.
+error: Site configuration:  Site name <site name=""> has an invalid port.  Integer number expected.
+error: Site configuration: Site name <site name=""> is missing port.
+error: Site configuration: <site name="">: Site root directory name <directory name=""> cannot be specified as an absolute path.  Directory name expected.
+error: Site configuration: Site name <site name=""> has an invalid 'enablehttps' value.  Boolean expected.
+error: Site configuration: Site <site name="">: site.json is invalid.
+error: Site configuration: Both sites &lt;site name 1&gt; and &lt;site name 2&gt; have the same root directory and port combination - '<path>', <port>
+error: Site configuration: <site name=""> is attempting to use an already existing root directory and port combination - '<path>', <port>
+error: Site configuration: Site <site name=""> is HTTPS, and would be sharing HTTP port <port> with <site name="">
+error: Site configuration: Site <site name=""> is attempting to use HTTPS in an already assigned HTTP port, <port>
+error: Site configuration: Both sites &lt;site name 1&gt; and &lt;site name 2&gt; have the same host name and port combination - '<host name="">', <port>
+error: Site configuration: <site name="">, <port> is already in use
+error: Site <site name="">: Too many files and/or directories (&gt; 2048) in directory: - <path>
+error: Site <site name="">: could not read directory: <path>
+error: Site <site name="">: Cannot find <path>
+error: Site configuration: invalid or missing rootDirectoryName.
+error: Site <site name=""> not started.
+error: Site <site name=""> not started.
+error: The following sites failed to run: - <site names="">
+error: Server not started.  No sites are running.</site></site></site></path></site></path></site></path></site></port></site></port></host></port></site></site></port></site></port></path></site></port></path></site></site></directory></site></site></site></name></name></site></name></name></name></name></name></key></key></key></key></path></name></path></name></path></name></name></path></site></path></site></path></path></path></site></symlinkPath></site></linkedFileName></path></site></value></mime></value></allowed></value></site></site></site></path></path></path></path></p>
+
+<p>HTTP errors:</p>
+
+<p>HTTP error 413: Payload exceeded limit of <amount> bytes
+HTTP error 408: Timeout exceeded limit of <amount> seconds
+HTTP error 403: Uploading is forbidden</amount></amount></p>
 
 <p>Non-logged errors and warnings (terminal only):</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>console.error('Unrecognized command line switch. Server not started.');
-        console.error('ERROR:  Error on server listening termination:');
-console.warn('\nWARNING! Log message queue full.  No entries are being logged to file.  Check permissions, storage space and/or filesystem health.');
-    console.warn(`\nWARNING!  Reached the amount of log termination retries due to pending callbacks (${MAX_NUMBER_OF_JSCLOGTERMINATE_RETRIES}).  Giving up.`);
-</code></pre></div></div>
+<p>Unrecognized command line switch. Server not started.
+ERROR:  Error on server listening termination:
+WARNING! Log message queue full.  No entries are being logged to file.  Check permissions, storage space and/or filesystem health.
+WARNING!  Reached the amount of log termination retries due to pending callbacks (30).  Giving up.</p>
+
+<p>Critical errors:</p>
+
+<p>error: CRITICAL: An application error occurred when processing an incoming request.
+error: CRITICAL: One or more vendor modules did not load.  JSCause will now terminate.
+error: CRITICAL: An application error occurred when processing a callback.
+error: CRITICAL: Cannot load <vendor file="" name=""> file. The JSCause installation might be corrupted.
+error: CRITICAL: Cannot load <file name=""> file. The JSCause installation might be corrupted.
+error: CRITICAL: Could not compile vendor module <name>.
+error: CRITICAL: Failed to load vendor module <name>. The JSCause installation might be corrupted.</name></name></file></vendor></p>
 
 <h2 id="more-resources">More resources</h2>
 
@@ -2539,6 +2410,8 @@ Any others?</li>
     </ul>
   </li>
 </ul>
+
+<p>(TO-DO:)  Any references to the almost-JSON we use here should be called JscJSON (JSON with comments.)</p>
 
       </div>
       <div class="topmenu">
