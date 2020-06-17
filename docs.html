@@ -2222,174 +2222,478 @@ rt.readFile('my_source.txt', 'utf-8')
 
 <p>It may be a broken symlink that doesn’t point to a valid file anymore.</p>
 
-<h2 id="list-of-errors-and-warnings-reported-by-jscause">List of errors and warnings reported by JSCause</h2>
+<h2 id="list-of-common-errors-and-warnings-reported-by-jscause">List of common errors and warnings reported by JSCause</h2>
 
-<p>Here is a list of errors and warnings that JSCause may report in the logs, or directly in the terminal.  This list is not completely exhaustive.  It may not include errors that are fairly easy to fix (e.g. “Missing rootDirectoryName”) or that could only show up during internal testing.</p>
+<p>Here is an excerpt of the most commonly encountered errors and warnings, as well as some obscure ones, and how to potentially address them.
+Since this list is not completely exhaustive, it may not include errors that are fairly easy to fix (e.g. “Missing rootDirectoryName.”)</p>
 
-<p>(TO-DO:)
-$$ Syntax warnings:</p>
+<h3 id="configuration">Configuration:</h3>
 
-<p>warning: Site: &lt;html/&gt; keyword found in the middle of code.  Did you mean to put it in the beginning of an HTML section?</p>
+<p>Message:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>warning: Site configuration: Site &lt;site name&gt; has &lt;file or console&gt; logging &lt;enabled | disabled&gt; while the server has per-site file logging &lt;disabled | enabled&gt;. - Server configuration prevails.
+</code></pre></div></div>
 
-<p>$$ Configuration warnings:</p>
+<p>Explanation:
+There is a discrepancy between a global logging configuration, and a specific site logging configuration.  For example, in <code class="highlighter-rouge">jscause.conf</code> there might be a configuration indicating that all sites’ file logging be enabled; and if there is one site indicating that its file logging be disabled, JSCause will emit this warning.  That way, JSCause lets the site owner know that logging will be enabled since that’s the prevailing global configuration.</p>
 
-<p>warning: Site configuration: <mime type=""> mimetype value is empty.  Assumed application/octet-stream.
-warning: Site configuration: Site <site name=""> has <file or="" console=""> logging &lt;enabled | disabled&gt; while the server has per-site file logging &lt;disabled | enabled&gt;. - Server configuration prevails.
-warning: Site configuration: Site <site name=""> is HTTPS, and would be sharing HTTPS port <port> with <site name="">
-warning: Site configuration: Site <site name=""> is using <HTTP or="" HTTPS=""> in an already assigned HTTPS port, <port>
-warning: Site configuration: Site <site name=""> is HTTP, and is sharing HTTPS port <port> with <site name=""></site></port></site></port></HTTP></site></site></port></site></file></site></mime></p>
+<p>Message:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>warning: Site configuration: Site &lt;site name 1&gt; is HTTPS, and would be sharing HTTPS port &lt;port&gt; with &lt;site name 2&gt;
+</code></pre></div></div>
 
-<p>$$ Website layout warnings:</p>
+<p>Explanation:
+Usually, different HTTPS sites use different ports.  So when two HTTPS sites have the same port in common, it may be a mistake.  It may not be, but JSCause warns about this just in case.  To avoid this warning, make sure that each HTTPS site has their own port.</p>
 
-<p>warning: Site <site name="">: &lt;error4xx/error5xx file&gt; detected in <path> subdirectory. Only error files in the root directory will be used to display custom errors.
-warning: Could not delete unhandled uploaded file: <file name=""> (CONT) On the file system as: <path></path></file></path></site></p>
+<p>Message:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>warning: Site configuration: Site &lt;site name&gt; is HTTP, and is sharing HTTPS port &lt;port&gt; with &lt;site name&gt;
+</code></pre></div></div>
 
-<p>$$ Configuration files:</p>
+<p>Explanation:
+Usually, an HTTP site and an HTTPS site use different ports.  If the HTTP site uses port that was already assigned to an HTTPS site, it may be that its traffic will go through HTTPS and not HTTP.  Or that the HTTPS site masks all requests intended to the HTTP site.  To avoid this warning, make sure that both sites use different ports.</p>
 
-<p>error: Invalid <file name=""> file format. :: The file is not valid JscJSON (JSON with comments allowed.)
-error: Error parsing <file name=""> Duplicate key: <key name="">
-error: Error parsing <file name=""> <error description=""> :: Expected colons, commas, opening or closing brackets, etc, in JscJSON.
-error: "<name>" is not a valid configuration key.  Check that all the keys and values in <file name=""> are valid. :: Make sure that all the keys in your configuration files are valid.  For example, `jscause.conf` will accept the `sites`, `logging` and `requestTimeoutSecs` keys.  Check that there are no typos, e.g. `sitess` instead of `sites`, and that all the keys are known to JSCause (e.g. `cheeseTacos` may trigger this error.)
-error: <configuration name="">:  The following configuration attribute was not found: - <key name=""> :: Check that the required key specified by <key name=""> is present in the filename specified by <configuration name="">. For instance, if the `sites` global configuration key is missing from `jscause.conf`, JSCause will show this error.</configuration></key></key></configuration></file></name></error></file></key></file></file></p>
+<p>Message:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>error: Invalid &lt;file name&gt; file format.
+</code></pre></div></div>
 
-<p>$$ Directories:</p>
+<p>Explanation:
+The file is not valid JSON or JscSON (which is JSON with comments allowed.)  Make sure that the file contents is correctly constructed (no extra commas, no typos, every key and value enclosed in double quotes, etc.)</p>
 
-<p>error: Temporary work directory path <path> must be specified as relative to <site name="">.</site></path></p>
+<p>Message:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>error: Temporary work directory path &lt;path&gt; must be specified as relative to &lt;site name&gt;.
+</code></pre></div></div>
 
-<p>$$ Forms and uploads:</p>
+<p>Explanation:
+Temporary work directories must be inside its site’s directory.  Therefore, any paths to define them must be relative to the site’s path.  See the <code class="highlighter-rouge">tempWorkDirectory</code> entry in the <a href="#sitejson-configuring-your-websites-details">site.json section</a> section for more information.</p>
 
-<p>error: Could not rename unhandled uploaded file: <file name=""> (CONT) Renaming from: <old path=""> (CONT) Renaming to: <new path=""> :: Occurs right after uploading.  Read only directory? Disk full? Disk became unavailable?
-error: Site: <name>: Application error when processing <file name="">. :: Happend if an errors occurs when deleting unhandled uploaded files.
-error: Form upload related error. :: An error ocurred while receiving the contents of an HTML form.  Usually this error is followed by more details about it, for example, an interrupted connection.</file></name></new></old></file></p>
+<p>Message:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>error: Site configuration: Site name &lt;site name&gt;: Missing rootdirectoryname.
+</code></pre></div></div>
 
-<p>$$ Runtime errors:</p>
+<p>Explanation:
+Every site configuration must specify the directory it will reside on.  This is done in the <code class="highlighter-rouge">jscause.conf</code> file.  Read the <code class="highlighter-rouge">rootdirectoryname</code> entry in the <a href="#jscauseconf-configuring-jscause-to-serve-your-website">jscause.conf configuration</a> section for more information.</p>
 
-<p>error: Site: <name>: Runtime error on file <file name="">: <error description="">
-error: Site <site name="">: Cannot serve <path> file. :: The static file was deleted/unavailable after JSCause was launched.</path></site></error></file></name></p>
+<p>Message:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>error: Site configuration: Site name &lt;site name&gt;: &lt;key name&gt; cannot be empty.
+</code></pre></div></div>
 
-<p>$$ Module errors:</p>
+<p>Explanation:
+This means that a specific configuration key has been assigned an empty string.  Certain configuration keys, like <code class="highlighter-rouge">rootdirectoryname</code>, not only needs to exist in the configuration file, but it also must hold a valid value.  Here is (an incomplete) list of keys that cannot be empty:</p>
+<ul>
+  <li><code class="highlighter-rouge">rootdirectoryname</code></li>
+  <li><code class="highlighter-rouge">httppoweredbyheader</code></li>
+  <li><code class="highlighter-rouge">mimetype</code></li>
+  <li><code class="highlighter-rouge">tempworkdirectory</code></li>
+  <li><code class="highlighter-rouge">httpscertfile</code></li>
+  <li><code class="highlighter-rouge">httpskeyfile</code></li>
+  <li><code class="highlighter-rouge">jscpextensionrequired</code></li>
+  <li><code class="highlighter-rouge">directoryname</code> (logging.)</li>
+</ul>
 
-<p>error: Module name and path <module path=""> must be specified as relative.</module></p>
+<p>Some keys will give a hint on which values they expect.  For example, if the error is related to <code class="highlighter-rouge">jscpextensionrequired</code>, JSCause will suggest to use <code class="highlighter-rouge">'never'</code>, <code class="highlighter-rouge">'optional'</code> or <code class="highlighter-rouge">'always'</code>.</p>
 
-<p>$$ Request errors:</p>
+<p>Message:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>error: Site configuration: Site name &lt;site name&gt;: &lt;key name&gt; expects a &lt;type&gt; value.
+</code></pre></div></div>
 
-<p>error: Request related error. :: An error occured while receiving or processing the request.  Usually this error is followed by more details about it, for example, an interrupted connection.</p>
+<p>Explanation:
+Make sure that the mentioned key configuration receives a value of the type indicated.  For example, directory names must be specified as strings; so using any other types, like numbers or objects, will trigger this error.</p>
 
-<p>$$ Startup errors:</p>
+<p>Message:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>error: Site configuration:  Site name &lt;site name&gt;: Invalid &lt;key name&gt;.
+</code></pre></div></div>
+<p>Or:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>error: Site configuration:  Site name &lt;site name&gt;: Invalid &lt;key name&gt; value.
+</code></pre></div></div>
 
-<p>error: Server <name> could not start listening on port <port>. - Error returned by the server follows: - Server <name> (port: <port>) not started. - Site <site name=""> not started. :: This error usually occurs when the port JSCause is trying to listen on is busy or unavailable (EADDRINUSE).  Another program may already be listening on that port.  If this is not the error displayed, JSCause will provide more information.
-error: Site <site name="">: An error occurred while attempting to start HTTP server.
-$ or:
-error: Site <site name="">: An error occurred while attempting to start HTTPS server. :: It is rare when this error occurs, especially since other errors will be emitted for similar causes.  JSCause will provide more information at the time this error occurs.  Probable causes are, the port is already in use, or there is not enough memory to run JSCause. 
-error: Cannot find <name> file. :: JSCause cannot find a configuration file, typically `jscause.conf` or one of the `site.json` files.  If `jscause.conf` can't be found, make sure it is in the same directory as the JSCause executable, `jscause.js`.  If a `site.json` file can't be found, make sure it is inside the `configuration` subdirectory of your website's directory.  [Read more in the site.json section](#sitejson-configuring-your-websites-details).
-error: <name> is a directory. :: JSCause is either trying to read a configuration file, such as `jscause.conf` or `site.json`, but the name refers to a directory instead.  Make sure that `jscause.conf` and every `site.json` file is actually a file and not a directory.
-error: Cannot load <name> file. :: JSCause attempted to read an existing configuration file, such as `jscause.conf` or `site.json`, and was unable to do so.  Make sure that JSCause has all the necessary access and permissions to read these files.
-error: Site: Compile error: <error> :: JSCause could not compile your program.  It's possibly due to a syntax error.  JSCause will try to display as much information about the error as possible.
-error: Site: Parsing error, possibly internal. :: JSCause may contain a bug.  If you get this error, [please let us know](#more-resources).</error></name></name></name></site></site></site></port></name></port></name></p>
+<p>Similar to <code class="highlighter-rouge">&lt;key name&gt; expects a &lt;type&gt; value.</code>  Make sure that the mentioned configuration key is assigned a value it expects.  This message may be emitted when configuring any of the following keys:</p>
+<ul>
+  <li><code class="highlighter-rouge">rootdirectoryname</code></li>
+  <li><code class="highlighter-rouge">jscpextensionrequired</code></li>
+  <li><code class="highlighter-rouge">maxpayloadsizebytes</code></li>
+  <li><code class="highlighter-rouge">httppoweredbyheader</code></li>
+</ul>
 
-<p>$$ SSL-related errors:</p>
+<p>Some keys will give a hint on which values they expect.  For example, if the error is related to <code class="highlighter-rouge">jscpextensionrequired</code>, JSCause will suggest to use <code class="highlighter-rouge">'never'</code>, <code class="highlighter-rouge">'optional'</code> or <code class="highlighter-rouge">'always'</code>.</p>
 
-<p>error: Site <site name="">: Cannot read '<file name="">' SSL key file. :: The SSL key file provided is missing or not found in the directory JSCause was expecting.  Refer to the `httpsKeyFile` sub-section of [the site.json section](#sitejson-configuring-your-websites-details) for more information.
-error: Site <site name="">: Cannot read '<file name="">' SSL cert file. :: The SSL cert file provided is missing or not found in the directory JSCause was expecting.  Refer to the `httpscertfile` sub-section of [the site.json section](#sitejson-configuring-your-websites-details) for more information.</file></site></file></site></p>
+<p>Message:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>error: Site configuration: Site name '&lt;name&gt;' is not unique.
+</code></pre></div></div>
 
-<p>===</p>
+<p>Explanation:
+Make sure every site configured in <code class="highlighter-rouge">jscause.conf</code> has a unique <code class="highlighter-rouge">name</code>.  For example:</p>
 
-<p>error: Site: Cannot find source file: <path>
-error: Site: Entry point is a directory: <path>
-error: Site: Cannot load source file: <path>
-error: Site: Could not compile code for <path>.
-error: Site configuration: Site name <site name=""> is missing rootdirectoryname.
-error: Site configuration: Site name <site name="">: rootdirectoryname cannot be empty.
-error: Site configuration: Site name <site name="">: rootdirectoryname expects a string value.
-error: Site configuration:  hostname cannot be empty.
-error: Site configuration:  Invalid maxpayloadsizebytes.  Integer number expected.
-error: Site configuration:  mimetype has an invalid '<value name="">' name.  Expected: <allowed names="">.
-error: Site configuration:  mimetype has an invalid 'include' attribute value. Object (key, value) expected.
-error: Site configuration:  mimetype has an invalid 'exclude' attribute value. Array expected.
-error: Site configuration:  mimetype has an invalid <value name=""> value for <mime type="">.  String expected.
-error: Site configuration:  mimetype name cannot be empty.
-error: Site configuration:  mimetype has an invalid <value name=""> name.  String expected.
-error: Site configuration:  tempworkdirectory cannot be empty.
-error: Site configuration:  Invalid jscpextensionrequired value.  Use 'never' (recommended), 'optional' or 'always'.
-error: Site configuration:  jscpextensionrequired cannot be empty.  Use 'never' (recommended), 'optional' or 'always'.
-error: Site configuration:  Invalid httppoweredbyheader value.  Use 'include' or 'exclude'.
-error: Site configuration:  httppoweredbyheader cannot be empty.  Use 'include' or 'exclude'.
-error: Site configuration:  httpscertfile cannot be empty.
-error: Site configuration:  httpskeyfile cannot be empty.
-error: Site <site name="">: Cannot find link: - <path> --&gt; <linkedFileName>
-error: Site <site name="">: Circular symbolic link reference: - <symlinkPath>
-error: Site <site name="">: Too many files and/or directories (&gt; 2048) in directory (circular reference?): - <path>
-error: Too many processed so far (&gt; 4096) (circular reference?): - <path>
-error: Too many directories left to process (&gt; 1024) (circular reference?): - <path>
-error: Site <site name="">: Too many files and/or directories (&gt; 2048) in directory: - <path>
-error: Site <site name="">: Too many files and/or directories (&gt; 2048) in directory: - <path>
-error: Cannot find directory: <name>
-error: Cannot find link: - <name> --&gt; <path>
-error: <name> --&gt; <path> is not a directory.
-error: <name> --&gt; <path> is not writeable.
-error: Configuration:  sites cannot be empty.
-error: Configuration: logging: <key name="">: <key name=""> is not a valid configuration key.
-error: Configuration: logging:  Invalid value for general.  Object expected.
-error: Configuration: logging:  <key name=""> is not a valid configuration key.
-error: Server configuration:  Expected a valid logging configuration value.
-error: Site configuration: Logging: '<key name="">' is not a valid configuration key.
-error: Site configuration: Logging: 'perSite' section must not have a 'directoryName' configuration key.
-error: Site configuration: Logging: 'perSite' section must not have a 'logfilesizethreshold' configuration key.
-error: Site configuration: Logging: 'logfilesizethreshold' must be 0 or greater.
-error: Site configuration: Logging: 'logfilesizethreshold' is invalid.  Integer number expected.
-error: Site configuration: '<name>' site logging: 'perSite' section must not have a 'logfilesizethreshold' configuration key.
-error: Site configuration: '<name>' site logging: Invalid directoryname.  String expected.
-error: Site configuration: '<name>' site logging: directoryname must be a relative path.
-error: Site configuration: '<name>' site logging: directoryname is missing.
-error: Site configuration: '<name>' site logging: directoryname cannot be empty.
-error: Site configuration: Logging: fileoutput must be either 'enabled' or 'disabled'.
-error: Site configuration: Logging: consoleOutput must be either 'enabled' or 'disabled'.
-error: Site configuration: Site <site name="">: logging directoryname cannot be empty.
-error: Site configuration: Site name '<name>' is not unique.
-error: Site configuration: Site name has an invalid value, <name>. String expected.
-error: Site configuration: Missing name.
-error: Site configuration:  Site name <site name=""> has an invalid port.  Integer number expected.
-error: Site configuration: Site name <site name=""> is missing port.
-error: Site configuration: <site name="">: Site root directory name <directory name=""> cannot be specified as an absolute path.  Directory name expected.
-error: Site configuration: Site name <site name=""> has an invalid 'enablehttps' value.  Boolean expected.
-error: Site configuration: Site <site name="">: site.json is invalid.
-error: Site configuration: Both sites &lt;site name 1&gt; and &lt;site name 2&gt; have the same root directory and port combination - '<path>', <port>
-error: Site configuration: <site name=""> is attempting to use an already existing root directory and port combination - '<path>', <port>
-error: Site configuration: Site <site name=""> is HTTPS, and would be sharing HTTP port <port> with <site name="">
-error: Site configuration: Site <site name=""> is attempting to use HTTPS in an already assigned HTTP port, <port>
-error: Site configuration: Both sites &lt;site name 1&gt; and &lt;site name 2&gt; have the same host name and port combination - '<host name="">', <port>
-error: Site configuration: <site name="">, <port> is already in use
-error: Site <site name="">: Too many files and/or directories (&gt; 2048) in directory: - <path>
-error: Site <site name="">: could not read directory: <path>
-error: Site <site name="">: Cannot find <path>
-error: Site configuration: invalid or missing rootDirectoryName.
-error: Site <site name=""> not started.
-error: Site <site name=""> not started.
-error: The following sites failed to run: - <site names="">
-error: Server not started.  No sites are running.</site></site></site></path></site></path></site></path></site></port></site></port></host></port></site></site></port></site></port></path></site></port></path></site></site></directory></site></site></site></name></name></site></name></name></name></name></name></key></key></key></key></path></name></path></name></path></name></name></path></site></path></site></path></path></path></site></symlinkPath></site></linkedFileName></path></site></value></mime></value></allowed></value></site></site></site></path></path></path></path></p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{
+  "sites": [
+    {
+      "name": "My Site", // First configured site.
+      [etc]
+    },
+    {
+      "name": "My Other Site", // This is OK.
+      [etc]
+    },
+    {
+      "name": "My Site", // This will yield an error since "My Site" is already being used.
+      [etc]
+    }
+  ],
+  [etc]
+}
+</code></pre></div></div>
 
-<p>HTTP errors:</p>
+<p>Message:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>error: Site configuration: Missing site name.
+</code></pre></div></div>
 
-<p>HTTP error 413: Payload exceeded limit of <amount> bytes
-HTTP error 408: Timeout exceeded limit of <amount> seconds
-HTTP error 403: Uploading is forbidden</amount></amount></p>
+<p>Explanation:
+Make sure every site configured in <code class="highlighter-rouge">jscause.conf</code> has a <code class="highlighter-rouge">name</code>.</p>
 
-<p>Non-logged errors and warnings (terminal only):</p>
+<p>Message:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>error: Site configuration: Site name &lt;site name&gt; is missing port.
+</code></pre></div></div>
 
-<p>Unrecognized command line switch. Server not started.
-ERROR:  Error on server listening termination:
-WARNING! Log message queue full.  No entries are being logged to file.  Check permissions, storage space and/or filesystem health.
-WARNING!  Reached the amount of log termination retries due to pending callbacks (30).  Giving up.</p>
+<p>Explanation:
+Make sure the site <site name=""> defined in `jscause.conf` has a `port`.</site></p>
 
-<p>Critical errors:</p>
+<p>Message:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>error: Site configuration: &lt;site name&gt;: Site root directory name &lt;directory name&gt; cannot be specified as an absolute path.  Directory name expected.
+</code></pre></div></div>
 
-<p>error: CRITICAL: An application error occurred when processing an incoming request.
-error: CRITICAL: One or more vendor modules did not load.  JSCause will now terminate.
-error: CRITICAL: An application error occurred when processing a callback.
-error: CRITICAL: Cannot load <vendor file="" name=""> file. The JSCause installation might be corrupted.
-error: CRITICAL: Cannot load <file name=""> file. The JSCause installation might be corrupted.
-error: CRITICAL: Could not compile vendor module <name>.
-error: CRITICAL: Failed to load vendor module <name>. The JSCause installation might be corrupted.</name></name></file></vendor></p>
+<p>Explanation:
+Site root directories are specified by the <code class="highlighter-rouge">rootDirectoryName</code> key in <code class="highlighter-rouge">jscause.conf</code> for every site defined.  Absolute paths, e.g. <code class="highlighter-rouge">/home/user/mySite</code>, are not allowed.  Read more about <code class="highlighter-rouge">rootDirectoryName</code> in the <a href="#jscauseconf-configuring-jscause-to-serve-your-website">JSCause configuration file section</a>.</p>
+
+<p>Message:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>error: Site configuration: Both sites &lt;site name 1&gt; and &lt;site name 2&gt; have the same root directory and port combination - '&lt;path&gt;', &lt;port&gt;
+error: Site configuration: &lt;site name 2&gt; is attempting to use an already existing root directory and port combination - '&lt;path&gt;', &lt;port&gt;
+</code></pre></div></div>
+
+<p>Explanation:
+No two sites can have the same root directory and the same port simultaneously.  Check your <code class="highlighter-rouge">jscause.conf</code> file and make sure that <code class="highlighter-rouge">&lt;site name 1&gt;</code> and <code class="highlighter-rouge">&lt;site name 2&gt;</code> either have different root directories or different ports.</p>
+
+<p>Message:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>error: Site configuration: Both sites &lt;site name 1&gt; and &lt;site name 2&gt; have the same host name and port combination - '&lt;host name&gt;', &lt;port&gt;
+error: Site configuration: &lt;site name 2&gt;: &lt;port&gt; is already in use
+</code></pre></div></div>
+
+<p>Explanation:
+No two sites can have the same host name and the same port simultaneously.  Check your <code class="highlighter-rouge">jscause.conf</code> file and make sure that <code class="highlighter-rouge">&lt;site name 1&gt;</code> and <code class="highlighter-rouge">&lt;site name 2&gt;</code> either have different host names or different ports.</p>
+
+<p>Message:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>error: Site configuration: Site &lt;site name 2&gt; is HTTPS, and would be sharing HTTP port &lt;port&gt; with &lt;site name 1&gt;
+error: Site configuration: Site &lt;site name 2&gt; is attempting to use HTTPS in an already assigned HTTP port, &lt;port&gt;
+</code></pre></div></div>
+
+<p>Explanation:
+JSCause detects using an HTTP port for HTTPS traffic as invalid.  Make sure that <code class="highlighter-rouge">&lt;site name 2&gt;</code> uses its own, secure HTTPS port.</p>
+
+<p>Message:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>error: Server &lt;name&gt; could not start listening on port &lt;port&gt;.
+</code></pre></div></div>
+
+<p>Explanation:
+This error usually occurs when the port JSCause is trying to listen to a port that is busy or unavailable (EADDRINUSE).  Another program may already be using it.  JSCause will try and provide more information.</p>
+
+<p>Message:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>error: Site &lt;site name&gt;: An error occurred while attempting to start HTTP server.
+</code></pre></div></div>
+<p>Or:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>error: Site &lt;site name&gt;: An error occurred while attempting to start HTTPS server.
+</code></pre></div></div>
+
+<p>Explanation:
+It is rare when this error occurs, especially since other errors will be emitted for similar causes.  JSCause will provide more information at the time this error occurs.  Probable causes are, the port is already in use, or there is not enough memory to run JSCause.</p>
+
+<p>Message:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>error: Cannot find &lt;name&gt; file.
+</code></pre></div></div>
+
+<p>Explanation:
+JSCause cannot find a configuration file, typically <code class="highlighter-rouge">jscause.conf</code> or one of the <code class="highlighter-rouge">site.json</code> files.  If <code class="highlighter-rouge">jscause.conf</code> can’t be found, make sure it is in the same directory as the JSCause executable, <code class="highlighter-rouge">jscause.js</code>.  If a <code class="highlighter-rouge">site.json</code> file can’t be found, make sure it is inside the <code class="highlighter-rouge">configuration</code> subdirectory of your website’s directory.  <a href="#sitejson-configuring-your-websites-details">Read more in the site.json section</a>.</p>
+
+<p>Message:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>error: &lt;name&gt; is a directory.
+</code></pre></div></div>
+
+<p>Explanation:
+JSCause is either trying to read a configuration file, such as <code class="highlighter-rouge">jscause.conf</code> or <code class="highlighter-rouge">site.json</code>, but the name refers to a directory instead.  Make sure that <code class="highlighter-rouge">jscause.conf</code> and every <code class="highlighter-rouge">site.json</code> file is actually a file and not a directory.</p>
+
+<p>Message:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>error: Cannot load &lt;name&gt; file.
+</code></pre></div></div>
+
+<p>Explanation:
+JSCause attempted to read an existing configuration file, such as <code class="highlighter-rouge">jscause.conf</code> or <code class="highlighter-rouge">site.json</code>, and was unable to do so.  Make sure that JSCause has all the necessary access and permissions to read these files.</p>
+
+<p>Message:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>error: Site: Parsing error, possibly internal.
+</code></pre></div></div>
+
+<p>Explanation:
+JSCause may contain a bug.  If you get this error, <a href="#more-resources">please let us know</a>.</p>
+
+<p>Message:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>error: Site: Cannot find source file: &lt;path&gt;
+</code></pre></div></div>
+
+<p>Explanation:
+A source file, be it a JSCP or JSCM one, could not be found or read.  Check that JSCause has read permissions to access it.</p>
+
+<p>Message:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>error: Site: Entry point is a directory: &lt;path&gt;
+</code></pre></div></div>
+
+<p>Explanation:
+<code class="highlighter-rouge">&lt;path&gt;</code> looks like a file (for instance, it has a JSCP or JSCM file extension), but it is in reality a directory, so JSCause cannot read it. Normally, JSCause would just enter the directory and parse its contents, so it would be quite rare to get this error message.</p>
+
+<p>Message:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>error: Site: Cannot load source file: &lt;path&gt;
+</code></pre></div></div>
+
+<p>Explanation:
+A source file, be it a JSCP or JSCM one, could not be read.  Check that JSCause has all the necessary permissions to read it.</p>
+
+<p>Message:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>error: Site: Compile error: &lt;error&gt; - Could not compile code for &lt;path&gt;.
+</code></pre></div></div>
+
+<p>Explanation:
+JSCause could not compile your program.  It is possibly due to a syntax error.  JSCause will try to display as much information about the error as possible.</p>
+
+<p>Message:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>error: Site &lt;site name&gt;: Cannot read '&lt;file name&gt;' SSL key file.
+</code></pre></div></div>
+
+<p>Explanation:
+The SSL key file provided is missing or not found in the directory JSCause was expecting.  Refer to the <code class="highlighter-rouge">httpsKeyFile</code> sub-section of <a href="#sitejson-configuring-your-websites-details">the site.json section</a> for more information.</p>
+
+<p>Message:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>error: Site &lt;site name&gt;: Cannot read '&lt;file name&gt;' SSL cert file.
+</code></pre></div></div>
+
+<p>Explanation:
+The SSL cert file provided is missing or not found in the directory JSCause was expecting.  Refer to the <code class="highlighter-rouge">httpscertfile</code> sub-section of <a href="#sitejson-configuring-your-websites-details">the site.json section</a> for more information.</p>
+
+<p>Message:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>error: Cannot find link:
+error: &lt;path&gt; --&gt; &lt;linkedFileName&gt;
+</code></pre></div></div>
+<p>Or:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>error: Site &lt;site name&gt;: Cannot find link:
+error: &lt;path&gt; --&gt; &lt;linkedFileName&gt;
+</code></pre></div></div>
+
+<p>Explanation:
+JSCause failed to follow the <code class="highlighter-rouge">&lt;path&gt;</code> symlink (symbolic link) when processing the configuration files or the site contents.  Make sure that the file or directory it links to, <code class="highlighter-rouge">&lt;linkedFileName&gt;</code> is correct.</p>
+
+<p>Message:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>error: Site &lt;site name&gt;: Circular symbolic link reference:
+error: &lt;symlinkPath&gt;
+</code></pre></div></div>
+
+<p>Explanation:
+JSCause attempted to retrieve the file or directory indicated by the symlink, but it either refers to itself, or it goes to yet another symlink or symlinks that in the end refer to each other, indefinitely.  Make sure that <code class="highlighter-rouge">&lt;symlinkpath&gt;</code> leads to a valid file or directory.</p>
+
+<p>Message:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>error: Site &lt;site name&gt;: Too many files and/or directories (&gt; 2048) in directory (circular reference?):
+error: &lt;path&gt;
+</code></pre></div></div>
+<p>Or:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>error: Too many directories processed so far (&gt; 4096) (circular reference?):
+error: &lt;path&gt;
+</code></pre></div></div>
+<p>Or:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>error: Too many directories left to process (&gt; 1024) (circular reference?):
+error: &lt;path&gt;
+</code></pre></div></div>
+
+<p>Explanation:
+Just like the error indicates, JSCause found too many files and/or subdirectories inside of <code class="highlighter-rouge">&lt;path&gt;</code>.  Make sure that the number of files and directories are below the limit.  If there are fewer than that, and JSCause still shows the error, it may be a malformed symlink or symlinks that refer to each other indefinitely.  If there are symlinks inside of <code class="highlighter-rouge">&lt;path&gt;</code>, make sure that they all refer to valid files or directories.</p>
+
+<h3 id="related-to-sites-content-and-run-time">Related to sites, content and run-time:</h3>
+
+<p>Message:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>warning: Site: <span class="nt">&lt;html/&gt;</span> keyword found in the middle of code.  Did you mean to put it in the beginning of an HTML section?
+</code></pre></div></div>
+
+<p>Explanation:
+The <code class="highlighter-rouge"><span class="nt">&lt;html/&gt;</span></code> keyword is intended to be placed <a href="#jscp-with-html-only">at the top of the file</a>.  JSCause will ignore it if it’s anywhere else, but will emit this warning just in case it was not placed at the top, be it by accident or on purpose.</p>
+
+<p>Message:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>warning: Site &lt;site name&gt;: &lt;error4xx/error5xx file&gt; detected in &lt;path&gt; subdirectory. Only error files in the root directory will be used to display custom errors.
+</code></pre></div></div>
+
+<p>Explanation:
+You placed an error file, such as <code class="highlighter-rouge">error4xx.html</code> or <code class="highlighter-rouge">error4xx.jscp</code> in a site subdirectory.  JSCause will not use them in order to display custom 4XX (e.g. 404) or 5XX (e.g. 500) errors.  For this, it will only take into account the ones placed in the root of the site.  So, if an error 500 happens when trying to access <code class="highlighter-rouge">/mypath/some_resource.jscp</code>, and there are two custom error files, one located at <code class="highlighter-rouge">/mypath/error5xx.jscp</code> and another located at <code class="highlighter-rouge">/error5xx.jscp</code>, JSCause will use the latter in order to display the custom error.  More info in the <a href="#custom-4xx-and-5xx-errors">custom errors</a> section.</p>
+
+<p>Message:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>warning: Could not delete unhandled uploaded file: &lt;file name&gt;
+(CONT) On the file system as: &lt;path&gt;
+</code></pre></div></div>
+
+<p>Explanation:
+JSCause failed deleting an uploaded file.  It may not have permissions to do so, or there is a problem with the file system.  If the file still exists, it will be located at <code class="highlighter-rouge">&lt;path&gt;</code>.  You may want to manually delete it.  Note that the file name specified in <code class="highlighter-rouge">&lt;file name&gt;</code> will most likely differ from <code class="highlighter-rouge">&lt;path&gt;</code>.</p>
+
+<p>Message:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>error: Could not rename unhandled uploaded file: &lt;file name&gt;
+(CONT) Renaming from: &lt;old path&gt;
+(CONT) Renaming to: &lt;new path&gt;
+</code></pre></div></div>
+
+<p>Explanation:
+This occurs right after uploading a file to a site.  When a file is uploaded, it is first stored in a temporary location.  When the upload completes, JSCause moves it to a different location so that the JSCP program can access it.  This error indicates that the file moving failed.  It’s probably because the target directory is read-only, or the disk is full/became unavailable.</p>
+
+<p>Message:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>error: Site: &lt;name&gt;: Application error when processing &lt;file name&gt;.
+</code></pre></div></div>
+
+<p>Explanation:
+This occurs right after JSCause finishes running a JSCP program which received a request with a file upload.  If the JSCP program ignores the upload, JSCause will safely delete it after it sends a response back to the client.  This error indicates that the deletion failed.  It’s probably related to permissions, or a disk-related issue.</p>
+
+<p>Message:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>error: Form upload related error.
+</code></pre></div></div>
+
+<p>Explanation:
+An error occurred while receiving the contents of an HTML form.  Usually this error is followed by more details about it, for example, an interrupted connection.</p>
+
+<p>Message:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>error: Site: &lt;name&gt;: Runtime error on file &lt;file name&gt;: &lt;error description&gt;
+</code></pre></div></div>
+
+<p>Explanation:
+An error occurred during the execution of the JSCP program in the specified file.  JSCause will provide more details, including the type of error and the line number.</p>
+
+<p>Message:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>error: Site &lt;site name&gt;: Cannot serve &lt;path&gt; file.
+</code></pre></div></div>
+
+<p>Explanation:
+JSCause attempted to serve a requested static file, but it was no longer available.  It was probably deleted or unavailable after JSCause was launched.  If JSCause is not configured to watch for changes in the file system (note: this feature is yet to be implemented), make sure that all files that are present when JSCause launches, keep being present throughout the run time of the application.</p>
+
+<p>Message:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>error: Module name and path &lt;module path&gt; must be specified as relative.
+</code></pre></div></div>
+
+<p>Explanation:
+When importing a module via <code class="highlighter-rouge">rt.module(&lt;module path&gt;)</code>, make sure that <code class="highlighter-rouge">&lt;module path&gt;</code> is a path relative to its site’s directory.  Absolute paths, for example <code class="highlighter-rouge">/home/users/misc/</code> are not allowed.  See the <a href="#jscause-modules-jscm-files">JSCM files section</a> section for more information.</p>
+
+<p>Message:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>error: Request related error.
+</code></pre></div></div>
+
+<p>Explanation:
+An error occured while receiving or processing a client request.  Usually this error is followed by more details about it.  For example, the cause could be that the connection was interrupted before the request was completed.</p>
+
+<h3 id="http-errors">HTTP errors:</h3>
+
+<p>(TO-DO: CONTINUE HERE.)</p>
+
+<p>Message:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>HTTP error 413: Payload exceeded limit of &lt;amount&gt; bytes
+</code></pre></div></div>
+
+<p>Explanation:</p>
+
+<p>Message:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>HTTP error 408: Timeout exceeded limit of &lt;amount&gt; seconds
+</code></pre></div></div>
+
+<p>Explanation:</p>
+
+<p>Message:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>HTTP error 403: Uploading is forbidden
+</code></pre></div></div>
+
+<p>Explanation:</p>
+
+<h3 id="non-logged-errors-and-warnings-terminal-only">Non-logged errors and warnings (terminal only):</h3>
+
+<p>Message:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Unrecognized command line switch. Server not started.
+</code></pre></div></div>
+
+<p>Explanation:</p>
+
+<p>Message:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ERROR:  Error on server listening termination:
+</code></pre></div></div>
+
+<p>Explanation:</p>
+
+<p>Message:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>WARNING! Log message queue full.  No entries are being logged to file.  Check permissions, storage space and/or filesystem health.
+</code></pre></div></div>
+
+<p>Explanation:</p>
+
+<p>Message:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>WARNING!  Reached the amount of log termination retries due to pending callbacks (30).  Giving up.
+</code></pre></div></div>
+
+<p>Explanation:</p>
+
+<h3 id="critical-errors">Critical errors:</h3>
+
+<p>Message:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>error: CRITICAL: An application error occurred when processing an incoming request.
+</code></pre></div></div>
+
+<p>Explanation:</p>
+
+<p>Message:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>error: CRITICAL: One or more vendor modules did not load.  JSCause will now terminate.
+</code></pre></div></div>
+
+<p>Explanation:</p>
+
+<p>Message:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>error: CRITICAL: An application error occurred when processing a callback.
+</code></pre></div></div>
+
+<p>Explanation:</p>
+
+<p>Message:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>error: CRITICAL: Cannot load &lt;vendor file name&gt; file. The JSCause installation might be corrupted.
+</code></pre></div></div>
+
+<p>Explanation:</p>
+
+<p>Message:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>error: CRITICAL: Cannot load &lt;file name&gt; file. The JSCause installation might be corrupted.
+</code></pre></div></div>
+
+<p>Explanation:</p>
+
+<p>Message:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>error: CRITICAL: Could not compile vendor module &lt;name&gt;.
+</code></pre></div></div>
+
+<p>Explanation:</p>
+
+<p>Message:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>error: CRITICAL: Failed to load vendor module &lt;name&gt;. The JSCause installation might be corrupted.
+</code></pre></div></div>
+
+<p>Explanation:</p>
+
+<p>(TO-DO:) We need to develop and add this section somewhere:</p>
+<h2 id="custom-4xx-and-5xx-errors">Custom 4xx and 5xx errors:</h2>
+<ul>
+  <li>Custom errors, if available, will be delivered only during a typical interaction in which a resource is not really available, or an error on a JSCP script.  In other cases, generic 4xx or 5xx will be delivered to the browser.  For instance:
+    <ul>
+      <li>When attempting to use an unrecognized HTTP method.</li>
+      <li>When file uploads are not allowed, or the payload maximum is exceeded.</li>
+      <li>When the site (domain name) is not recognized.</li>
+      <li>When either a form upload or json body upload parsing fails.</li>
+      <li>When delivering a non-cached static file produces an error (e.g., file was available during parsing, but became unavailable later.)</li>
+      <li>Possibly others.</li>
+    </ul>
+  </li>
+  <li>error4xx.jscp/html and error5xx.jscp/html.  html prevails over jscp.</li>
+  <li>Only the ones on the site’s root will be taken into account.</li>
+  <li>Referring to them directly (e.g. explicit ‘/error5xx.html’ request from the browser) will throw a default error 404.</li>
+  <li>If you name a directory error400/500.jscp/html, it will throw a 404 error unless a slash is added.  This is by design.</li>
+  <li>Note:  If either error4xx.jscp or error5xx.jscp have a compile/runtime error, a generic 5xx will be delivered to the browser.  So, if an error 400 happens, and the error4xx.jscp has an error, the browser will indicate error 500.</li>
+</ul>
 
 <h2 id="more-resources">More resources</h2>
 
