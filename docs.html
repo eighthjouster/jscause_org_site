@@ -322,7 +322,7 @@
 
 <p>The timing starts when the request is created due to a web client contacting JSCause.  It includes the time it takes for the client to finish sending the request (including POST bodies and file uploads), and the time it takes for the website (read, JSCP files) to process the request and send a response.  It also includes the time JSCause takes giving the response for the operating system (OS) to send back to the web client.</p>
 
-<p>So, when JSCause gives the whole response for the operating system to handle, <code class="highlighter-rouge">requestTimeoutSecs</code> stops applying.  This means that the response could take longer than the time specified in <code class="highlighter-rouge">requestTimeoutSecs</code>, simply because it’s not longer under JSCause’s control, but the operating system’s.</p>
+<p>So, when JSCause gives the whole response for the operating system to handle, <code class="highlighter-rouge">requestTimeoutSecs</code> stops applying.  This means that the response could take longer than the time specified in <code class="highlighter-rouge">requestTimeoutSecs</code>, simply because it’s not longer under JSCause’s control, but that of the operating system.</p>
 
 <p>If the request exceeds the time specified by <code class="highlighter-rouge">requestTimeoutSecs</code>, JSCause will respond with an HTTP 408 (request timeout) error.</p>
 
@@ -2585,25 +2585,26 @@ An error occured while receiving or processing a client request.  Usually this e
 
 <h3 id="http-errors">HTTP errors:</h3>
 
-<p>(TO-DO: CONTINUE HERE.)</p>
-
 <p>Message:</p>
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>HTTP error 413: Payload exceeded limit of &lt;amount&gt; bytes
 </code></pre></div></div>
 
-<p>Explanation:</p>
+<p>Explanation:
+The request includes a POST payload (e.g. a form upload) that exceeds the size limits configured in JSCause.  The limit is determined by <code class="highlighter-rouge">maxPayloadSizeBytes</code> in the website configuration.  See the <code class="highlighter-rouge">maxPayloadSizeBytes</code> entry in the <a href="#sitejson-configuring-your-websites-details">site.json section</a> section for more information.</p>
 
 <p>Message:</p>
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>HTTP error 408: Timeout exceeded limit of &lt;amount&gt; seconds
 </code></pre></div></div>
 
-<p>Explanation:</p>
+<p>Explanation:
+The request took too long to be handled.  See the <a href="#requesttimeoutsecs"><code class="highlighter-rouge">requestTimeoutSecs</code></a> (<code class="highlighter-rouge">requesttimeoutsecs</code>) server configuration value for more information.</p>
 
 <p>Message:</p>
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>HTTP error 403: Uploading is forbidden
 </code></pre></div></div>
 
-<p>Explanation:</p>
+<p>Explanation:
+The website has the <code class="highlighter-rouge">canUpload</code> configuration value set to <code class="highlighter-rouge">false</code>.  See the <code class="highlighter-rouge">canUpload</code> entry in the <a href="#sitejson-configuring-your-websites-details">site.json section</a> section for more information.</p>
 
 <h3 id="non-logged-errors-and-warnings-terminal-only">Non-logged errors and warnings (terminal only):</h3>
 
@@ -2611,51 +2612,39 @@ An error occured while receiving or processing a client request.  Usually this e
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Unrecognized command line switch. Server not started.
 </code></pre></div></div>
 
-<p>Explanation:</p>
+<p>Explanation:
+You used a command line switch that JSCause didn’t recognize. At the time of writing this manual, only the <a href="#testing-jscauses-integrity"><code class="highlighter-rouge">runtests</code></a> command line switch is valid.  For example, this is valid:</p>
 
-<p>Message:</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ERROR:  Error on server listening termination:
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>node jscause.js runtests
 </code></pre></div></div>
 
-<p>Explanation:</p>
+<p>This is invalid:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>node jscause.js --not-recognized
+</code></pre></div></div>
 
 <p>Message:</p>
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>WARNING! Log message queue full.  No entries are being logged to file.  Check permissions, storage space and/or filesystem health.
 </code></pre></div></div>
 
-<p>Explanation:</p>
+<p>Explanation:
+JSCause has too many log entries pending to be written do disk.  This could be due to a slow-responding storage media, a change of disk permissions, or because the disk is full.  10 MiB of pending logs will trigger this warning.</p>
 
 <p>Message:</p>
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>WARNING!  Reached the amount of log termination retries due to pending callbacks (30).  Giving up.
 </code></pre></div></div>
 
-<p>Explanation:</p>
+<p>Explanation:
+While JSCause is terminating, it’s attempting to complete some tasks related to logging.  For instance, writing pending logs to disk or compressing old logs.  If these operations take too long (more than 30 seconds), JSCause will issue this warning and immediately exit.</p>
 
 <h3 id="critical-errors">Critical errors:</h3>
 
 <p>Message:</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>error: CRITICAL: An application error occurred when processing an incoming request.
-</code></pre></div></div>
-
-<p>Explanation:</p>
-
-<p>Message:</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>error: CRITICAL: One or more vendor modules did not load.  JSCause will now terminate.
-</code></pre></div></div>
-
-<p>Explanation:</p>
-
-<p>Message:</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>error: CRITICAL: An application error occurred when processing a callback.
-</code></pre></div></div>
-
-<p>Explanation:</p>
-
-<p>Message:</p>
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>error: CRITICAL: Cannot load &lt;vendor file name&gt; file. The JSCause installation might be corrupted.
+error: CRITICAL: One or more vendor modules did not load.  JSCause will now terminate.
 </code></pre></div></div>
 
-<p>Explanation:</p>
+<p>Explanation:
+JSCause failed to load at least one of its dependencies when starting.  The dependencies reside under the <code class="highlighter-rouge">/jscvendor</code> subdirectory (alongside the <code class="highlighter-rouge">/sites</code> subdirectory.)  Make sure <code class="highlighter-rouge">/jscvendor</code> can be read by JSCause.  If the problem persists, reinstall JSCause.</p>
 
 <p>Message:</p>
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>error: CRITICAL: Cannot load &lt;file name&gt; file. The JSCause installation might be corrupted.
@@ -2674,6 +2663,8 @@ An error occured while receiving or processing a client request.  Usually this e
 </code></pre></div></div>
 
 <p>Explanation:</p>
+
+<p>(TO-DO: CONTINUE HERE.)</p>
 
 <p>(TO-DO:) We need to develop and add this section somewhere:</p>
 <h2 id="custom-4xx-and-5xx-errors">Custom 4xx and 5xx errors:</h2>
@@ -2694,6 +2685,19 @@ An error occured while receiving or processing a client request.  Usually this e
   <li>If you name a directory error400/500.jscp/html, it will throw a 404 error unless a slash is added.  This is by design.</li>
   <li>Note:  If either error4xx.jscp or error5xx.jscp have a compile/runtime error, a generic 5xx will be delivered to the browser.  So, if an error 400 happens, and the error4xx.jscp has an error, the browser will indicate error 500.</li>
 </ul>
+
+<h2 id="testing-jscauses-integrity">Testing JSCause’s integrity</h2>
+
+<p>JSCause can run a battery of self-tests in order to ensure that it can perform all theits functionality in a reliable way.  As a user, you don’t typically need to do this.  But this is useful when you upgrade to a more recent version of NodeJS, for example.</p>
+
+<p>To run the self-tests, run the following from your command line:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>node jscause.js runtests
+</code></pre></div></div>
+
+<p>JSCause should report that all tests passed.  If it didn’t, please contact us.</p>
+
+<p>Note:  Some JSCause installations may not have the self-tests available.</p>
 
 <h2 id="more-resources">More resources</h2>
 
