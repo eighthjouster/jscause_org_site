@@ -55,9 +55,122 @@
           <h1>Documentation</h1>
       </div>
       <div class="content">
-          <p>(TO-DO: Address all the TO-DO’s before publishing)</p>
+          <h2 id="table-of-contents">Table of Contents</h2>
 
-<p>(TO-DO:And put an index here?)</p>
+<ul>
+  <li><a href="#what-is-jscause">What is JSCause?</a></li>
+  <li><a href="#structure-of-a-jscause-site">Structure of a JSCause site</a>
+    <ul>
+      <li><a href="#the-interesting-stuff">The interesting stuff</a></li>
+      <li><a href="#the-important-to-know-stuff">The important to know stuff</a></li>
+      <li><a href="#the-boilerplate-stuff">The boilerplate stuff</a></li>
+    </ul>
+  </li>
+  <li><a href="#jscauseconf-configuring-jscause-to-serve-your-website">jscause.conf: Configuring JSCause to serve your website</a>
+    <ul>
+      <li><a href="#sites">sites</a></li>
+      <li><a href="#logging">logging</a></li>
+      <li><a href="#requesttimeoutsecs">requestTimeoutSecs</a></li>
+    </ul>
+  </li>
+  <li><a href="#example-jscauseconf-configuration">Example jscause.conf configuration</a></li>
+  <li><a href="#sitejson-configuring-your-websites-details">site.json: Configuring your website’s details</a></li>
+  <li><a href="#example-sitejson-configuration">Example site.json configuration</a></li>
+  <li><a href="#starting-up-jscause">Starting up JSCause</a></li>
+  <li><a href="#stopping-jscause">Stopping JSCause</a></li>
+  <li><a href="#the-website-directory-all-your-websites-content">The website/ directory: All your website’s content</a>
+    <ul>
+      <li><a href="#jscp-files">JSCP files</a></li>
+      <li><a href="#jscm-files">JSCM files</a></li>
+      <li><a href="#index-files">Index files</a></li>
+    </ul>
+  </li>
+  <li><a href="#custom-4xx-and-5xx-errors">Custom 4xx and 5xx errors</a>
+    <ul>
+      <li><a href="#all-the-routing-rules">All the routing rules</a></li>
+    </ul>
+  </li>
+  <li><a href="#the-runtime-framework">The runtime framework</a>
+    <ul>
+      <li><a href="#jscp-with-javascript-only">JSCP with Javascript only</a></li>
+      <li><a href="#jscp-with-html-only">JSCP with HTML only</a></li>
+      <li><a href="#jscp-with-both-html-and-javascript">JSCP with both HTML and Javascript</a></li>
+      <li><a href="#the-rt-runtime-object">The rt runtime object</a></li>
+      <li><a href="#jscause-modules-jscm-files">JSCause modules: JSCM files</a></li>
+      <li><a href="#rt-in-modules">rt in modules</a></li>
+    </ul>
+  </li>
+  <li><a href="#redirection">Redirection</a></li>
+  <li><a href="#callbacks">Callbacks</a></li>
+  <li><a href="#rt-promises">RT Promises</a></li>
+  <li><a href="#logging-features">Logging features</a>
+    <ul>
+      <li><a href="#types-of-data-logged">Types of data logged</a></li>
+      <li><a href="#per-site-logging">Per site logging</a></li>
+      <li><a href="#log-file-compression">Log file compression</a></li>
+    </ul>
+  </li>
+  <li><a href="#httpsssl-configuration">HTTPS/SSL configuration</a></li>
+  <li><a href="#jscvendor-jscause-vendor-directory">jscvendor: JSCause vendor directory</a></li>
+  <li><a href="#symbolic-links-in-configuration-and-websites">Symbolic links in configuration and websites</a>
+    <ul>
+      <li><a href="#where-symlinks-can-be-used">Where symlinks can be used</a>
+        <ul>
+          <li><a href="#jscauseconf-rootdirectoryname">jscause.conf: rootDirectoryName</a></li>
+          <li><a href="#site-contents-files-and-directories">Site contents files and directories</a></li>
+          <li><a href="#sitejson-tempworkdirectory">site.json: tempWorkDirectory</a></li>
+          <li><a href="#logging-directory">Logging</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><a href="#the-rt-runtime-object-reference">The rt runtime object reference</a>
+    <ul>
+      <li><a href="#rtadditional">rt.additional</a></li>
+      <li><a href="#rtcontenttype">rt.contentType</a></li>
+      <li><a href="#rtcopyfile">rt.copyFile()</a></li>
+      <li><a href="#rtdeletecookie">rt.deleteCookie()</a></li>
+      <li><a href="#rtdeletefile">rt.deleteFile()</a></li>
+      <li><a href="#rtfileexists">rt.fileExists()</a></li>
+      <li><a href="#rtgetcookie">rt.getCookie()</a></li>
+      <li><a href="#rtgetcurrentpath">rt.getCurrentPath()</a></li>
+      <li><a href="#rtgetparams">rt.getParams</a></li>
+      <li><a href="#rtheader">rt.header()</a></li>
+      <li><a href="#rtmodule">rt.module()</a></li>
+      <li><a href="#rtmovefile">rt.moveFile()</a></li>
+      <li><a href="#rtpostparams">rt.postParams</a></li>
+      <li><a href="#rtprint">rt.print()</a></li>
+      <li><a href="#rtreadfile">rt.readFile()</a></li>
+      <li><a href="#rtredirectto">rt.redirectTo()</a></li>
+      <li><a href="#rtrequestmethod">rt.requestMethod</a></li>
+      <li><a href="#rtresetredirectto">rt.resetRedirectTo()</a></li>
+      <li><a href="#rtrunafter">rt.runAfter()</a></li>
+      <li><a href="#rtsetcookie">rt.setCookie()</a></li>
+      <li><a href="#rtunsafeprint">rt.unsafePrint()</a></li>
+      <li><a href="#rtuploadedfiles">rt.uploadedFiles</a></li>
+      <li><a href="#rtwaitfor">rt.waitFor()</a></li>
+    </ul>
+  </li>
+  <li><a href="#faq-and-troubleshooting-jscause">FAQ and Troubleshooting JSCause</a>
+    <ul>
+      <li><a href="#why-doesnt-jscause-complain-when-a-certificate-or-key-file-is-invalid">Why doesn’t JSCause complain when a certificate or key file is invalid?</a></li>
+      <li><a href="#sitejson-accepts-a-hostname-that-could-already-be-used-in-another-sites-sitejson--is-this-a-bug"><code class="highlighter-rouge">site.json</code> accepts a hostName that could already be used in another site’s json.  Is this a bug?</a></li>
+      <li><a href="#jscause-says-a-file-does-not-exist-but-i-can-see-it-in-the-file-system">JSCause says a file does not exist, but I can see it in the file system</a></li>
+    </ul>
+  </li>
+  <li><a href="#list-of-common-errors-and-warnings-reported-by-jscause">List of common errors and warnings reported by JSCause</a>
+    <ul>
+      <li><a href="#configuration">Configuration</a></li>
+      <li><a href="#related-to-sites-content-and-run-time">Related to sites, content and run-time</a></li>
+      <li><a href="#http-errors">HTTP errors</a></li>
+      <li><a href="#non-logged-errors-and-warnings-terminal-only">Non-logged errors and warnings (terminal only)</a></li>
+      <li><a href="#critical-errors">Critical errors</a></li>
+    </ul>
+  </li>
+  <li><a href="#testing-jscauses-integrity">Testing JSCause’s integrity</a></li>
+  <li><a href="#more-resources">More resources</a></li>
+  <li><a href="#credits">Credits</a></li>
+</ul>
 
 <h2 id="what-is-jscause">What is JSCause?</h2>
 
@@ -144,7 +257,7 @@
 
 <h2 id="jscauseconf-configuring-jscause-to-serve-your-website">jscause.conf: Configuring JSCause to serve your website</h2>
 
-<p>When JSCause is invoked, it reads the <code class="highlighter-rouge">jscause.conf</code> file for configuration options. The options are declared as a <em>sort of</em> JSON object.  We use “sort of” here because comments (designated by <code class="highlighter-rouge">//</code>) are allowed, whereas in a truly JSON object, they are not.</p>
+<p>When JSCause is invoked, it reads the <code class="highlighter-rouge">jscause.conf</code> file for configuration options. The options are declared as a <em>JscJSON</em> object.  JscJSON objects differ from regular JSON objects in one area only:  JscJSON objects allow comments (designated by <code class="highlighter-rouge">//</code>), whereas true JSON ones do not.</p>
 
 <p>The options, in the form of attributes, are case insensitive (i.e. <code class="highlighter-rouge">sites</code> can be written as <code class="highlighter-rouge">Sites</code>, <code class="highlighter-rouge">SITES</code>, <code class="highlighter-rouge">sItEs</code>, etc.)  They are listed below:</p>
 
@@ -362,7 +475,7 @@
 
 <p>So, in the example in the previous section, the website has a <code class="highlighter-rouge">rootDirectoryName</code> of “mysite”.  Therefore, JSCause will look for, and read the <code class="highlighter-rouge">sites/mysite/configuration/site.json</code> file.</p>
 
-<p>Just like with <code class="highlighter-rouge">jscause.conf</code>, <code class="highlighter-rouge">site.json</code> is a <em>sort of</em> JSON object (it accepts comments that start with <code class="highlighter-rouge">//</code>.)</p>
+<p>Just like with <code class="highlighter-rouge">jscause.conf</code>, <code class="highlighter-rouge">site.json</code> is in reality a <em>JscJSON</em> object (comments are allowed; they start with <code class="highlighter-rouge">//</code>.)</p>
 
 <p>The options, in the form of attributes, are case insensitive (i.e. <code class="highlighter-rouge">hostName</code> can be written as <code class="highlighter-rouge">hostname</code>, <code class="highlighter-rouge">Hostname</code>, <code class="highlighter-rouge">HOSTNAME</code>, etc.)  They are listed below:</p>
 
@@ -657,6 +770,15 @@ Terminated.
 [1]+  Done                    node jscause
 </code></pre></div></div>
 
+<p>When JSCause is instructed to terminate, it will close the log files. If there are any log files being compressed at that very moment, it will wait until the operation completes.  Any pending log files compression will be ignored after that (but resumed once JSCause is started again.)</p>
+
+<p>If JSCause receives a second Ctrl+C keyboard combination during termination and cleanup, it will display the following message:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Still cleaning on exit.  Try again to exit right away...
+</code></pre></div></div>
+
+<p>At that point, if you press Ctrl+C again (a third time), JSCause will terminate immediately, interrupting any cleanup operation.  Avoid getting to this point as much as possible, since compressed log files being created at that point may be rendered unusable.</p>
+
 <h2 id="the-website-directory-all-your-websites-content">The website/ directory: All your website’s content</h2>
 
 <p>JSCause will serve everything you place inside the <code class="highlighter-rouge">website</code> directory to the public.  The directory tree of this directory will map the routing tree of your website.</p>
@@ -726,6 +848,45 @@ Terminated.
 <p><code class="highlighter-rouge">website/stories/index.jscp</code></p>
 
 <p>Then it can be requested via <code class="highlighter-rouge">https://www.example.com/stories/index.jscp</code> or just <code class="highlighter-rouge">https://www.example.com/stories</code></p>
+
+<h2 id="custom-4xx-and-5xx-errors">Custom 4xx and 5xx errors</h2>
+
+<p>When JSCause cannot find a request because the resource doesn’t exist, or encounters an error while running a JSCP file, it will respond to the client by setting the response’s status code accordingly (e.g., HTTP 404 error, or HTTP 500 error.)  The web client handles how to inform the visitor.</p>
+
+<p>You can instruct JSCause to display a specific page when such HTTP errors occur.</p>
+
+<p>In order to do this, follow these steps:</p>
+
+<ul>
+  <li>For HTTP 404 errors and similar, create a custom error file named <code class="highlighter-rouge">error4xx.html</code>.  For HTTP 500 errors and similar, create a file named <code class="highlighter-rouge">error5xx.html</code>.
+    <ul>
+      <li>You can create <code class="highlighter-rouge">error4xx.jscp</code> and <code class="highlighter-rouge">error5xx.jscp</code> instead.  Notice that if both <code class="highlighter-rouge">error4xx.html</code> and <code class="highlighter-rouge">error4xx.jscp</code> exist, JSCause will use the HTML version.  Same goes to <code class="highlighter-rouge">error5xx.html</code> and <code class="highlighter-rouge">error5xx.jscp</code>.</li>
+    </ul>
+  </li>
+  <li>Place the custom error files <strong>on the root directory</strong> of your site.
+    <ul>
+      <li>For example, if your site is located at <code class="highlighter-rouge">sites/mysite/website/</code>, your custom error files must be located at <code class="highlighter-rouge">sites/mysite/website/error4xx.html</code> and <code class="highlighter-rouge">sites/mysite/website/error5xx.html</code> (or their JSCP counterparts.)</li>
+      <li>If your site has subdirectories, and you attempt to place custom error files in those (e.g. <code class="highlighter-rouge">sites/mysite/website/my_subdir/error4xx.html</code>), JSCause will ignore said files.</li>
+    </ul>
+  </li>
+</ul>
+
+<p>There are cases in which, even though a custom 4xx or 5xx page is configured, JSCause will not display them and just send the response error as if there was no custom errors at all.  This is by design.  Here are such cases:</p>
+
+<ul>
+  <li>When the web client attempts to use an unrecognized HTTP method.</li>
+  <li>When file uploads are not allowed.</li>
+  <li>When the upload payload limit is exceeded.</li>
+  <li>When the site (domain name) is not recognized.</li>
+  <li>When either a form upload or json body upload parsing fails.</li>
+  <li>When delivering a non-cached static file fails (e.g., the file was available when JSCause started, but became unavailable later.)</li>
+</ul>
+
+<p>JSCause will throw a default (non-custom) HTTP 404 error if a web client attempts to directly access the custom error files. For example, given the file <code class="highlighter-rouge">sites/mysite/website/error5xx.jscp</code>, when a web client tries to access <code class="highlighter-rouge">https://example.com/error5xx.jscp</code>, JSCause will respond that the file is not found.</p>
+
+<p>If you give a subdirectory a custom error name, it will throw a default (non-custom) HTTP 404 error, unless a slash is added.  This is by design.  For example, if your site has the following path: <code class="highlighter-rouge">sites/mysite/website/error4xx.html/index.html</code>, and the web client tries to access <code class="highlighter-rouge">https://example.com/error4xx.html</code>, JSCause will respond that the file is not found.  However, <code class="highlighter-rouge">https://example.com/error5xx.jscp/</code> (notice the trailing slash) will work.</p>
+
+<p><strong>Note</strong>:  If either <code class="highlighter-rouge">error4xx.jscp</code> or <code class="highlighter-rouge">error5xx.jscp</code> has a compile/runtime error, a generic (non-custom) HTTP 500 error will be delivered to the web client.  For example: if JSCause encounters an HTTP 404 error, and the <code class="highlighter-rouge">error4xx.jscp</code> file has in itself an error, JSCause will return an HTTP 500 error instead.</p>
 
 <h3 id="all-the-routing-rules">All the routing rules</h3>
 
@@ -919,7 +1080,7 @@ Fri, 17 Jan 2020 05:05:26 GMT - example.com - GET: / - 500
 
 <p>We’ll no longer get an HTTP error 500, and the browser will display <code class="highlighter-rouge">3</code>.</p>
 
-<h2 id="redirection">Redirection:</h2>
+<h2 id="redirection">Redirection</h2>
 
 <p>To redirect to a different URL, use <a href="#rtredirectto"><code class="highlighter-rouge">rt.redirectTo()</code></a>.</p>
 
@@ -991,7 +1152,7 @@ rt.readFile('my_source.txt', 'utf-8')
 
 <p>You can read more about this behavior in the next section about <a href="#rt-promises">RT Promises</a>.</p>
 
-<h2 id="rt-promises">RT Promises:</h2>
+<h2 id="rt-promises">RT Promises</h2>
 
 <p>RT Promises refers to the mechanism some <code class="highlighter-rouge">rt</code> methods use to deal with the asynchronous nature of their operations.  They seek to emulate Javascript’s Promises.  One important difference is that RT Promises will always involve two methods, <code class="highlighter-rouge">rtOnSuccess()</code> and <code class="highlighter-rouge">rtOnError()</code>.</p>
 
@@ -1342,7 +1503,7 @@ Sun, 23 Feb 2020 00:32:04 GMT - jscausesite1 - GET: /some_file.jscp - 500
 
 <p><strong>Be mindful about where you place this directory.</strong>  It should be a location outside of your site’s <code class="highlighter-rouge">/website</code> directory.  It should never be public.</p>
 
-<h4 id="logging-1">Logging</h4>
+<h4 id="logging-directory">Logging directory</h4>
 
 <p>You can use a symlink when specifying a logging directory, in both a server-wide scenario as well as a site-wide scenario.</p>
 
@@ -1375,19 +1536,6 @@ Sun, 23 Feb 2020 00:32:04 GMT - jscausesite1 - GET: /some_file.jscp - 500
     // etc
   }
 </code></pre></div></div>
-
-<h2 id="terminating-an-jscause-instance">Terminating an JSCause instance</h2>
-
-<p>JSCause will gracefully terminate when the Ctrl+C keyboard combination is used in the terminal window it is running on.  Alternatively, you can send a SIGTERM or SIGNINT kill signal to JSCause’s process to do the same thing.</p>
-
-<p>When JSCause is instructed to terminate, it will close the log files. If there are any log files being compressed at that very moment, it will wait until the operation completes.  Any pending log files to compress will be ignored after that.</p>
-
-<p>If JSCause receives a second Ctrl+C keyboard combination during termination and cleanup, it will display the following message:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Still cleaning on exit.  Try again to exit right away...
-</code></pre></div></div>
-
-<p>At that point, if you press Ctrl+C again (a third time), JSCause will terminate immediately, interrupting any cleanup operation.  Avoid getting to this point as much as possible, since compressed log files being created at that point may be rendered unusable.</p>
 
 <h2 id="the-rt-runtime-object-reference">The rt runtime object reference</h2>
 
@@ -2639,52 +2787,31 @@ While JSCause is terminating, it’s attempting to complete some tasks related t
 <h3 id="critical-errors">Critical errors:</h3>
 
 <p>Message:</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>error: CRITICAL: Cannot load &lt;vendor file name&gt; file. The JSCause installation might be corrupted.
-error: CRITICAL: One or more vendor modules did not load.  JSCause will now terminate.
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>CRITICAL: Cannot load &lt;vendor file path&gt; file.
+CRITICAL: Failed to load vendor module &lt;vendor file path&gt;. The JSCause installation might be corrupted.
+CRITICAL: One or more vendor modules did not load.  JSCause will now terminate.
 </code></pre></div></div>
 
 <p>Explanation:
 JSCause failed to load at least one of its dependencies when starting.  The dependencies reside under the <code class="highlighter-rouge">/jscvendor</code> subdirectory (alongside the <code class="highlighter-rouge">/sites</code> subdirectory.)  Make sure <code class="highlighter-rouge">/jscvendor</code> can be read by JSCause.  If the problem persists, reinstall JSCause.</p>
 
 <p>Message:</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>error: CRITICAL: Cannot load &lt;file name&gt; file. The JSCause installation might be corrupted.
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>CRITICAL: Could not compile vendor module &lt;vendor file path&gt;.
+CRITICAL: Failed to load vendor module &lt;vendor file path&gt;. The JSCause installation might be corrupted.
+CRITICAL: One or more vendor modules did not load.  JSCause will now terminate.
 </code></pre></div></div>
 
-<p>Explanation:</p>
+<p>Explanation:
+JSCause failed to load at least one of its dependencies when starting.  The dependencies reside under the <code class="highlighter-rouge">/jscvendor</code> subdirectory (alongside the <code class="highlighter-rouge">/sites</code> subdirectory.)  For some reason, some dependencies could not be initialized.  This might be an indication of a corrupted installation.  Reinstall JSCause.</p>
 
 <p>Message:</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>error: CRITICAL: Could not compile vendor module &lt;name&gt;.
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>CRITICAL: Cannot load &lt;file path&gt; vendor template file.
+CRITICAL: Failed to load vendor module &lt;vendor file path&gt;. The JSCause installation might be corrupted.
+CRITICAL: One or more vendor modules did not load.  JSCause will now terminate.
 </code></pre></div></div>
 
-<p>Explanation:</p>
-
-<p>Message:</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>error: CRITICAL: Failed to load vendor module &lt;name&gt;. The JSCause installation might be corrupted.
-</code></pre></div></div>
-
-<p>Explanation:</p>
-
-<p>(TO-DO: CONTINUE HERE.)</p>
-
-<p>(TO-DO:) We need to develop and add this section somewhere:</p>
-<h2 id="custom-4xx-and-5xx-errors">Custom 4xx and 5xx errors:</h2>
-<ul>
-  <li>Custom errors, if available, will be delivered only during a typical interaction in which a resource is not really available, or an error on a JSCP script.  In other cases, generic 4xx or 5xx will be delivered to the browser.  For instance:
-    <ul>
-      <li>When attempting to use an unrecognized HTTP method.</li>
-      <li>When file uploads are not allowed, or the payload maximum is exceeded.</li>
-      <li>When the site (domain name) is not recognized.</li>
-      <li>When either a form upload or json body upload parsing fails.</li>
-      <li>When delivering a non-cached static file produces an error (e.g., file was available during parsing, but became unavailable later.)</li>
-      <li>Possibly others.</li>
-    </ul>
-  </li>
-  <li>error4xx.jscp/html and error5xx.jscp/html.  html prevails over jscp.</li>
-  <li>Only the ones on the site’s root will be taken into account.</li>
-  <li>Referring to them directly (e.g. explicit ‘/error5xx.html’ request from the browser) will throw a default error 404.</li>
-  <li>If you name a directory error400/500.jscp/html, it will throw a 404 error unless a slash is added.  This is by design.</li>
-  <li>Note:  If either error4xx.jscp or error5xx.jscp have a compile/runtime error, a generic 5xx will be delivered to the browser.  So, if an error 400 happens, and the error4xx.jscp has an error, the browser will indicate error 500.</li>
-</ul>
+<p>Explanation:
+JSCause cannot find a critical component required to load dependencies.  This might be an indication of a corrupted installation.  Try to recover and restore the file indicated by <file path="">.  It may have been accidentally deleted, for example.  If the problem persists, reinstall JSCause.</file></p>
 
 <h2 id="testing-jscauses-integrity">Testing JSCause’s integrity</h2>
 
@@ -2701,25 +2828,12 @@ JSCause failed to load at least one of its dependencies when starting.  The depe
 
 <h2 id="more-resources">More resources</h2>
 
-<p>(TO-DO:)
-Where to find more information about JSCause?</p>
+<p>Please visit our <a href="https://github.com/eighthjouster/jscause">Github repository</a>.</p>
 
 <h2 id="credits">Credits</h2>
 
-<p>(TO-DO:)
-Give credit here.</p>
-<ul>
-  <li>Thanks to:
-    <ul>
-      <li>https://github.com/felixge/node-formidable</li>
-      <li>https://github.com/parshap/node-sanitize-filename</li>
-      <li>https://github.com/pillarjs/cookies
-Any others?</li>
-    </ul>
-  </li>
-</ul>
-
-<p>(TO-DO:)  Any references to the almost-JSON we use here should be called JscJSON (JSON with comments.)</p>
+<p>JSCause uses and wants to give thanks to: <a href="https://github.com/felixge/node-formidable">Node Formidable</a>, <a href="https://github.com/parshap/node-sanitize-filename">sanitize-filename</a> and 
+the <a href="https://github.com/pillarjs/cookies">Cookies NodeJS module</a>.</p>
 
       </div>
       <div class="topmenu">
