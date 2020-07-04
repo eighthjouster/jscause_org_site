@@ -59,6 +59,12 @@
 
 <ul>
   <li><a href="#what-is-jscause">What is JSCause?</a></li>
+  <li><a href="#installation">Installation</a>
+    <ul>
+      <li><a href="#installing-standalone-jscause">Installing standalone JSCause</a></li>
+      <li><a href="#installing-jscause-via-npm">Installing JSCause via npm</a></li>
+    </ul>
+  </li>
   <li><a href="#structure-of-a-jscause-site">Structure of a JSCause site</a>
     <ul>
       <li><a href="#the-interesting-stuff">The interesting stuff</a></li>
@@ -197,6 +203,25 @@
 </code></pre></div></div>
 
 <p>The <code class="highlighter-rouge">jscp</code> extension stands for “[J]ava[S]cript [C]ompiled [P]age.”</p>
+
+<h2 id="installation">Installation</h2>
+
+<p>JSCause requires <a href="https://nodejs.org">NodeJS</a>.  Please make sure you have it installed in your system.  Any version above 8.x should be fine.</p>
+
+<p>There are two types of installation: standalone JSCause, and installation via npm.</p>
+
+<h3 id="installing-standalone-jscause">Installing standalone JSCause</h3>
+
+<p>Download the standalone JSCause zip file and uncompress it anywhere in your system.</p>
+
+<h3 id="installing-jscause-via-npm">Installing JSCause via npm</h3>
+
+<p>Open a terminal window and run the following command:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo npm install -g jscause
+</code></pre></div></div>
+
+<p><strong>For more advanced users:</strong>  If you ever add JSCause as a package dependency to your project, JSCause will be available from <code class="highlighter-rouge">./node_modules/.bin/jscause</code>.</p>
 
 <h2 id="structure-of-a-jscause-site">Structure of a JSCause site</h2>
 
@@ -731,9 +756,14 @@
 
 <h2 id="starting-up-jscause">Starting up JSCause</h2>
 
-<p>Once you have configured JSCause and your website, you can run it by changing to the JSCause directoru and issuing the following command:</p>
+<p>Once you have configured JSCause and your website, you can run it by changing to the JSCause directory and issuing the following command:</p>
 
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>node jscause
+</code></pre></div></div>
+
+<p>Or if you installed JSCause via npm:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>jscause
 </code></pre></div></div>
 
 <p>JSCause will print out the following (may differ depending on your configuration):</p>
