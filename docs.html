@@ -58,6 +58,7 @@
           <h2 id="table-of-contents">Table of Contents</h2>
 
 <ul>
+  <li><a href="#what-is-new-in-jscause">What is new in JSCause?</a></li>
   <li><a href="#what-is-jscause">What is JSCause?</a></li>
   <li><a href="#installation">Installation</a>
     <ul>
@@ -101,6 +102,7 @@
       <li><a href="#jscp-with-javascript-only">JSCP with Javascript only</a></li>
       <li><a href="#jscp-with-html-only">JSCP with HTML only</a></li>
       <li><a href="#jscp-with-both-html-and-javascript">JSCP with both HTML and Javascript</a></li>
+      <li><a href="#the-rtprint-shortcut-js-js">The rt.print shortcut: &lt;js= /js&gt;</a></li>
       <li><a href="#the-rt-runtime-object">The rt runtime object</a></li>
       <li><a href="#jscause-modules-jscm-files">JSCause modules: JSCM files</a></li>
       <li><a href="#rt-in-modules">rt in modules</a></li>
@@ -178,6 +180,12 @@
   <li><a href="#credits">Credits</a></li>
   <li><a href="#license">License</a></li>
 </ul>
+
+<h2 id="what-is-new-in-jscause">What is new in JSCause?</h2>
+
+<p>Please refer to the project’s CHANGELOG.md file on the <a href="https://github.com/eighthjouster/jscause">Github repository</a> for project updates.</p>
+
+<p>In the repository, you can also check the ROADMAP.md file to learn more about planned future features and additions.</p>
 
 <h2 id="what-is-jscause">What is JSCause?</h2>
 
@@ -970,7 +978,7 @@ rt.print('Hello, Javascript');
 
 <h3 id="jscp-with-html-only">JSCP with HTML only</h3>
 
-<p>To let JSCP know that the whole file is HTML, start it with <code class="highlighter-rouge"><span class="nt">&lt;html</span> <span class="nt">/&gt;</span></code>:</p>
+<p>To let JSCP know that the whole file contents is HTML, start it with <code class="highlighter-rouge"><span class="nt">&lt;html</span> <span class="nt">/&gt;</span></code>:</p>
 
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;html</span> <span class="nt">/&gt;</span>
 <span class="nt">&lt;html&gt;</span>
@@ -980,6 +988,10 @@ rt.print('Hello, Javascript');
 </code></pre></div></div>
 
 <p>When a browser access this file (e.g. <code class="highlighter-rouge">index.jscp</code>), it will display <code class="highlighter-rouge">Hello, HTML</code> back to the user.</p>
+
+<p>Of course, at this point you could just use a regular <code class="highlighter-rouge">.html</code> file.  JSCause will happily render it whole.</p>
+
+<p>Technically, you can still embed Javascript code in a file starting with <code class="highlighter-rouge"><span class="nt">&lt;html</span> <span class="nt">/&gt;</span></code>.  It’s just that, if it’s all HTML only, <code class="highlighter-rouge"><span class="nt">&lt;html</span> <span class="nt">/&gt;</span></code> is needed, otherwise JSCause will complain.</p>
 
 <p>Note: You can replace <code class="highlighter-rouge"><span class="nt">&lt;html</span> <span class="nt">/&gt;</span></code> with <code class="highlighter-rouge">&lt;js/js&gt;</code> and achieve the same thing above.</p>
 
@@ -1022,6 +1034,54 @@ rt.print('Hello, Javascript');
 &lt;p&gt;John's age is: &lt;js rt.print(randomAge); /js&gt;&lt;/p&gt;
 &lt;p&gt;&lt;js rt.print(message); /js&gt;&lt;/p&gt;
 </code></pre></div></div>
+
+<h3 id="the-implicit-rtprint-shortcut-js-js">The implicit rt.print shortcut: &lt;js= /js&gt;</h3>
+
+<p>A single Javascript <code class="highlighter-rouge">&lt;js rt.print(value); /js&gt;</code> call embedded within HTML can be replaced with the shorter <code class="highlighter-rouge">&lt;js= value /js&gt;</code> version.</p>
+
+<p>So, in the examples in the previous section, the following lines:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;p&gt;PI is: &lt;js rt.print(Math.PI); /js&gt;
+
+&lt;p&gt;John's age is: &lt;js rt.print(randomAge); /js&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;js rt.print(message); /js&gt;&lt;/p&gt;
+</code></pre></div></div>
+
+<p>Could be rewritten as:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;p&gt;PI is: &lt;js= Math.PI /js&gt;
+
+&lt;p&gt;John's age is: &lt;js= randomAge /js&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;js= message /js&gt;&lt;/p&gt;
+</code></pre></div></div>
+
+<h4 id="quirk-warning">Quirk warning</h4>
+
+<p>JSCause does a simple replacement when dealing <code class="highlighter-rouge">&lt;js= /js&gt;</code>.  So, again:</p>
+
+<p>The following statement:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;h1&gt;&lt;js= title /js&gt;
+</code></pre></div></div>
+
+<p>is interpreted as:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;h1&gt;&lt;js rt.print(title) /js&gt;
+</code></pre></div></div>
+
+<p>That means that one could cleverly add <code class="highlighter-rouge">);</code> to the value and run more code:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;js='1');rt.print('23'/js&gt;
+</code></pre></div></div>
+
+<p>Will print <code class="highlighter-rouge">123</code> because it’s interpreted as:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;js rt.print('1');rt.print('23') /js&gt;
+</code></pre></div></div>
+
+<p>Please notice that this quirk may be fixed in a future version of JSCause, so you’re advised not to use it.</p>
 
 <h3 id="the-rt-runtime-object">The rt runtime object</h3>
 
