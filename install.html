@@ -55,59 +55,77 @@
           <h1>Install JSCause</h1>
       </div>
       <div class="content">
-          <h2 id="the-condensed-version">The condensed version</h2>
+          <h2 id="requirements">Requirements</h2>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl https://example.com/coming_soon
-cd jscause
-node jscause
+<p>You must have <a href="https://nodejs.org">NodeJS installed and running</a> on your system.  It should be version 8 or up.  You can verify this by running on the terminal:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>node --version
 </code></pre></div></div>
 
-<h2 id="the-extended-version">The extended version</h2>
+<h2 id="decide-where-you-want-jscause-to-run-your-sites">Decide where you want JSCause to run your sites</h2>
 
-<p>JSCause assumes you have <a href="https://nodejs.org">NodeJS</a> installed on your system.  Please download it and install it before proceeding further.</p>
+<p>Create an installation directory (folder) in which you want JSCause to run your website.  For instance:</p>
 
-<p>There are two ways to install JSCause:</p>
+<p><code class="highlighter-rouge">/home/your_name/jscause_site</code> (on a Unix-like operation system such as Linux.)</p>
 
-<h2 id="1-download-and-unzip-preferred">1. Download and unzip (preferred)</h2>
+<p>or</p>
 
-<p>The preferred way to install JSCause is by <a href="/download.html">downloading the latest zip file</a>, and unzip it in the target installation directory.</p>
+<p><code class="highlighter-rouge">/Users/your_name/jscause_site</code> (on macOs)</p>
 
-<ul>
-  <li>
-    <p><a href="/download.html">Download the JSCause zip package</a>.</p>
-  </li>
-  <li>
-    <p>Unzip it in a directory on your system.</p>
-  </li>
-  <li>
-    <p>Open a terminal, change to the target directory.</p>
-  </li>
-  <li>
-    <p>Run <code class="highlighter-rouge">node jscause</code></p>
-  </li>
-  <li>
-    <p>That’s it!  If you see <code class="highlighter-rouge">INFO: Server 0 listening on port 3000</code> on the terminal, things went well.  If not, please check the <a href="/docs.html#troubleshooting-jscause">troubleshooting section</a> of the documentation.</p>
-  </li>
-</ul>
+<p>or</p>
 
-<h2 id="2-use-npm">2. Use npm</h2>
+<p><code class="highlighter-rouge">C:\Users\your_name\Documents\jscause_site</code> (on Windows)</p>
 
-<ul>
-  <li>Create a directory where you want to install JSCause, and switch to it.  For example, <code class="highlighter-rouge">/home/your_username/jscause</code>:
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd ~
-mkdir jscause
-cd jscause
-</code></pre></div>    </div>
-  </li>
-  <li>Use npm to install jscause:
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm install jscause
-</code></pre></div>    </div>
-  </li>
-  <li>
-    <p>Run <code class="highlighter-rouge">node jscause</code></p>
-  </li>
-  <li>That’s it!  If you see <code class="highlighter-rouge">INFO: Server 0 listening on port 3000</code> on the terminal, things went well.  If not, please check the <a href="/docs.html#troubleshooting-jscause">troubleshooting section</a> of the documentation.</li>
-</ul>
+<h2 id="if-you-downloaded-the-stand-alone-version">If you downloaded the stand-alone version</h2>
+
+<p>If you <a href="/download.html">downloaded the stand-alone version of JSCause</a>, then you got a zip file named similar to <code class="highlighter-rouge">jscause_standalone-X.Y.Z.zip</code> (for example, <code class="highlighter-rouge">jscause_standalone-0.9.3-alpha.zip</code>).</p>
+
+<p>Move it to the installation directory you determined in the previous section.  Then uncompress it:</p>
+
+<p><strong>If you are on Linux or macOS</strong>: On the terminal, go to the installation directory, then use the <code class="highlighter-rouge">unzip</code> command:</p>
+
+<p><code class="highlighter-rouge">unzip jscause_standalone-X.Y.Z.zip</code></p>
+
+<p>Replace <code class="highlighter-rouge">X.Y.Z</code> with the version found in the zip file name.  For example, for <code class="highlighter-rouge">0.9.3-alpha</code>:</p>
+
+<p><code class="highlighter-rouge">unzip jscause_standalone-0.9.3-alpha.zip</code></p>
+
+<p><strong>If you are on Windows</strong>:  On Windows Explorer, navigate to the location of the file, then right-click on it and select “Extract All.”</p>
+
+<p>You’ll end up with a directory named <code class="highlighter-rouge">jscause</code>.</p>
+
+<p>To start JSCause, go into that new <code class="highlighter-rouge">jscause</code> directory, then run the following command:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>node jscause
+</code></pre></div></div>
+
+<p>That’s it!  If you see <code class="highlighter-rouge">INFO: Server 0 listening on port 3000</code> on the terminal, things went well.  If not, please check the <a href="/docs.html#faq-and-troubleshooting-jscause">troubleshooting section</a> of the documentation.</p>
+
+<p><strong>Important note:</strong>  The zip package includes example SSL certificates, so you can test out HTTPS with your website.  These certificates are <strong>not</strong> suitable for production!  If you use these certs, your users will get a security warning in their browsers.  You must provide your own certificates.</p>
+
+<h2 id="if-you-prefer-to-use-npm">If you prefer to use NPM</h2>
+
+<p>On the terminal, go to the installation directory you chose in a previous section above.  Then follow the instructions on the <a href="/download.html">download page</a>, under the “Option 2: Installation via NPM” section.</p>
+
+<p>Basically, you’ll install JSCause by using the command: <code class="highlighter-rouge">sudo npm install -g jscause</code>.</p>
+
+<p>Or if you don’t have access to <code class="highlighter-rouge">sudo</code>, then use: <code class="highlighter-rouge">npm install jscause</code> (which will install it in <code class="highlighter-rouge">./node_modules/.bin/jscause</code>)</p>
+
+<p>At this point, JSCause will be installed.  Either configure your website by following <a href="/tutorial.html">the tutorial</a> or <a href="/docs.html">the documentation</a>, or optionally download and unzip <a href="/download.html#download-the-site-template">the site template</a>.</p>
+
+<p>To run JSCause, run the following command from the configured site directory:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>jscause
+</code></pre></div></div>
+
+<p>Or if you didn’t use <code class="highlighter-rouge">sudo</code>:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>./node_modules/.bin/jscause
+</code></pre></div></div>
+
+<p>That’s it!  If you see <code class="highlighter-rouge">INFO: Server 0 listening on port 3000</code> on the terminal, things went well.  If not, please check the <a href="/docs.html#faq-and-troubleshooting-jscause">troubleshooting section</a> of the documentation.</p>
+
+<p><strong>Important note:</strong>  Like mentioned above, the site template includes example SSL certificates, so you can test out HTTPS with your website.  These certificates are <strong>not</strong> suitable for production!  If you use these certs, your users will get a security warning in their browsers.  You must provide your own certificates.</p>
 
 <hr />
 

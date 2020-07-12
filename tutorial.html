@@ -55,7 +55,790 @@
           <h1>Tutorial</h1>
       </div>
       <div class="content">
-          <p>Let’s get this party started!</p>
+          <h2 id="do-you-prefer-a-video-tutorial">Do you prefer a video tutorial?</h2>
+
+<h3 id="if-you-prefer-a-video">If you prefer a video:</h3>
+
+<p>Check out our <a href="https://www.youtube.com/">Youtube channel</a> [COMING SOON!!!!!]</p>
+
+<h3 id="or-if-you-prefer-good-old-text-keep-reading">Or if you prefer good old text, keep reading.</h3>
+
+<p>This tutorial makes some assumptions:</p>
+
+<ul>
+  <li>
+    <p>That you have basic knowledge of the terminal (or command prompt/Powershell on Windows).  Enough to navigate around directories (<code class="highlighter-rouge">cd</code>) and invoke basic command-line instructions.</p>
+  </li>
+  <li>
+    <p>That you have <a href="https://nodejs.org">NodeJS</a> installed in your system.</p>
+  </li>
+  <li>
+    <p>That NodeJS is at least version 8 (type <code class="highlighter-rouge">node --version</code> on the terminal if you want to double-check.)</p>
+  </li>
+  <li>
+    <p>That you have <a href="/download.html">downloaded the standalone version</a> of JSCause.  Or if you installed JSCause via <code class="highlighter-rouge">npm</code>, then this tutorial assumes that you have downloaded the <a href="/download.html">example site project</a>.</p>
+  </li>
+  <li>
+    <p>That your system has a modern web browser installed, such as Firefox, Safari, Edge or Chrome.</p>
+  </li>
+  <li>
+    <p>That you know how to view a web page’s HTML source code.  You can try it now with this page!  Need more info? Here it is:  If you’re on Firefox and on Windows, try Control+U on the keyboard (Command+U on a Mac).  If you’re on Chrome, try Control+Alt+U (or Command+Alt+U on a Mac.) On other browsers, look for a “View Source” or “View Page Source” on its menu.  On Safari, it’s on the “Develop” menu, for example.  The source code should look like something similar to the following:</p>
+  </li>
+</ul>
+
+<p><img src="images/tutorial_006.png" alt="Browser showing this page's HTML source code" title="This website's HTML source code" /></p>
+
+<ul>
+  <li>
+    <p>That you understand that the sole purpose of the code in this tutorial is shown and used for the <em>sole</em> purpose of teaching how JSCause works.  We didn’t include security checks typically found in server-side code in order to avoid complexity and to focus on JSCause’s features.  JSCause performs a few security measures when running your code, but ultimately, you, the reader, are responsible to secure your own programs.  This is not only true with JSCause, but with any other server-oriented technology that is exposed to an intranet or the Internet, and that handles sensitive information (such as user passwords, financial records, personal information, etc.)</p>
+  </li>
+  <li>
+    <p>And finally, that you are already familiarized with HTML, CSS and Javascript. You don’t have to be an expert, but at least you should know the basics.</p>
+  </li>
+</ul>
+
+<h4 id="lets-run-jscause">Let’s run JSCause</h4>
+
+<p>If you downloaded the stand-alone version, uncompress (unzip) it anywhere on your disk drive.</p>
+
+<p>Or if you installed via <code class="highlighter-rouge">npm</code>, uncompress (unzip) the example site project, again, anywhere on your disk drive.</p>
+
+<p>No matter which way you used to get JSCause, the final uncompressed directory is named <code class="highlighter-rouge">jscause</code>.  From a terminal window, go inside it:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pwd
+
+[/some/path/in/your/system/jscause]
+</code></pre></div></div>
+
+<p>The contents of the <code class="highlighter-rouge">jscause</code> directory should have at least the following files and subdirectories:</p>
+
+<ul>
+  <li><code class="highlighter-rouge">Readme.txt</code></li>
+  <li><code class="highlighter-rouge">jscause.conf</code></li>
+  <li><code class="highlighter-rouge">logs/</code></li>
+  <li><code class="highlighter-rouge">sites/</code></li>
+</ul>
+
+<p>If you have the standalone version of JSCause, you’ll also have these files (don’t modify them if all you want is to run a website):</p>
+
+<ul>
+  <li><code class="highlighter-rouge">jscause.js</code></li>
+  <li><code class="highlighter-rouge">jscvendor/</code></li>
+</ul>
+
+<p>Now run JSCause by typing:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>node jscause
+</code></pre></div></div>
+
+<p>Or if you installed via <code class="highlighter-rouge">npm</code>:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>jscause
+</code></pre></div></div>
+
+<p>JSCause will start running and will present you with the following:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>INFO: Reading configuration for site 'My Site' from 'sites/mysite'
+INFO: Site 'My Site' at https://localhost:3000/ assigned to server 0
+INFO: ************ All sites' configuration read at this point ********************
+INFO: The following sites were set up successfully:
+INFO: 'My Site'
+INFO: Will start listening.
+INFO: Server 0 listening on port 3000
+</code></pre></div></div>
+
+<p><img src="images/tutorial_001.png" alt="Terminal window showing JSCause running" title="JSCause running" /></p>
+
+<p>Great! At this point, JSCause is ready to receive requests.  Go to your web browser and visit: <a href="https://localhost:3000">https://localhost:3000</a></p>
+
+<p>You may see a browser security warning, but since this is a tutorial, we can ignore it for now.  Do not ignore it for production work! (see the <strong>Important</strong> notice further below.)</p>
+
+<p>The browser will display the words “It works!”</p>
+
+<p>In a modern browser, you’ll also see a row of squares slowly changing colors.</p>
+
+<p><img src="images/tutorial_002.gif" alt="Web browser window displaying the phrase 'It works!'" title="It works! JSCause is running!" /></p>
+
+<p><strong>Important</strong>: Your browser may warn you that the site is not secure.  That’s because we’re using a placeholder SSL certificate in order to test and use HTTPS connections.  These certificates are <strong>not</strong> suitable for production!  If you use these certs, your users will get a security warning in their browsers.  <strong>You must provide your valid private key file and certificate file</strong>.</p>
+
+<h4 id="choose-your-own-adventure">Choose your own adventure</h4>
+
+<p>Do you want to dive into how JSCause builds and renders the “It Works!” page? Go to the next section, “Before exploring example starter site,” and keep reading.</p>
+
+<p>Or if you’d like to create a simple website from scratch, proceed to skip ahead and go to the “<a href="#lets-create-a-simple-recipe-uploader">Let’s create a simple recipe uploader</a>” section.</p>
+
+<h4 id="before-exploring-example-starter-site">Before exploring example starter site</h4>
+
+<p>Go ahead and refresh the starter site page a few times.</p>
+
+<p>Notice three things:</p>
+
+<p><strong>1. Server-side rendering:</strong>  Notice how the row colors change with each refresh.  These colors are chosen on the server side.  This is easy to check by viewing the page’s source code:</p>
+
+<p><img src="images/tutorial_005.png" alt="Browser showing the example site's HTML source code" title="Part of the example site's HTML source code" /></p>
+
+<p>Notice the section about the CSS keyframes, which are part of CSS animations.  Don’t worry if you don’t know much about CSS.  Just pay attention to the numeric values inside <code class="highlighter-rouge">rgb()</code> (the values in your browser will very likely differ from this example):</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@keyframes colors1 {
+  0% { background: rgb(143, 39, 163); }
+  50% { background: rgb(218, 170, 217); }
+  100% { background: rgb(184, 78, 178); }
+}
+</code></pre></div></div>
+
+<p>If you refresh the page source code, you’ll get different numbers:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@keyframes colors1 {
+  0% { background: rgb(219, 57, 216); }
+  50% { background: rgb(91, 43, 167); }
+  100% { background: rgb(221, 76, 150); }
+}
+</code></pre></div></div>
+
+<p>As you can see, those numbers are generated on the server.</p>
+
+<p><strong>2. Speed!</strong>  Ok, we’ll admit that this page is a very simple one, so that’s a factor to take into consideration.  But you get pure HTML and CSS here, and you get it fast (depending on your connection, of course.)</p>
+
+<p><strong>3. Logging:</strong> If you check the terminal window, you’ll notice a bunch of entries similar to the following ones:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Thu, 09 Jul 2020 04:40:28 GMT - localhost - GET: / - 200
+Thu, 09 Jul 2020 04:40:28 GMT - localhost - GET: /favicon.ico - 200
+Thu, 09 Jul 2020 04:43:07 GMT - localhost - GET: / - 200
+Thu, 09 Jul 2020 04:43:08 GMT - localhost - GET: / - 200
+</code></pre></div></div>
+
+<p>Each entry represents one request coming from the web browser.  In this case, we can see that JSCause at first served <code class="highlighter-rouge">/</code>, which stands for <code class="highlighter-rouge">https://localhost:3000/</code>, and <code class="highlighter-rouge">/favicon.ico</code>, which stands for <code class="highlighter-rouge">https://localhost:3000/favicon.ico</code>.  The each duplicate <code class="highlighter-rouge">/</code> corresponds to each time you refreshed the page.  <code class="highlighter-rouge">favicon.ico</code> just got retrieved once, and the browser cached it (saved it), so it didn’t need to retrieve it again with each refresh.  Notice that each entry has the date and time of the request, as well as whether it succeeded or not (200 = succeeded. Other typical HTTP status codes are 404 for “not found” and 500 for “application error.”)</p>
+
+<p>A copy of these logs will be found in the <code class="highlighter-rouge">/logs</code> directory, as well as the <code class="highlighter-rouge">sites/mywebsite/localLogs</code> directory.  Notice that JSCause compresses old log files to save up space.</p>
+
+<h4 id="stopping-jscause">Stopping JSCause</h4>
+
+<p>In order to stop JSCause, just hit Control+C on the terminal window.  You’ll see the following:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>^C
+Received interrupt signal.  Cleaning up before exiting...
+Terminated.
+</code></pre></div></div>
+
+<p><img src="images/tutorial_003.png" alt="Terminal window showing JSCause stopping" title="JSCause stopping" /></p>
+
+<p>Very easy.  Restart JSCause again to continue with the tutorial.</p>
+
+<h4 id="exploring-example-starter-site">Exploring example starter site</h4>
+
+<p>If you explore the <code class="highlighter-rouge">jscause</code> directory (on Windows Explorer, Finder or the command line), you’ll notice a subsidrectory <code class="highlighter-rouge">sites</code>.  Under <code class="highlighter-rouge">sites</code>, there will be one directory called <code class="highlighter-rouge">mysite</code>.  Here’s its contents:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>+ jscause.conf
++ sites/
+      + mysite/
+            + configuration/
+            + localLogs/
+            + workbench/
+            + website/
+                  index.jscp
+                  favicon.ico
+                  error4xx.jscp
+                  error5xx.jscp
+</code></pre></div></div>
+
+<p>From the above diagram, we can observe that there is a <code class="highlighter-rouge">jscause.conf</code> file outside of <code class="highlighter-rouge">sites/</code>.  We’ll delve into it for a bit on the second part of the tutorial, “<a href="#lets-create-a-simple-recipe-uploader">Let’s create a simple recipe uploader</a>.”  For now, just ignore.  Anyway.  Moving on.</p>
+
+<p>Notice how <code class="highlighter-rouge">website</code> has the files that comprise the actual website.  When JSCause receives the <code class="highlighter-rouge">https://localhost:3000/</code> request, it immediately assumes that we are referring to <code class="highlighter-rouge">/index.jscp</code>.  <code class="highlighter-rouge">index.jscp</code> is the default file.  That means, if you visit <code class="highlighter-rouge">https://localhost:3000/index.jscp</code> from the browser, you’ll get exactly the same page (with different row colors.)</p>
+
+<p>Each <code class="highlighter-rouge">JSCP</code> file (files with the <code class="highlighter-rouge">.jscp</code> extension) represents one resource that is immediately available for requests from the browser (in web dev parlance, they directly map to the application’s client routes.)  So, if you had a file named <code class="highlighter-rouge">secondPage.jscp</code>, then you could access it through:</p>
+
+<p><code class="highlighter-rouge">https://localhost:3000/secondPage.jscp</code></p>
+
+<p>Or if you had a subdirectory and a file as <code class="highlighter-rouge">/secondFolder/index.jscp</code>, then you could access it either through:</p>
+
+<p><code class="highlighter-rouge">https://localhost:3000/secondFolder/index.jscp</code></p>
+
+<p>Or through:</p>
+
+<p><code class="highlighter-rouge">https://localhost:3000/secondFolder</code></p>
+
+<p>(Remember:  We can omit <code class="highlighter-rouge">index.jscp</code> from the address because it’s the default file.)</p>
+
+<p>Please note this exception: <code class="highlighter-rouge">error4xx.jscp</code> and <code class="highlighter-rouge">error5xx.jscp</code> are special files, so trying to request them directly (e.g. <code class="highlighter-rouge">https://localhost:3000/err5xx.jscp</code>) won’t work - JSCause will respond with an HTTP 404 error (not found) to the web browser.  We’ll talk more about these special files later.</p>
+
+<p>Let’s move on.</p>
+
+<p>We won’t discuss how the pure HTML and CSS do what they do in the browser. That can be an exercise for you (hint: CSS animations.) Instead, we’ll focus on the parts of <code class="highlighter-rouge">index.jscp</code> pertaining to JSCause.</p>
+
+<p>There are three key parts:</p>
+
+<p><strong>Part 1</strong>:  Lines 1-5:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;js
+  // These functions are defined server-side.
+  function randomNumber() { return Math.floor(Math.random() * 256); }
+  function rgbValue() { return `${randomNumber()}, ${randomNumber()}, ${randomNumber()}`; }
+/js&gt;
+</code></pre></div></div>
+
+<p>JSCause will run any code enclosed between <code class="highlighter-rouge">&lt;js</code> and <code class="highlighter-rouge">/js&gt;</code> <em>before</em> responding to the web browser.</p>
+
+<p>That means that the code above will define two functions <em>on the server</em>, <code class="highlighter-rouge">randomNumber()</code> and <code class="highlighter-rouge">rgbValue()</code>.  JSCause will never sent these function definitions to the web browser.</p>
+
+<p>As you may have noticed, <code class="highlighter-rouge">rgbValue()</code> will create a string comprised of three random numbers between 0 and 255.  For example: <code class="highlighter-rouge">"141, 72, 260"</code>, or <code class="highlighter-rouge">"34, 199, 102"</code>, or <code class="highlighter-rouge">"255, 229, 7"</code>, etc.</p>
+
+<p>“But wait,” you may be asking. “How do you send actual functions to the browser, then?” Don’t enclose those in a <code class="highlighter-rouge">&lt;js ... /js&gt;</code> block.  If it’s a regular <code class="highlighter-rouge">JS</code> file (with a <code class="highlighter-rouge">.js</code> extension instead of <code class="highlighter-rouge">.jscp</code>, JSCause will send it as is.  If the functions are inside a <code class="highlighter-rouge">JSCP</code> file , they should be inside <code class="highlighter-rouge">&lt;script&gt;</code> tags as it usually happens with Javascript embedded in HTML.</p>
+
+<p>To illustrate the above: In the following example, <code class="highlighter-rouge">serverFunction()</code> is defined on the server-side, only to be used on the server, and <code class="highlighter-rouge">clientFunction()</code> will be sent to the browser, for the browser to define and use:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;js
+  function serverFunction() {
+      console.log('I run on the server.');
+  }
+/js&gt;
+
+&lt;script&gt;
+  function clientFunction() {
+      console.log('I run on the client.');
+  }
+&lt;/script&gt;
+</code></pre></div></div>
+
+<p><strong>Part 2</strong>:  Lines 19-20:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    @keyframes colors1 {
+        0% { background: rgb(&lt;js= rgbValue() /js&gt;); }
+</code></pre></div></div>
+
+<p>JSCause will treat everything outside of a <code class="highlighter-rouge">&lt;js ... /js&gt;</code> block as HTML/CSS content, and thus leave it alone.  JSCause will send that HTML content <em>as is</em> when responding to the web browser.  Well, at least that is true for the first line.  Now, on the second line, we have:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;js= rgbValue() /js&gt;
+</code></pre></div></div>
+
+<p>Remember that JSCause runs the contents of a <code class="highlighter-rouge">&lt;js ... /js&gt;</code> block.  Notice how <code class="highlighter-rouge">&lt;js</code> is followed by <code class="highlighter-rouge">=</code>.  The <code class="highlighter-rouge">=</code> instructs JSCause to treat whatever follows as an expression.  JSCause will evaluate that expression, convert it into a value, then use said value as part of the response to the web browser.  Here is an example:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;p&gt;Two plus two is: &lt;js= 2+2 /js&gt;&lt;/p&gt;       &lt;!-- The browser will show: Two plus two is 4 --&gt;
+&lt;js const lastName = 'Anderson' /js&gt; &lt;!-- JSCause defines the lastName constant. --&gt;
+Hello, Mr. &lt;js= lastName + '!' /js&gt;  &lt;!-- The browser will show: Hello, Mr. Anderson! --&gt;
+</code></pre></div></div>
+
+<p>Back to our starter site:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    0% { background: rgb(&lt;js= rgbValue() /js&gt;); }
+</code></pre></div></div>
+
+<p>When JSCause sees <code class="highlighter-rouge">rgbValue()</code>, it will call it and use its value inside the block.  Let’s suppose that <code class="highlighter-rouge">rgbValue()</code> returns the randomly created string <code class="highlighter-rouge">"33, 44, 55"</code>. In that case, JSCause will send the following to the web browser:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    0% { background: rgb(33, 44, 55); }
+</code></pre></div></div>
+
+<p><strong>Part 3</strong>:  Lines 35-38:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    &lt;js for (let i=0; i&lt;10; i++) { /js&gt;
+        &lt;div class="blockie blockie-1"&gt;&lt;/div&gt; &lt;!-- i is &lt;js= i /js&gt; --&gt;
+        &lt;div class="blockie blockie-2"&gt;&lt;/div&gt;
+    &lt;js } /js&gt;
+</code></pre></div></div>
+
+<p>Here we have a typical Javascript <code class="highlighter-rouge">for</code> loop.  Notice again how the actual code is inside <code class="highlighter-rouge">&lt;js ... /js&gt;</code> blocks, and the rest is just HTML.</p>
+
+<p>The <code class="highlighter-rouge">for</code> loop will output send the following to the web browser:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    &lt;div class="blockie blockie-1"&gt;&lt;/div&gt; &lt;!-- i is 0 --&gt;
+    &lt;div class="blockie blockie-2"&gt;&lt;/div&gt;
+
+    &lt;div class="blockie blockie-1"&gt;&lt;/div&gt; &lt;!-- i is 1 --&gt;
+    &lt;div class="blockie blockie-2"&gt;&lt;/div&gt;
+
+    &lt;div class="blockie blockie-1"&gt;&lt;/div&gt;  &lt;!-- i is 2 --&gt;
+    &lt;div class="blockie blockie-2"&gt;&lt;/div&gt;
+
+    &lt;!-- ...etc... --&gt;
+
+    &lt;div class="blockie blockie-1"&gt;&lt;/div&gt; &lt;!-- i is 9 --&gt;
+    &lt;div class="blockie blockie-2"&gt;&lt;/div&gt;
+
+    &lt;div class="blockie blockie-1"&gt;&lt;/div&gt; &lt;!-- i is 10 --&gt;
+    &lt;div class="blockie blockie-2"&gt;&lt;/div&gt;
+</code></pre></div></div>
+
+<p>And there you have it.  That’s how JSCause renders the “It Works!” page.</p>
+
+<p>If you want to learn about other features, such as how to handle request parameters, forms, and uploads, keep reading the sections below.</p>
+
+<p>Or you can go directly to [the manual](/docs.html to learn about the whole feature set.</p>
+
+<h4 id="lets-create-a-simple-recipe-uploader">Let’s create a simple recipe uploader</h4>
+
+<p>In this exercise, we’ll create a food recipe uploader. It’s a very simple example.  We won’t be using a database. Just file uploading, file creation, and that’s it.</p>
+
+<p>We’ll start off with the example starter site that we set up and running in previous sections.  Let’s take a look at its file structure again:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>+ jscause.conf
++ sites/
+      + mysite/
+            + configuration/
+            + localLogs/
+            + workbench/
+            + website/
+                  index.jscp
+                  favicon.ico
+                  error4xx.jscp
+                  error5xx.jscp
+</code></pre></div></div>
+
+<p><em><strong>Changing the listening port</strong></em></p>
+
+<p>Just for the fun of it, let’s change the listening port from 3000 to 8080.  So, instead of visiting <code class="highlighter-rouge">https://localhost:3000</code>, we’ll be visiting <code class="highlighter-rouge">https://localhost:8080</code>.  In order to do that, open <code class="highlighter-rouge">jscause.conf</code> on a text editor.  Here is its contents:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{
+  "sites": [
+    {
+      "name": "My Site",
+      "port": 3000,
+      "rootDirectoryName": "mysite",
+      "enableHTTPS": true
+    }
+  ],
+  "logging": {
+    "general": {
+      "directoryName": "./logs",
+      "fileOutput": "enabled",
+      "consoleOutput": "enabled"
+    },
+    "perSite": {
+      "fileOutput": "per site",
+      "consoleOutput": "enabled"
+    }
+  }
+}
+</code></pre></div></div>
+
+<p>Change the <code class="highlighter-rouge">"port"</code> configuration value from <code class="highlighter-rouge">3000</code> to <code class="highlighter-rouge">8080</code>:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    // Oh yes, comments starting with "//" are accepted.
+    {
+      "name": "My Site",
+      "port": 8080, // &lt;--- changed from 3000 to 8080.
+      "rootDirectoryName": "mysite",
+      "enableHTTPS": true
+    }
+</code></pre></div></div>
+
+<p>Save the file, and restart JSCause: terminate it with Control+C then run <code class="highlighter-rouge">node jscause</code> (or <code class="highlighter-rouge">jscause</code> if you used <code class="highlighter-rouge">npm</code>.)</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>INFO: Reading configuration for site 'My Site' from 'sites/mysite'
+INFO: Site 'My Site' at https://localhost:8080/ assigned to server 0
+INFO: ************ All sites' configuration read at this point ********************
+INFO: The following sites were set up successfully:
+INFO: 'My Site'
+INFO: Will start listening.
+INFO: Server 0 listening on port 8080
+</code></pre></div></div>
+
+<p>Notice how JSCause just informed us that we’re now running from port <code class="highlighter-rouge">8080</code>:</p>
+
+<p>Go ahead and give it a try right now by visiting <a href="https://localhost:8080">https://localhost:8080</a>.  Remember that you may get a security warning from your browser because we’re using HTTPS with placeholder certificates.  Ignore the warning for now, but <strong>you must use your own valid certificates</strong> in production.</p>
+
+<p><em><strong>Creating new recipes subdirectories</strong></em></p>
+
+<p>Create a subdirectory named <code class="highlighter-rouge">recipes</code> under <code class="highlighter-rouge">mysite</code>, outside of <code class="highlighter-rouge">website</code>.  Also, create a subdirectory named <code class="highlighter-rouge">recipeImages</code> under <code class="highlighter-rouge">website</code>.</p>
+
+<p>Your directory structure should look like this:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>+ sites/
+      + mysite/
+            + configuration/
+            + localLogs/
+            + workbench/
+            + recipes/
+            + website/
+            +    recipeImages/
+</code></pre></div></div>
+
+<p>Notice how <code class="highlighter-rouge">recipes</code> is outside of <code class="highlighter-rouge">website</code>.  Because of that, we cannot access it from the web.  This is exactly what we want for our purposes, since we’ll store some information we don’t want to make available in the raw.  <code class="highlighter-rouge">recipeImages</code>, on the other hand, <em>is</em> available from the web.</p>
+
+<p><em><strong>Creating the No Frills Recipes homepage</strong></em></p>
+
+<p>Edit the file <code class="highlighter-rouge">website/index.jscp</code>, and replace its whole contents with the following:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;!doctype html&gt;</span>
+<span class="nt">&lt;html&gt;</span>
+  <span class="nt">&lt;head&gt;</span>
+    <span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">"icon"</span> <span class="na">href=</span><span class="s">"favicon.ico"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;title&gt;</span>No frills recipes<span class="nt">&lt;/title&gt;</span>
+  <span class="nt">&lt;/head&gt;</span>
+  <span class="nt">&lt;body&gt;</span>
+    <span class="nt">&lt;h1&gt;</span>No frills recipes<span class="nt">&lt;/h1&gt;</span>
+
+    <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"/newRecipe.jscp"</span><span class="nt">&gt;</span>Create a new recipe<span class="nt">&lt;/a&gt;</span>
+  <span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</code></pre></div></div>
+
+<p>It’s a very basic page showing a header and a link.  Restart JSCause so it picks up the changes.</p>
+
+<p>You’ll notice that JSCause throws an error.  What happened?  Here’s a condensed version of the error, showing the relevant bits:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ERROR: Site: Compile error: Unexpected token &lt; at line 1
+:1
+
+[Some other error messages here]
+
+SyntaxError: Unexpected token &lt;
+
+[Some stack trace errors here]
+
+ERROR: Site: Could not compile code for index.jscp.
+ERROR: Site 'My Site' not started.
+INFO: ************ All sites' configuration read at this point ********************
+ERROR: Server not started.  No sites are running.
+</code></pre></div></div>
+
+<p>JSCause is telling us that it didn’t recognize the veru first character in our file, the <code class="highlighter-rouge">&lt;</code> in <code class="highlighter-rouge">&lt;!doctype html&gt;</code>.</p>
+
+<p>This is because JSCause is expecting Javascript code.  It’s a <code class="highlighter-rouge">JSCP</code> file after all.  Since there are no <code class="highlighter-rouge">&lt;js ... /js&gt;</code> blocks anywhere on the page, it assumes that the whole file is Javascript.  Of course, this is the wrong assumption since the whole file is HTML instead.</p>
+
+<p>This is easily solved by adding the <code class="highlighter-rouge"><span class="nt">&lt;html</span> <span class="nt">/&gt;</span></code> directive at the very top of the file:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;html</span> <span class="nt">/&gt;</span>
+<span class="cp">&lt;!doctype html&gt;</span>
+<span class="nt">&lt;html&gt;</span>
+  <span class="nt">&lt;head&gt;</span>
+  <span class="c">&lt;!-- etc, etc --&gt;</span>
+</code></pre></div></div>
+
+<p><code class="highlighter-rouge"><span class="nt">&lt;html</span> <span class="nt">/&gt;</span></code> tells JSCause that it should treat the whole file as HTML. This is fine for now since we’ll add some Javscript code later on.  However, if you ever plan to serve HTML in a file, we suggest that you use the <code class="highlighter-rouge">.html</code> extension instead.  That way, you don’t need to use the <code class="highlighter-rouge"><span class="nt">&lt;html</span> <span class="nt">/&gt;</span></code> directive, plus JSCause will be more efficient (read: quicker) to deliver it to the web browser.</p>
+
+<p>We are also aware that the error message is kind of cryptic.  This will be improved in a future version.</p>
+
+<p>Alright.  Start JSCause again.  This time it should work.  Visit https://localhost:8080 (or refresh the web browser if it’s already open.)</p>
+
+<p>You should see a very modest page showing a “No frills recipes” heading, and a “Create a new recipe” link:</p>
+
+<p><img src="images/tutorial_007.png" alt="Browser showing the No Frills Recipes example" title="No Frills Recipes page" /></p>
+
+<p><em><strong>Creating a new page</strong></em></p>
+
+<p>Try to follow the “Create a new recipe” link.  You will greeted with a “Not found” message:</p>
+
+<p><img src="images/tutorial_008.png" alt="Browser showing a Not Found error page" title="HTTP 404 Error: Not found" /></p>
+
+<p>When we click on the link, JSCause sees a <code class="highlighter-rouge">/newRecipe.jscp</code> request, but no <code class="highlighter-rouge">newRecipe.jsp</code> file exists and, therefore, it responds with an HTTP 404 error.  Let’s fix that.</p>
+
+<p>Create a new <code class="highlighter-rouge">newRecipe.jsp</code> file alongside <code class="highlighter-rouge">index.jscp</code>:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>+ sites/
+      + mysite/
+            + website/
+            +    index.jscp
+            +    newRecipe.jscp &lt;--- new file
+</code></pre></div></div>
+
+<p>Fill it out with the following code:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;html</span> <span class="nt">/&gt;</span>
+<span class="cp">&lt;!doctype html&gt;</span>
+<span class="nt">&lt;html&gt;</span>
+  <span class="nt">&lt;head&gt;</span>
+    <span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">"icon"</span> <span class="na">href=</span><span class="s">"favicon.ico"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;title&gt;</span>No frills recipes<span class="nt">&lt;/title&gt;</span>
+  <span class="nt">&lt;/head&gt;</span>
+  <span class="nt">&lt;body&gt;</span>
+    <span class="nt">&lt;h1&gt;</span>New no frills recipe<span class="nt">&lt;/h1&gt;</span>
+  <span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</code></pre></div></div>
+
+<p>Restart JSCause and refresh the page.  The browser will show the following:</p>
+
+<p><img src="images/tutorial_009.png" alt="Browser showing the New Recipe page" title="New Recipe page" /></p>
+
+<p><em><strong>Adding a New Recipe form</strong></em></p>
+
+<p>Time to add the new recipe form.  Right after the <code class="highlighter-rouge">&lt;h1&gt;New no frills recipe&lt;/h1&gt;</code> heading, add the following:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    &lt;form method="post" action="newRecipe.jscp" enctype="multipart/form-data"&gt;
+      &lt;p&gt;Recipe title: &lt;input type="text" name="recipe_title" value="" /&gt;&lt;/p&gt;
+      &lt;p&gt;Recipe photo: &lt;input type="file" name="recipe_photo" value="" /&gt;&lt;/p&gt;
+      &lt;p&gt;Recipe description: &lt;textarea name="recipe_description"&gt;&lt;/textarea&gt;&lt;/p&gt;
+      &lt;p&gt;&lt;input type="submit" name="submit" value="Submit recipe" /&gt;&lt;/p&gt;
+    &lt;/form&gt;
+</code></pre></div></div>
+
+<p>As you can see, it’s just a standard HTML upload form.  Restart JSCause and refresh the page in order to see it:</p>
+
+<p><img src="images/tutorial_010.png" alt="Browser showing the New Recipe form" title="New Recipe form" /></p>
+
+<p>Fill it out with some random data, then, click the “Submit recipe” button.  You will notice that the page will refresh, and your entered form data gone.  If you already have some experience with form handling, you may have an idea of what happened.  If not, we’ll explain it now.  So, what happened?</p>
+
+<p><em><strong>Accessing the form data, part 1</strong></em></p>
+
+<p>The form instructed the browser to submit the form to the <code class="highlighter-rouge">newRecipe.jsp</code> (indicated by the <code class="highlighter-rouge">action="newRecipe.jsp"</code> attribute.)  JSCause runs <code class="highlighter-rouge">newRecipe.jsp</code> again and, given that it’s the same code as before, it responds in exactly the same way as before.  Which is, it displays the form again:</p>
+
+<p><img src="images/tutorial_010.png" alt="Browser showing the New Recipe form after submission" title="New Recipe form after submission" /></p>
+
+<p>In order to access the form query parameters, you can use the <code class="highlighter-rouge">rt.postParams[]</code> object.  Each key in <code class="highlighter-rouge">rt.postParams[]</code> represents the name of a parameter.  Each value, in turn, represents the value of the parameter.</p>
+
+<p>Let’s say, for example, that you submitted “Tomato salad” as a recipe title in the form above.</p>
+
+<p>We named the title field as <code class="highlighter-rouge">"recipe_title"</code> (<code class="highlighter-rouge">name="recipe_title"</code>.)  Therefore, <code class="highlighter-rouge">rt.postParams['recipe_title']</code> will contain the string “Tomato salad”.</p>
+
+<p>Let’s verify this by adding the following lines between the heading and the form:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    &lt;js
+      if (rt.postParams['submit']) {
+        rt.print('Submission received for: ' + rt.postParams['recipe_title']);
+      }
+    /js&gt;
+</code></pre></div></div>
+
+<p>Restart JSCause and refresh the page.  Your browser will ask you to confirm that you want to resubmit the form.  Indicate that yes, you intend to resubmit.  If you entered “Tomato salad” in the title, you’ll see the following:</p>
+
+<p><img src="images/tutorial_011.png" alt="Browser showing that we submitted a New Recipe title" title="New Recipe title" /></p>
+
+<p><em><strong>The rt.print() command</strong></em></p>
+
+<p>Notice the <code class="highlighter-rouge">rt.print()</code> command, and how we can use it to print strings that will become part of the response.  The following piece of code is equivalent:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    &lt;js if (rt.postParams['submit']) { /js&gt;
+        Submission received for: &lt;js= rt.postParams['recipe_title'] /js&gt;
+    &lt;js } /js&gt;
+</code></pre></div></div>
+
+<p>Whether to use <code class="highlighter-rouge">rt.print()</code> or the <code class="highlighter-rouge">&lt;js= /js&gt;</code> block is a matter of preference.</p>
+
+<p><em><strong>Accessing the form data, part 2</strong></em></p>
+
+<p>Let’s validate the form data.  Replace the whole <code class="highlighter-rouge">if () {}</code> block with the following:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>      if (rt.postParams['submit']) {
+        let proceed = true;
+
+        if (!rt.postParams['recipe_title']) {
+          rt.print(' - Please provide a title.');
+          proceed = false;
+        }
+
+        if (!rt.uploadedFiles['recipe_photo']) {
+          rt.print(' - Please provide a photo.');
+          proceed = false;
+        }
+
+        if (!rt.postParams['recipe_description']) {
+          rt.print(' - Please provide a recipe description.');
+          proceed = false;
+        }
+
+        if (proceed) {
+          rt.print('All form fields valid!');
+        }
+      }
+</code></pre></div></div>
+
+<p>Before continuing, notice how each key available in <code class="highlighter-rouge">rt.postParams[]</code> corresponds to a field in the form.  Also notice that we used <code class="highlighter-rouge">rt.uploadedFiles['recipe_photo']</code> to refer to the uploaded file.  So, there you have it.  Form field values are stored in <code class="highlighter-rouge">rt.postParams[]</code> and form file uploads are stored in <code class="highlighter-rouge">rt.uploadedFiles[]</code>.</p>
+
+<p>Restart JSCause and refresh the page.  The browser will show the following:</p>
+
+<p><img src="images/tutorial_012.png" alt="Browser showing that we need to provide more data" title="Browser validation" /></p>
+
+<p>We had already provided a recipe title, but not a photo or description; hence we get those two messages in the response.  Alright, let’s provide all the fields in the form. Re-add “Tomato soup” as a title, and click on the “Browse…” button next to the “Recipe photo” field in order to upload a photo.  Any image file you have on your computer should work.  If you don’t have any, you can download this one, <a href="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/Mozzarella_and_Tomato_Salad_Platter.jpg/1920px-Mozzarella_and_Tomato_Salad_Platter.jpg">courtesy of Wikipedia</a>:</p>
+
+<p><img src="images/tutorial_014_tomato_salad.png" alt="An image of a Mozzarella and Tomato Salad Platter" title="Mozzarella and Tomato Salad Platter" /></p>
+
+<p>Finally, on the “Recipe description” field, add some text (for example, “This recipe will be available soon.”)</p>
+
+<p>Click on the “Submit recipe” button.</p>
+
+<p>The browser will now show the message “All form fields valid!”, indicating that the form data passed validation:</p>
+
+<p><img src="images/tutorial_013.png" alt="Browser showing that all the form data submitted is valid" title="All form data is valid" /></p>
+
+<p><em><strong>Examining uploaded files</strong></em></p>
+
+<p>As mentioned earlier, <code class="highlighter-rouge">rt.uploadedFiles[]</code> has data associated to the files uploaded through the form.  In the form, we have a file upload field named <code class="highlighter-rouge">"recipe_photo"</code>.  The file information is therefore available from <code class="highlighter-rouge">rt.uploadedFiles['recipe_photo']</code>.</p>
+
+<p>In our example, the following is part of what <code class="highlighter-rouge">rt.uploadedFiles['recipe_photo']</code> contains:</p>
+
+<ul>
+  <li>
+    <p><code class="highlighter-rouge">name</code> (<code class="highlighter-rouge">rt.uploadedFiles['recipe_photo'].name</code>): The name of the uploaded file.</p>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">path</code> (<code class="highlighter-rouge">rt.uploadedFiles['recipe_photo'].path</code>): The path of the uploaded file, including <em>a</em> temporary name.</p>
+  </li>
+</ul>
+
+<p><strong><code class="highlighter-rouge">rt.uploadedFiles['recipe_photo'].name</code></strong>: If you used the suggested image above for our example, then this name would be <code class="highlighter-rouge">tutorial_014_tomato_salad.png</code>.</p>
+
+<p>JSCause will replace invalid characters in <code class="highlighter-rouge">name</code> (e.g. <code class="highlighter-rouge">&lt;</code>, <code class="highlighter-rouge">&gt;</code>, and <code class="highlighter-rouge">*</code>) with an underscore, <code class="highlighter-rouge">_</code>.  So if the original name is <code class="highlighter-rouge">one*bad&gt;name.txt</code>, JSCause will change it to <code class="highlighter-rouge">one_bad_name.txt</code> before storing it in <code class="highlighter-rouge">rt.uploadedFiles[]</code>.</p>
+
+<p><strong><code class="highlighter-rouge">rt.uploadedFiles['recipe_photo'].path</code></strong>:  This a full file path pointing to where the upload has been <em>temporarily</em> stored.</p>
+
+<p>We say <em>temporarily</em> stored because JSCause <strong>will delete</strong> it as soon as it finishes sending the response back to the web browser (which happens when the <code class="highlighter-rouge">JSCP</code> program ends.)  This is by design in order to avoid clutter when an upload is not handled.  So, in order to preserve the file, we must handle it.</p>
+
+<p>Before handling the file, here are two more things to keep in mind:</p>
+
+<ol>
+  <li>
+    <p>The full path typically points to a location within the site’s subdirectory.  In this example, it will be <code class="highlighter-rouge">sites/website/workbench</code>.</p>
+  </li>
+  <li>
+    <p>The name specified in <code class="highlighter-rouge">path</code> will most likely <em>not</em> match the file name specified in <code class="highlighter-rouge">name</code>.  In our example, <code class="highlighter-rouge">name</code> will be something like <code class="highlighter-rouge">tutorial_014_tomato_salad.png</code>, whereas <code class="highlighter-rouge">path</code> will contain a random name similar to <code class="highlighter-rouge">jscupload_2a595765dd630a8e0a7c0fb92df7227d</code>.  This is for security purposes.  Don’t pay too much attention to that random name.  It’s just temporary, after all.</p>
+  </li>
+</ol>
+
+<p><em><strong>Handling and storing uploaded files</strong></em></p>
+
+<p>Let’s move the uploaded photo a permanent location.  We could copy it as well, but moving it is way faster. JSCause is prepared to deal with either case.</p>
+
+<p>Replace the <code class="highlighter-rouge">if (proceed)</code> statement with the following:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>        if (proceed) {
+          const photoFile = rt.uploadedFiles['recipe_photo'];
+          const fileName = photoFile.name;
+
+          const moveFrom = photoFile.path;
+          const moveTo = `website/recipeImages/${fileName}`;
+          rt.moveFile(moveFrom, moveTo);
+          rt.print('Recipe photo uploaded successfully!');
+        }
+</code></pre></div></div>
+
+<p>Quick note: if you’re on Windows, you may want to set <code class="highlighter-rouge">moveTo</code> to <code class="highlighter-rouge">website\\recipeImages\\${fileName}</code> instead.  You can use the <code class="highlighter-rouge">join()</code> method of the <code class="highlighter-rouge">path</code> NodeJS module is you’d like make them platform independent.  We’ll provide an example later.</p>
+
+<p>On to the code…</p>
+
+<p>The key operation here is done by <code class="highlighter-rouge">rt.moveFile()</code>.  As its name implies, <code class="highlighter-rouge">rt.moveFile()</code> moves a file from one file location to another.</p>
+
+<p>From the above code, <code class="highlighter-rouge">moveFrom</code> contains the temporary path of the uploaded photo. <code class="highlighter-rouge">moveTo</code> contains the destination path, which is the <code class="highlighter-rouge">recipeImages</code> subdirectory.  We have left the original file name provided by the web browser (although JSCause can tweak it for security purposes.)</p>
+
+<p>Let’s talk more about the way the code provides the destination path:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>`website/recipeImages/${fileName}`
+</code></pre></div></div>
+
+<p>Which JSCause converts to <code class="highlighter-rouge">website/recipeImages/tutorial_014_tomato_salad.png</code> (or whatever file name you used.)</p>
+
+<p>The above path will always be relative to your website’s working directory - no matter where your <code class="highlighter-rouge">JSCP</code> file is located (e.g. be it in <code class="highlighter-rouge">./myPage.jscp</code> or <code class="highlighter-rouge">/someDir/anotherDir/myPage.jscp</code>.)</p>
+
+<p>So, if the website is located, say, at <code class="highlighter-rouge">/Users/Lana/Web/jscause/sites/mysite</code>, then JSCause sees:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>website/recipeImages/tutorial_014_tomato_salad.png
+</code></pre></div></div>
+
+<p>as:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/Users/Lana/Web/jscause/sites/mysite/website/recipeImages/tutorial_014_tomato_salad.png
+</code></pre></div></div>
+
+<p>Because <code class="highlighter-rouge">recipeImages</code> is inside of <code class="highlighter-rouge">website</code>, then it will be available to the public.  If you don’t want make it immediately available (and that’s generally the case with many files), move it to a location outside of <code class="highlighter-rouge">website</code>.  Please read the paragraph marked as <strong>IMPORTANT</strong> at the end of this section for more information.</p>
+
+<p>You can also provide a relative path for the source (“from”) path to <code class="highlighter-rouge">rt.moveFile()</code>.  And you can also explicitly provide an absolute path as well (for both source and destination.)  As the matter of fact, we are already doing with that with the source, since it <code class="highlighter-rouge">moveFrom</code>, which contains the same value as <code class="highlighter-rouge">rt.uploadedFiles['recipe_photo']</code>, is provided as an absolute path.</p>
+
+<p>As noted earlier, NodeJS (not JSCause) provides the <code class="highlighter-rouge">join()</code> method from the <code class="highlighter-rouge">path</code> module as a way to build paths without us worrying about running on Windows, Linux, macOS, etc.  Let’s use it.</p>
+
+<p>Replace:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>const moveTo = `website/recipeImages/${fileName}`;
+</code></pre></div></div>
+
+<p>with:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>const moveTo = require('path').join('website', 'recipeImages', fileName);
+</code></pre></div></div>
+
+<p><strong>IMPORTANT</strong>:  As a rule of thumb, you should <em>never</em> trust content uploaded from an external source like a web client (such as a web browser.)  Take all the necessary measures to ensure that neither your system, nor your visitors, are negatively affected by content provided by third parties.  JSCause attempts to mitigate this, for example, by not allowing the copying or moving of either <code class="highlighter-rouge">JSCP</code> or <code class="highlighter-rouge">JSCM</code> files into <code class="highlighter-rouge">website</code> (at least, not by default.)  But you can and <em>should</em> do more security checks in order to protect yourself.</p>
+
+<p><em><strong>Checking for upload success and errors</strong></em></p>
+
+<p>What if the file upload doesn’t go through? Let’s simulate that by temporarily making the destination path invalid.  In the <code class="highlighter-rouge">moveTo</code> line:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>const moveTo = require('path').join('website', 'recipeImages', fileName);
+</code></pre></div></div>
+
+<p>Replace <code class="highlighter-rouge">'website'</code> with <code class="highlighter-rouge">'website_INVALID'</code> (let’s hope you don’t have an existing <code class="highlighter-rouge">website_INVALID</code> directory? If that’s the case, then use another name, like <code class="highlighter-rouge">'website_INVALID2'</code>):</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>const moveTo = require('path').join('website_INVALID', 'recipeImages', fileName);
+</code></pre></div></div>
+
+<p>Restart JSCause and refresh the page.  The browser will show an error page:</p>
+
+<p><img src="images/tutorial_008.png" alt="Browser showing a Server Error page" title="HTTP 500 Error: Internal server error" /></p>
+
+<p>If you check the terminal where JSCause is running, you’ll a message like the following:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ERROR: Site: My Site: Runtime error on file /newRecipe.jscp:
+ENOENT: no such file or directory,
+rename '/[some path]/jscause/sites/mysite/workbench/jscupload_6fbdadb42a2a297c44f7abe27bc32962' -&gt;
+'[some path]/jscause/sites/mysite/website_INVALID/recipeImages/tutorial_014_tomato_salad.png'
+at line (unknown)
+[... More error info here ... ]
+Sun, 12 Jul 2020 17:05:22 GMT - localhost - POST: /newRecipe.jscp - 500
+</code></pre></div></div>
+
+<p>Notice how the last line indicates that JSCause responded with an HTTP 500 Error back to the web browser.</p>
+
+<p>Good to know that JSCause reports an error, but the message is not helpful to the site’s visitors.  Let’s show the visitors a more friendly error message, alongside with the form, in case they want to try again.</p>
+
+<p>(TO-DO: Continue here.)</p>
+
+<p>(TO-DO: Remember:
+          //  .rtOnSuccess(() =&gt; { rt.print(‘File moved successfully!’); })
+          //  .rtOnError((err) =&gt; { rt.print(<code class="highlighter-rouge">There was an error: ${err}</code>); });
+)</p>
+
+<p><em><strong>Creating new files</strong></em></p>
+
+<p>(TO-DO: Remember:
+    rt.runAfter(() =&gt; {
+      /js&gt;
+    &lt;form method="post" action="newRecipe.jscp" enctype="multipart/form-data"&gt;
+      &lt;p&gt;Recipe title: <input type="text" name="recipe_title" value="" />&lt;/p&gt;
+      &lt;p&gt;Recipe photo: <input type="file" name="recipe_photo" value="" />&lt;/p&gt;
+      &lt;p&gt;Recipe description: <textarea name="recipe_description"></textarea>&lt;/p&gt;
+      &lt;p&gt;<input type="submit" name="submit" value="Submit recipe" />&lt;/p&gt;
+    &lt;/form&gt;
+      &lt;js
+    });
+    /js&gt;</p>
+
+<p>)</p>
+
+<p><em><strong>Custom error messages</strong></em></p>
+
+<p>(PARENTHESIS TO SHOW HOW TO DO CUSTOM 404 PAGES)</p>
+
+<p>(THEN, CONTINUE SHOWING THE FORM SUBMISSION… CREATE newRecipe.jscp - rename it from _newRecipe.jscp)</p>
+
+<p>(TO-DO:)</p>
+<ul>
+  <li>Disclaimer that the examples are not the best.  They’re just there for informational purposes.</li>
+  <li>Show getParams[] work.
+    <ul>
+      <li>Processing/moving uploaded files.</li>
+    </ul>
+  </li>
+  <li>Show how callbacks work (and mention why you don’t need the waitFor() trick for built-in functions.)</li>
+  <li>Show how callbacks work (and mention why you don’t need the waitFor() trick for built-in functions.)</li>
+  <li>Show how to change localhost and ports.</li>
+  <li>
+    <p>Then, refer to the manual, FAQ and troubleshooting.</p>
+  </li>
+  <li>Invite to explore the manual:
+    <ul>
+      <li>More on how callbacks work: waitFor() for non-built-in functions.</li>
+      <li>Show how modules work.</li>
+    </ul>
+  </li>
+  <li>V0.9.4 at this point.</li>
+</ul>
+
+<p>Read <a href="/docs.html">the manual</a> to learn about JSCause’s whole feature set.</p>
+
+<p>(TO-DO: Blur your name/computer name in terminal screen captures.)</p>
+
+<p>(TO-DO: Place an “In this tutorial, you will learn” section at the top of this document.)</p>
+
+<p>(UPLOAD THE TUTORIAL’S CODE TO GITHUB? OWN REPO? ZIP FILE?)</p>
+
+<p>(TO-DO: REMOVE UNCOMPRESSED ZIP FILES FROM THE MAIN PROJECT’S DIST DIRECTORY ONCE YOU’RE DONE WRITING THIS TUTORIAL.)</p>
+
 
       </div>
       <div class="topmenu">

@@ -58,21 +58,31 @@
           <p>JSCause is built to be both easy to use, and powerful with a rich set of features:</p>
 
 <ul>
-  <li><strong>It runs on Node.js</strong>. Even better, it doesn’t need npm.  That’s right, no external dependencies whatsoever!</li>
-  <li><strong>It’s easy to install</strong>.  Just unpack (unzip), run <code class="highlighter-rouge">node jscause.js</code> on the terminal and you’re good to go.</li>
+  <li><strong>It runs on Node.js</strong>. Even better, it doesn’t need npm.  That’s right, no external dependencies whatsoever! (There is an npm version; but again, this is not needed.)</li>
+  <li><strong>It’s easy to install</strong>.  Just unpack (unzip), run <code class="highlighter-rouge">node jscause.js</code> on the terminal and you’re good to go.
+    <ul>
+      <li>Or if you use npm, run <code class="highlighter-rouge">npm install -g jscause</code>, and then run <code class="highlighter-rouge">jscause</code> on your website’s directory.</li>
+    </ul>
+  </li>
   <li><strong>It’s easy to maintain</strong>.  Your site’s configuration is in the <code class="highlighter-rouge">configuration</code> folder, and your content is in the <code class="highlighter-rouge">website</code> folder.  That’s it.</li>
   <li><strong>Simple site architecture</strong>.  Do you need to serve <code class="highlighter-rouge">/myfolder/myfile</code>? Put your content in <code class="highlighter-rouge">website/myfolder/myfile.jscp</code>.</li>
   <li><strong>Serve static assets with no fuss</strong>. Do you need to serve <code class="highlighter-rouge">/myimages/image1.jpg</code>? Put your image in <code class="highlighter-rouge">website/myimages/image1.jpg</code>.</li>
   <li><strong>Custom error messages</strong>. Create your cool “404, Not Found” page and place it in <code class="highlighter-rouge">/website/error4xx.jscp</code>.</li>
   <li><strong>Easy query string handling</strong>.  Access <code class="highlighter-rouge">name</code> in <code class="highlighter-rouge">/myfile?name=Jane</code> by using <code class="highlighter-rouge">rt.getParams['name']</code>.</li>
-  <li><strong>Easy content upload handling</strong>.  Handle form and JSON submission, as well as file uploads, with simple commands (e.g. <code class="highlighter-rouge">rt.postParams['first_name']</code>.)</li>
+  <li><strong>Easy content upload handling</strong>.  Handle form and JSON submissions, as well as file uploads, with simple commands (e.g. <code class="highlighter-rouge">rt.postParams['first_name']</code>.)</li>
   <li><strong>Multiple sites</strong>.  You can have, for example, “mysite1.com” in <code class="highlighter-rouge">sites/mysite1/website</code> and “mysite2.com” in <code class="highlighter-rouge">sites/mysite2/website</code>.</li>
-  <li><strong>Server logs</strong>.  Check out <code class="highlighter-rouge">/website/logs</code> to see how your site is being accessed.</li>
+  <li><strong>Server logs</strong>.  Check out <code class="highlighter-rouge">/website/localLogs</code> to see how your site is being accessed.</li>
   <li><strong>HTTPS-ready</strong>.  Provide JSCause with your SSL certificates and serve HTTPS content in no time.</li>
   <li><strong>Built with security in mind</strong>.  Escape content for output and set upload limits and request timeouts.</li>
+  <li><strong>Released under the MIT License</strong>.  JSCause is free for both non-commercial and commercial puposes.</li>
 </ul>
 
-<p>Ready to learn more?  Check out the <a href="/tutorial.html">tutorial</a> or <a href="/docs.html">the full documentation</a>.</p>
+<h2 id="learn-more">Learn more</h2>
+
+<ul>
+  <li>Check out the <a href="/tutorial.html">tutorial</a>.</li>
+  <li>Read <a href="/docs.html">the full documentation</a>.</li>
+</ul>
 
 <p>Or <a href="/download.html">download JSCause here</a>.</p>
 

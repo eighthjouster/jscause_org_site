@@ -163,7 +163,7 @@
     <ul>
       <li><a href="#why-doesnt-jscause-complain-when-a-certificate-or-key-file-is-invalid">Why doesn’t JSCause complain when a certificate or key file is invalid?</a></li>
       <li><a href="#sitejson-accepts-a-hostname-that-could-already-be-used-in-another-sites-sitejson--is-this-a-bug"><code class="highlighter-rouge">site.json</code> accepts a hostName that could already be used in another site’s json.  Is this a bug?</a></li>
-      <li><a href="#jscause-says-a-file-does-not-exist-but-i-can-see-it-in-the-file-system">JSCause says a file does not exist, but I can see it in the file system</a></li>
+      <li><a href="#jscause-says-a-file-does-not-exist-but-i-can-see-it-in-the-file-system">JSCause says a file does not exist, but I can see it in the file system.</a></li>
     </ul>
   </li>
   <li><a href="#list-of-common-errors-and-warnings-reported-by-jscause">List of common errors and warnings reported by JSCause</a>
@@ -232,6 +232,8 @@
 
 <p>If you need a project template for your site, you can use the one <a href="https://github.com/eighthjouster/jscause/releases/download/v0.9.3-alpha/jscause_site_template-v1.zip">available in the release</a>.</p>
 
+<p><strong>Important note:</strong>  The project template include example SSL certificates, so you can use HTTPS.  These certificates are <strong>not</strong> suitable for production!  If you use these certs, your users will get a security warning in their browsers.  You must provide your own certificates.</p>
+
 <p><strong>For more advanced users:</strong>  If you ever add JSCause as a package dependency to your project (i.e. <code class="highlighter-rouge">npm install --save jscause</code>), JSCause will be available from <code class="highlighter-rouge">./node_modules/.bin/jscause</code>.</p>
 
 <h2 id="structure-of-a-jscause-site">Structure of a JSCause site</h2>
@@ -245,7 +247,7 @@
  ./sites/mysite/
  ./sites/mysite/configuration/site.json
  ./sites/mysite/configuration/certs/
- ./sites/mysite/logs/
+ ./sites/mysite/localLogs/
  ./sites/mysite/website/
 </code></pre></div></div>
 
@@ -265,7 +267,7 @@
     <p><code class="highlighter-rouge">sites/mysite/configuration/certs</code>: If you site uses a secure connection (HTTPS), you will have to place your certificate files in this location.  More information in <a href="#httpsssl-configuration">the HTTPS/SSL configuration section</a>, as well as in <a href="#sitejson-configuring-your-websites-details">the site.json section</a>.</p>
   </li>
   <li>
-    <p><code class="highlighter-rouge">sites/mysite/logs/</code>:  In this subdirectory, JSCause will log access and error entries pertaining to your website.</p>
+    <p><code class="highlighter-rouge">sites/mysite/localLogs/</code>:  In this subdirectory, JSCause will log access and error entries pertaining to your website.</p>
   </li>
 </ul>
 
@@ -795,7 +797,7 @@ INFO: Server 0 listening on port 80
 
 <h2 id="stopping-jscause">Stopping JSCause</h2>
 
-<p>You can stop JSCause simply by issuing Ctrl+C in the terminal:</p>
+<p>You can stop JSCause simply by issuing Control+C in the terminal:</p>
 
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>^C
 Received interrupt signal.  Cleaning up before exiting...
@@ -813,12 +815,12 @@ Terminated.
 
 <p>When JSCause is instructed to terminate, it will close the log files. If there are any log files being compressed at that very moment, it will wait until the operation completes.  Any pending log files compression will be ignored after that (but resumed once JSCause is started again.)</p>
 
-<p>If JSCause receives a second Ctrl+C keyboard combination during termination and cleanup, it will display the following message:</p>
+<p>If JSCause receives a second Control+C keyboard combination during termination and cleanup, it will display the following message:</p>
 
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Still cleaning on exit.  Try again to exit right away...
 </code></pre></div></div>
 
-<p>At that point, if you press Ctrl+C again (a third time), JSCause will terminate immediately, interrupting any cleanup operation.  Avoid getting to this point as much as possible, since compressed log files being created at that point may be rendered unusable.</p>
+<p>At that point, if you press Control+C again (a third time), JSCause will terminate immediately, interrupting any cleanup operation.  Avoid getting to this point as much as possible, since compressed log files being created at that point may be rendered unusable.</p>
 
 <h2 id="the-website-directory-all-your-websites-content">The website/ directory: All your website’s content</h2>
 
@@ -2459,7 +2461,7 @@ rt.readFile('my_source.txt', 'utf-8')
 
 <p>This is fine as long as both sites use different ports.</p>
 
-<h3 id="jscause-says-a-file-does-not-exist-but-i-can-see-it-in-the-file-system">JSCause says a file does not exist, but I can see it in the file system</h3>
+<h3 id="jscause-says-a-file-does-not-exist-but-i-can-see-it-in-the-file-system">JSCause says a file does not exist, but I can see it in the file system.</h3>
 
 <p>It may be a broken symlink that doesn’t point to a valid file anymore.</p>
 
@@ -2930,7 +2932,7 @@ the <a href="https://github.com/pillarjs/cookies">Cookies NodeJS module</a>.</p>
 
 <h2 id="license">License</h2>
 
-<p>Copyright 2020 - Rafael A. Pacheco Palencia (@eighthjouster)</p>
+<p>Copyright 2020 - Rafael A. Pacheco-Palencia (@eighthjouster)</p>
 
 <p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p>
 
