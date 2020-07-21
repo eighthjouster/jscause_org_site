@@ -59,9 +59,20 @@
 
 <h3 id="if-you-prefer-a-video">If you prefer a video:</h3>
 
-<p>Check out our <a href="https://www.youtube.com/">Youtube channel</a> [COMING SOON!!!!!]</p>
+<p>Check out our Youtube channel (coming soon.)</p>
 
 <h3 id="or-if-you-prefer-good-old-text-keep-reading">Or if you prefer good old text, keep reading.</h3>
+
+<p>In this tutorial, you will learn:</p>
+
+<ul>
+  <li>How to start and stop JSCause.</li>
+  <li>How to display basic web pages.</li>
+  <li>How to display dynamic content.</li>
+  <li>How to handle HTML forms and file uploads.</li>
+  <li>How to do basic file system operations (read, write files, read directories.)</li>
+  <li>How to handle URL query parameters.</li>
+</ul>
 
 <p>This tutorial makes some assumptions:</p>
 
@@ -90,10 +101,13 @@
 
 <ul>
   <li>
-    <p>That you understand that the sole purpose of the code in this tutorial is shown and used for the <em>sole</em> purpose of teaching how JSCause works.  We didn’t include security checks typically found in server-side code in order to avoid complexity and to focus on JSCause’s features.  JSCause performs a few security measures when running your code, but ultimately, you, the reader, are responsible to secure your own programs.  This is not only true with JSCause, but with any other server-oriented technology that is exposed to an intranet or the Internet, and that handles sensitive information (such as user passwords, financial records, personal information, etc.)</p>
+    <p>That you understand that this tutorial provides example source code for the <em>sole</em> purpose of teaching how JSCause works.  We didn’t include security checks typically found in server-side code in order to keep the focus on JSCause’s features.  JSCause performs a few security measures when running your code, but ultimately, you, the reader, are responsible to secure your own programs.  This is not only true with JSCause, but with any other server-oriented technology that is exposed to an intranet or the Internet, and that handles sensitive information (such as user passwords, financial records, personal information, etc.)</p>
   </li>
   <li>
-    <p>And finally, that you are already familiarized with HTML, CSS and Javascript. You don’t have to be an expert, but at least you should know the basics.</p>
+    <p>That you are already familiarized with HTML, CSS and Javascript. You don’t have to be an expert, but at least you should know the basics.</p>
+  </li>
+  <li>
+    <p>And finally, that the results in this tutorial jusdt serve the purpose of demonstrating JSCause’s capabilities.  Please don’t expect amazing design visuals in the results.  For that, you’ll need to apply your HTML and CSS skills.</p>
   </li>
 </ul>
 
@@ -101,7 +115,7 @@
 
 <p>If you downloaded the stand-alone version, uncompress (unzip) it anywhere on your disk drive.</p>
 
-<p>Or if you installed via <code class="highlighter-rouge">npm</code>, uncompress (unzip) the example site project, again, anywhere on your disk drive.</p>
+<p>Or if you installed it via <code class="highlighter-rouge">npm</code>, uncompress (unzip) the example site project, again, anywhere on your disk drive.</p>
 
 <p>No matter which way you used to get JSCause, the final uncompressed directory is named <code class="highlighter-rouge">jscause</code>.  From a terminal window, go inside it:</p>
 
@@ -131,7 +145,7 @@
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>node jscause
 </code></pre></div></div>
 
-<p>Or if you installed via <code class="highlighter-rouge">npm</code>:</p>
+<p>Or if you installed it via <code class="highlighter-rouge">npm</code>:</p>
 
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>jscause
 </code></pre></div></div>
@@ -155,7 +169,7 @@ INFO: Server 0 listening on port 3000
 
 <p>The browser will display the words “It works!”</p>
 
-<p>In a modern browser, you’ll also see a row of squares slowly changing colors.</p>
+<p>In a modern browser, you’ll also see a row of rectangles slowly changing colors.</p>
 
 <p><img src="images/tutorial_002.gif" alt="Web browser window displaying the phrase 'It works!'" title="It works! JSCause is running!" /></p>
 
@@ -163,11 +177,11 @@ INFO: Server 0 listening on port 3000
 
 <h4 id="choose-your-own-adventure">Choose your own adventure</h4>
 
-<p>Do you want to dive into how JSCause builds and renders the “It Works!” page? Go to the next section, “Before exploring example starter site,” and keep reading.</p>
+<p>Do you want to dive into how JSCause builds and renders the “It Works!” page? Go to the next section, “Before exploring the example starter site,” and keep reading.</p>
 
 <p>Or if you’d like to create a simple website from scratch, proceed to skip ahead and go to the “<a href="#lets-create-a-simple-recipe-uploader">Let’s create a simple recipe uploader</a>” section.</p>
 
-<h4 id="before-exploring-example-starter-site">Before exploring example starter site</h4>
+<h4 id="before-exploring-the-example-starter-site">Before exploring the example starter site</h4>
 
 <p>Go ahead and refresh the starter site page a few times.</p>
 
@@ -177,12 +191,12 @@ INFO: Server 0 listening on port 3000
 
 <p><img src="images/tutorial_005.png" alt="Browser showing the example site's HTML source code" title="Part of the example site's HTML source code" /></p>
 
-<p>Notice the section about the CSS keyframes, which are part of CSS animations.  Don’t worry if you don’t know much about CSS.  Just pay attention to the numeric values inside <code class="highlighter-rouge">rgb()</code> (the values in your browser will very likely differ from this example):</p>
+<p>Notice the section about the CSS keyframes.  Don’t worry if you don’t know much about CSS animations.  Just pay attention to the numeric values inside <code class="highlighter-rouge">rgb()</code> (the values in your browser will very likely differ from this example):</p>
 
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@keyframes colors1 {
-  0% { background: rgb(143, 39, 163); }
-  50% { background: rgb(218, 170, 217); }
-  100% { background: rgb(184, 78, 178); }
+  0% { background: rgb(198, 163, 206); }
+  50% { background: rgb(105, 167, 22); }
+  100% { background: rgb(183, 5, 246); }
 }
 </code></pre></div></div>
 
@@ -207,7 +221,7 @@ Thu, 09 Jul 2020 04:43:07 GMT - localhost - GET: / - 200
 Thu, 09 Jul 2020 04:43:08 GMT - localhost - GET: / - 200
 </code></pre></div></div>
 
-<p>Each entry represents one request coming from the web browser.  In this case, we can see that JSCause at first served <code class="highlighter-rouge">/</code>, which stands for <code class="highlighter-rouge">https://localhost:3000/</code>, and <code class="highlighter-rouge">/favicon.ico</code>, which stands for <code class="highlighter-rouge">https://localhost:3000/favicon.ico</code>.  The each duplicate <code class="highlighter-rouge">/</code> corresponds to each time you refreshed the page.  <code class="highlighter-rouge">favicon.ico</code> just got retrieved once, and the browser cached it (saved it), so it didn’t need to retrieve it again with each refresh.  Notice that each entry has the date and time of the request, as well as whether it succeeded or not (200 = succeeded. Other typical HTTP status codes are 404 for “not found” and 500 for “application error.”)</p>
+<p>Each entry represents one request coming from the web browser.  In this case, we can see that JSCause at first served ‘<code class="highlighter-rouge">/</code>’, which stands for <code class="highlighter-rouge">https://localhost:3000/</code>, and ‘<code class="highlighter-rouge">/favicon.ico</code>’, which stands for <code class="highlighter-rouge">https://localhost:3000/favicon.ico</code>.  Each duplicate ‘<code class="highlighter-rouge">/</code>’ corresponds to each time you refreshed the page.  <code class="highlighter-rouge">favicon.ico</code> just got retrieved once, and the browser cached it (saved it), so it didn’t need to retrieve it again with each refresh.  Notice that each entry has the date and time of the request, as well as whether it succeeded or not (200 = succeeded. Other typical HTTP status codes are 404 for “not found” and 500 for “application error.”)</p>
 
 <p>A copy of these logs will be found in the <code class="highlighter-rouge">/logs</code> directory, as well as the <code class="highlighter-rouge">sites/mywebsite/localLogs</code> directory.  Notice that JSCause compresses old log files to save up space.</p>
 
@@ -222,9 +236,9 @@ Terminated.
 
 <p><img src="images/tutorial_003.png" alt="Terminal window showing JSCause stopping" title="JSCause stopping" /></p>
 
-<p>Very easy.  Restart JSCause again to continue with the tutorial.</p>
+<p>Very easy.  Restart JSCause to continue with the tutorial.</p>
 
-<h4 id="exploring-example-starter-site">Exploring example starter site</h4>
+<h4 id="exploring-the-example-starter-site">Exploring the example starter site</h4>
 
 <p>If you explore the <code class="highlighter-rouge">jscause</code> directory (on Windows Explorer, Finder or the command line), you’ll notice a subsidrectory <code class="highlighter-rouge">sites</code>.  Under <code class="highlighter-rouge">sites</code>, there will be one directory called <code class="highlighter-rouge">mysite</code>.  Here’s its contents:</p>
 
@@ -241,23 +255,29 @@ Terminated.
                   error5xx.jscp
 </code></pre></div></div>
 
-<p>From the above diagram, we can observe that there is a <code class="highlighter-rouge">jscause.conf</code> file outside of <code class="highlighter-rouge">sites/</code>.  We’ll delve into it for a bit on the second part of the tutorial, “<a href="#lets-create-a-simple-recipe-uploader">Let’s create a simple recipe uploader</a>.”  For now, just ignore.  Anyway.  Moving on.</p>
+<p>From the above diagram, we can observe that there is a <code class="highlighter-rouge">jscause.conf</code> file outside of <code class="highlighter-rouge">sites/</code>.  We’ll delve into it for a bit on the second part of the tutorial, “<a href="#lets-create-a-simple-recipe-uploader">Let’s create a simple recipe uploader</a>.”  For now, just ignore it.  Anyway, moving on.</p>
 
 <p>Notice how <code class="highlighter-rouge">website</code> has the files that comprise the actual website.  When JSCause receives the <code class="highlighter-rouge">https://localhost:3000/</code> request, it immediately assumes that we are referring to <code class="highlighter-rouge">/index.jscp</code>.  <code class="highlighter-rouge">index.jscp</code> is the default file.  That means, if you visit <code class="highlighter-rouge">https://localhost:3000/index.jscp</code> from the browser, you’ll get exactly the same page (with different row colors.)</p>
 
-<p>Each <code class="highlighter-rouge">JSCP</code> file (files with the <code class="highlighter-rouge">.jscp</code> extension) represents one resource that is immediately available for requests from the browser (in web dev parlance, they directly map to the application’s client routes.)  So, if you had a file named <code class="highlighter-rouge">secondPage.jscp</code>, then you could access it through:</p>
+<p>Each <code class="highlighter-rouge">JSCP</code> file (files with the <code class="highlighter-rouge">.jscp</code> extension) represents one resource that is immediately available for requests from the browser (in web dev parlance, they directly map to the application’s server routes.)  So, if you had a file named <code class="highlighter-rouge">secondPage.jscp</code>, then you could access it through:</p>
 
 <p><code class="highlighter-rouge">https://localhost:3000/secondPage.jscp</code></p>
 
-<p>Or if you had a subdirectory and a file as <code class="highlighter-rouge">/secondFolder/index.jscp</code>, then you could access it either through:</p>
+<p>The <code class="highlighter-rouge">.jscp</code> extension is optional, so this is also valid:</p>
 
-<p><code class="highlighter-rouge">https://localhost:3000/secondFolder/index.jscp</code></p>
+<p><code class="highlighter-rouge">https://localhost:3000/secondPage</code></p>
 
-<p>Or through:</p>
+<p>Or if you had a subdirectory and a file as <code class="highlighter-rouge">/secondDir/index.jscp</code>, then you could access it either through:</p>
 
-<p><code class="highlighter-rouge">https://localhost:3000/secondFolder</code></p>
+<p><code class="highlighter-rouge">https://localhost:3000/secondDir/index.jscp</code></p>
 
-<p>(Remember:  We can omit <code class="highlighter-rouge">index.jscp</code> from the address because it’s the default file.)</p>
+<p>Or since we can omit the <code class="highlighter-rouge">.jscp</code> extension:</p>
+
+<p><code class="highlighter-rouge">https://localhost:3000/secondDir/index</code></p>
+
+<p>Or since <code class="highlighter-rouge">index.jscp</code> is the default:</p>
+
+<p><code class="highlighter-rouge">https://localhost:3000/secondDir</code></p>
 
 <p>Please note this exception: <code class="highlighter-rouge">error4xx.jscp</code> and <code class="highlighter-rouge">error5xx.jscp</code> are special files, so trying to request them directly (e.g. <code class="highlighter-rouge">https://localhost:3000/err5xx.jscp</code>) won’t work - JSCause will respond with an HTTP 404 error (not found) to the web browser.  We’ll talk more about these special files later.</p>
 
@@ -549,6 +569,8 @@ ERROR: Server not started.  No sites are running.
 
 <p><img src="images/tutorial_009.png" alt="Browser showing the New Recipe page" title="New Recipe page" /></p>
 
+<p>Notice that JSCause treats URL paths as case-sensitive.  That is, if you created a page called <code class="highlighter-rouge">newPage.jscp</code>, and try to visit <code class="highlighter-rouge">https://localhost:8080/NEWPAGE.JSCP</code>, or <code class="highlighter-rouge">/newpage.jscp</code>, <code class="highlighter-rouge">/nEwPaGe.JsCp</code>, etc, JSCause will respond that the page is not found.  The URL must correctly match the <code class="highlighter-rouge">JSCP</code> file exactly as it is written, <code class="highlighter-rouge">/newPage.jscp</code>.</p>
+
 <p><em><strong>Adding a New Recipe form</strong></em></p>
 
 <p>Time to add the new recipe form.  Right after the <code class="highlighter-rouge">&lt;h1&gt;New no frills recipe&lt;/h1&gt;</code> heading, add the following:</p>
@@ -733,21 +755,33 @@ ERROR: Server not started.  No sites are running.
 
 <p>As noted earlier, NodeJS (not JSCause) provides the <code class="highlighter-rouge">join()</code> method from the <code class="highlighter-rouge">path</code> module as a way to build paths without us worrying about running on Windows, Linux, macOS, etc.  Let’s use it.</p>
 
-<p>Replace:</p>
+<p>At the very top of the file, replace:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;html</span> <span class="nt">/&gt;</span>
+</code></pre></div></div>
+
+<p>With:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> &lt;js
+   const fsPath = require('path');
+ /js&gt;
+</code></pre></div></div>
+
+<p>Then, replace:</p>
 
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>const moveTo = `website/recipeImages/${fileName}`;
 </code></pre></div></div>
 
-<p>with:</p>
+<p>With:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>const moveTo = require('path').join('website', 'recipeImages', fileName);
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>const moveTo = fsPath.join('website', 'recipeImages', fileName);
 </code></pre></div></div>
 
 <p><strong>IMPORTANT</strong>:  As a rule of thumb, you should <em>never</em> trust content uploaded from an external source like a web client (such as a web browser.)  Take all the necessary measures to ensure that neither your system, nor your visitors, are negatively affected by content provided by third parties.  JSCause attempts to mitigate this, for example, by not allowing the copying or moving of either <code class="highlighter-rouge">JSCP</code> or <code class="highlighter-rouge">JSCM</code> files into <code class="highlighter-rouge">website</code> (at least, not by default.)  But you can and <em>should</em> do more security checks in order to protect yourself.</p>
 
-<p><em><strong>Checking for upload success and errors</strong></em></p>
+<p><em><strong>Checking for upload errors</strong></em></p>
 
-<p>What if the file upload doesn’t go through? Let’s simulate that by temporarily making the destination path invalid.  In the <code class="highlighter-rouge">moveTo</code> line:</p>
+<p>What if the file upload doesn’t go through? Let’s simulate that by temporarily making the destination path invalid.  That will cause an error, and the file move operation will fail.  In the <code class="highlighter-rouge">moveTo</code> line:</p>
 
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>const moveTo = require('path').join('website', 'recipeImages', fileName);
 </code></pre></div></div>
@@ -774,71 +808,732 @@ Sun, 12 Jul 2020 17:05:22 GMT - localhost - POST: /newRecipe.jscp - 500
 
 <p>Notice how the last line indicates that JSCause responded with an HTTP 500 Error back to the web browser.</p>
 
-<p>Good to know that JSCause reports an error, but the message is not helpful to the site’s visitors.  Let’s show the visitors a more friendly error message, alongside with the form, in case they want to try again.</p>
+<p>Good to know that JSCause reports an error, but the message is not helpful to the site’s visitors.  Let’s show the visitors a more friendly error message alongside with the form.</p>
 
-<p>(TO-DO: Continue here.)</p>
+<p>Replace:</p>
 
-<p>(TO-DO: Remember:
-          //  .rtOnSuccess(() =&gt; { rt.print(‘File moved successfully!’); })
-          //  .rtOnError((err) =&gt; { rt.print(<code class="highlighter-rouge">There was an error: ${err}</code>); });
-)</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>          rt.moveFile(moveFrom, moveTo);
+</code></pre></div></div>
 
-<p><em><strong>Creating new files</strong></em></p>
+<p>With:</p>
 
-<p>(TO-DO: Remember:
-    rt.runAfter(() =&gt; {
-      /js&gt;
-    &lt;form method="post" action="newRecipe.jscp" enctype="multipart/form-data"&gt;
-      &lt;p&gt;Recipe title: <input type="text" name="recipe_title" value="" />&lt;/p&gt;
-      &lt;p&gt;Recipe photo: <input type="file" name="recipe_photo" value="" />&lt;/p&gt;
-      &lt;p&gt;Recipe description: <textarea name="recipe_description"></textarea>&lt;/p&gt;
-      &lt;p&gt;<input type="submit" name="submit" value="Submit recipe" />&lt;/p&gt;
-    &lt;/form&gt;
-      &lt;js
-    });
-    /js&gt;</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>          rt.moveFile(moveFrom, moveTo)
+              .rtOnError((err) =&gt; { rt.print('There was an error.  Please try again later.'); });
+</code></pre></div></div>
 
-<p>)</p>
+<p>From the above, you can see that <code class="highlighter-rouge">rt.moveFile()</code> can be chained with <code class="highlighter-rouge">.rtOnerror()</code> in order to handle any errors that the move operation may raise (or throw, if you prefer.)  <code class="highlighter-rouge">.rtOnError()</code> expects a callback function.</p>
 
-<p><em><strong>Custom error messages</strong></em></p>
+<p>Restart JSCause and refresh the page.  The browser will show your error page:</p>
 
-<p>(PARENTHESIS TO SHOW HOW TO DO CUSTOM 404 PAGES)</p>
+<p><img src="images/tutorial_016.png" alt="Browser showing the recipe form with an error message" title="Error message in the form" /></p>
 
-<p>(THEN, CONTINUE SHOWING THE FORM SUBMISSION… CREATE newRecipe.jscp - rename it from _newRecipe.jscp)</p>
+<p>Our custom error message is displayed now.  However, check out those issues with red arrows above.</p>
 
-<p>(TO-DO:)</p>
+<p>First, the success message is still displayed.  And second, our error message appears at the bottom of the form instead of at the top.</p>
+
+<p>Let’s address the first issue.</p>
+
+<p>But before continuing: Notice how the error handling callback has an <code class="highlighter-rouge">err</code> parameter.  This parameter contains what JSCause got from the underlying operating system.  It’s not advisable to print this error to the page, but you may want to output it to the terminal via <code class="highlighter-rouge">console.error()</code> (i.i. <code class="highlighter-rouge">console.error(err)</code>).  That way, your site visitors won’t see the actual error (which can be a security issue), but you as a developer will still have access to it (via the terminal, and logs that your operating system captures via <code class="highlighter-rouge">console.error()</code>.)</p>
+
+<p><em><strong>Checking for upload success</strong></em></p>
+
+<p>Just like we have <code class="highlighter-rouge">.rtOnError()</code>, we also have <code class="highlighter-rouge">.rtOnSuccess()</code>, and it does exactly what you’re thinking:  It will invoke a callback function when <code class="highlighter-rouge">rt.moveFile()</code> suceeds.</p>
+
+<p>Thereby, we can move our original <code class="highlighter-rouge">rt.print()</code> success statement into an <code class="highlighter-rouge">rt.OnSuccess()</code> callback function.</p>
+
+<p>Right after:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>          rt.moveFile(moveFrom, moveTo)
+</code></pre></div></div>
+
+<p>Insert a new line:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>              .rtOnSuccess(() =&gt; { rt.print('Recipe photo uploaded successfully!'); })
+</code></pre></div></div>
+
+<p>So the whole <code class="highlighter-rouge">rt.moveFile()</code> operation will look like this:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>          rt.moveFile(moveFrom, moveTo)
+              .rtOnSuccess(() =&gt; { rt.print('Recipe photo uploaded successfully!'); })
+              .rtOnError((err) =&gt; { rt.print('There was an error.  Please try again later.'); });
+</code></pre></div></div>
+
+<p>At this point, you can comment out or delete the original <code class="highlighter-rouge">rt.print()</code> success statement.  The whole upload handling block will look like the following:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>        if (proceed) {
+          const photoFile = rt.uploadedFiles['recipe_photo'];
+          const moveFrom = photoFile.path;
+          const fileName = photoFile.name;
+          const moveTo = require('path').join('website_INVALID', 'recipeImages', fileName);
+          rt.moveFile(moveFrom, moveTo)
+            .rtOnSuccess(() =&gt; { rt.print('Recipe photo uploaded successfully!'); })
+            .rtOnError((err) =&gt; { rt.print('There was an error.  Please try again later.'); });
+        }
+</code></pre></div></div>
+
+<p>Restart JSCause and refresh the browser.  The page will now show the following:</p>
+
+<p><img src="images/tutorial_017.png" alt="Browser showing the recipe form with an error message" title="Error message in the form" /></p>
+
+<p>The success message is gone now.  Remember that the file move operation fails because we deliberately made it fail by rewriting the <code class="highlighter-rouge">'website'</code> string in the <code class="highlighter-rouge">path</code> building operation to <code class="highlighter-rouge">'website_INVALID'</code>.</p>
+
+<p>If we fix the path, the success message will appear again.  However, if we did this now, you would notice that it would also appear at the bottom of the form.  So, before doing that, let’s make the result messages (successful or not) appear at the top again.</p>
+
+<p><em><strong>Dealing with asynchronous calls</strong></em></p>
+
+<p>Note: If you’re familiar with how Javascript handles asynchronous operations, then you may skip the next four paragraph of our subsection, “Asynchronous operations explained quickly.”</p>
+
+<p><em>Asynchronous operations explained quickly:</em></p>
+
+<p><code class="highlighter-rouge">rt.moveFile()</code> is an asynchronous operation.  That is, when JSCause get to an <code class="highlighter-rouge">rt.moveFile()</code> command, it starts the process of moving the file, but it doesn’t wait for it to finish.  Instead, it leaves the task in the background and moves on to the next statement in the <code class="highlighter-rouge">JSCP</code> file.  At some point, when the move operation completes, JSCause runs the appropiate callback function depending on the result (i.e., the callback in either <code class="highlighter-rouge">.rtOnSuccess()</code> or <code class="highlighter-rouge">.rtOnError()</code>.)</p>
+
+<p>In our example, JSCause starts the move operation, then proceeds to render the New Recipe form.  When the move operation completes, JSCause will either render a success message, or an error one.  Since it has already rendered the form, then the message will appear after it.</p>
+
+<p>Why does JSCause not just wait until the move operation is completed? Because file operations are way slower than typical in-memory operations (yes, even today.)  If JSCause has to render hundreds or thousands of pages per second due to many requests, all those disk operations add up, and visitors will experience a slow website.  The solution is asynchronous operations.</p>
+
+<p>If JSCause can do some other tasks without waiting for disk operations to complete, then the wait times for each visitor are greatly reduced.  Think of a big customer queue at the supermarket.  If there is only one cashier in the whole store, everybody has to wait for each and every customer transaction ahead of them. Asynchronous operations are like having several cashiers helping that one single queue.  It doesn’t matter if one customer is too slow.  As soon as another cashier is free, the next customer can be helped.</p>
+
+<p><em>End of quickly explaining asynchronous operations.</em></p>
+
+<p>We’ll have to render the form after the asynchronous operations complete:</p>
+
 <ul>
-  <li>Disclaimer that the examples are not the best.  They’re just there for informational purposes.</li>
-  <li>Show getParams[] work.
-    <ul>
-      <li>Processing/moving uploaded files.</li>
-    </ul>
-  </li>
-  <li>Show how callbacks work (and mention why you don’t need the waitFor() trick for built-in functions.)</li>
-  <li>Show how callbacks work (and mention why you don’t need the waitFor() trick for built-in functions.)</li>
-  <li>Show how to change localhost and ports.</li>
   <li>
-    <p>Then, refer to the manual, FAQ and troubleshooting.</p>
+    <p>After the uploaded file move operation completes, <em>and</em></p>
   </li>
-  <li>Invite to explore the manual:
-    <ul>
-      <li>More on how callbacks work: waitFor() for non-built-in functions.</li>
-      <li>Show how modules work.</li>
-    </ul>
+  <li>
+    <p>After the result callback (<code class="highlighter-rouge">.rtonSucess()</code> / <code class="highlighter-rouge">.rtOnError()</code>) completes as well.</p>
   </li>
-  <li>V0.9.4 at this point.</li>
 </ul>
 
-<p>Read <a href="/docs.html">the manual</a> to learn about JSCause’s whole feature set.</p>
+<p>We can do that with <code class="highlighter-rouge">rt.runAfter()</code>.  This command accepts a callback (yes, another one), and it will only run it when all other pending (asynchronous) operations in your <code class="highlighter-rouge">JSCP</code> file have completed.  This will be true no matter if there is one, five, 10 or 99 pending operations.  In our example, we only have one.</p>
 
-<p>(TO-DO: Blur your name/computer name in terminal screen captures.)</p>
+<p>Here a quick example:</p>
 
-<p>(TO-DO: Place an “In this tutorial, you will learn” section at the top of this document.)</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rt.runAfter(() =&gt; {
+    console.log('We have completed all our operations.');
+})
+</code></pre></div></div>
 
-<p>(UPLOAD THE TUTORIAL’S CODE TO GITHUB? OWN REPO? ZIP FILE?)</p>
+<p>Now let’s go back to our recipe upload example.</p>
 
-<p>(TO-DO: REMOVE UNCOMPRESSED ZIP FILES FROM THE MAIN PROJECT’S DIST DIRECTORY ONCE YOU’RE DONE WRITING THIS TUTORIAL.)</p>
+<p>Replace:</p>
 
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    &lt;form method="post" action="newRecipe.jscp" enctype="multipart/form-data"&gt;
+      &lt;p&gt;Recipe title: &lt;input type="text" name="recipe_title" value="" /&gt;&lt;/p&gt;
+      &lt;p&gt;Recipe photo: &lt;input type="file" name="recipe_photo" value="" /&gt;&lt;/p&gt;
+      &lt;p&gt;Recipe description: &lt;textarea name="recipe_description"&gt;&lt;/textarea&gt;&lt;/p&gt;
+      &lt;p&gt;&lt;input type="submit" name="submit" value="Submit recipe" /&gt;&lt;/p&gt;
+    &lt;/form&gt;
+</code></pre></div></div>
+
+<p>With:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    &lt;js rt.runAfter(() =&gt; { /js&gt;
+      &lt;form method="post" action="newRecipe.jscp" enctype="multipart/form-data"&gt;
+        &lt;p&gt;Recipe title: &lt;input type="text" name="recipe_title" value="" /&gt;&lt;/p&gt;
+        &lt;p&gt;Recipe photo: &lt;input type="file" name="recipe_photo" value="" /&gt;&lt;/p&gt;
+        &lt;p&gt;Recipe description: &lt;textarea name="recipe_description"&gt;&lt;/textarea&gt;&lt;/p&gt;
+        &lt;p&gt;&lt;input type="submit" name="submit" value="Submit recipe" /&gt;&lt;/p&gt;
+      &lt;/form&gt;
+    &lt;js }); /js&gt;
+</code></pre></div></div>
+
+<p>You will notice that the code now has two continuous <code class="highlighter-rouge">&lt;js ... /js&gt;</code> blocks.  Combining them into one would be completely fine.  We just separated both blocks for illustration purposes, just to emphasize that the second block runs last.</p>
+
+<p>Restart JSCause and refresh the browser.  Now you should be seeing the error message on top of the form:</p>
+
+<p><img src="images/tutorial_018.png" alt="Browser showing the recipe form with an error message on the correct position" title="Error message in the form" /></p>
+
+<p>Now, let’s fix the destination path.  Rememeber we deliberately made it invalid:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>const moveTo = require('path').join('website_INVALID', 'recipeImages', fileName);
+</code></pre></div></div>
+
+<p>Remove that <code class="highlighter-rouge">_INVALID</code> suffix:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>const moveTo = require('path').join('website', 'recipeImages', fileName);
+</code></pre></div></div>
+
+<p>Restart JSCause and refresh the browser.  Now the operation succeeds, and the success message appears on top of the form:</p>
+
+<p><img src="images/tutorial_019.png" alt="Browser showing the recipe form with a successful upload result message" title="Upload successful" /></p>
+
+<p>Let’s check that the recipe photo was indeed uploaded.  Examine the <code class="highlighter-rouge">sites/mysite/website/recipeImages</code> subdirectory (by using macOS’s Finder, Windows Explorer, or Linux equivalent; or the from terminal with the <code class="highlighter-rouge">ls</code> or <code class="highlighter-rouge">dir</code> command.)</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ ls sites/mysite/website/recipeImages/
+tutorial_014_tomato_salad.png
+</code></pre></div></div>
+
+<p>If you see the <code class="highlighter-rouge">tutorial_014_tomato_salad.png</code> file in the list, then everything worked correctly!</p>
+
+<p>A quick note about moving a file to a destination that already exists: if we instruct <code class="highlighter-rouge">rt.moveFile()</code> to move a file, and another file already exists at the destination, then that file will be overwritten.  This is the default behavior.  You can change this so that JSCause emits an error without overwriting anything, by adding a third boolean parameter set to <code class="highlighter-rouge">false</code>.  For example, <code class="highlighter-rouge">rt.moveFile('source_path', 'dest_path', false);</code>.  You should handle that error with <code class="highlighter-rouge">rt.onError()</code> if you don’t want your visitors to see an HTTP 500 error (internal server error) in their browsers.</p>
+
+<p>Alright, we’ve uploaded the recipe photo.  We should move on to storing the <em>actual</em> recipe.</p>
+
+<p><em><strong>The recipe contents and its location</strong></em></p>
+
+<p>Let’s revisit part of our application’s file structure in order to highlight where the <code class="highlighter-rouge">recipes</code> directory is located:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>+ sites/
+      + mysite/
+            + recipes/
+            + website/
+            +    recipeImages/
+            +    index.jscp
+            +    newRecipe.jscp
+</code></pre></div></div>
+
+<p><code class="highlighter-rouge">recipes</code> is outside of <code class="highlighter-rouge">website</code>, which means, JSCause won’t be able to serve it to a web client.  This is by design.  We can hold data and other assets in a way that’s not accessible to the public, by simply keeping it off the <code class="highlighter-rouge">website</code> directory.</p>
+
+<p>We want the recipes to be accessible in our application, sure.  Just not the raw data.</p>
+
+<p>Let’s also revisit what’s left to be addressed in the form:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>      &lt;p&gt;Recipe title: &lt;input type="text" name="recipe_title" value="" /&gt;&lt;/p&gt;
+      &lt;p&gt;Recipe description: &lt;textarea name="recipe_description"&gt;&lt;/textarea&gt;&lt;/p&gt;
+    &lt;/form&gt;
+</code></pre></div></div>
+
+<p>We’ll store the contents of the <code class="highlighter-rouge">recipe_title</code> and the <code class="highlighter-rouge">recipe_description</code> parameters in a text file, and we’ll place that text file in <code class="highlighter-rouge">recipes</code>.  To keep things simple, we’ll name that file with the name of its corresponding recipe image.  For example, if we uploaded a recipe image named <code class="highlighter-rouge">tutorial_014_tomato_salad.png</code>, our recipe file will be called <code class="highlighter-rouge">tutorial_014_tomato_salad.txt</code>.</p>
+
+<p>Alright, let’s do that.</p>
+
+<p><em><strong>Creating new recipe files</strong></em></p>
+
+<p>We’ll need to create a file by using Node’s <code class="highlighter-rouge">fs</code> module.  Right after the <code class="highlighter-rouge">require()</code> at the beginning of the file:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>   const fsPath = require('path');
+</code></pre></div></div>
+
+<p>Add:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>   const fs = require('fs');
+</code></pre></div></div>
+
+<p>And right after this move operation:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>          rt.moveFile(moveFrom, moveTo)
+            .rtOnSuccess(() =&gt; { rt.print('Recipe photo uploaded successfully!'); })
+            .rtOnError((err) =&gt; { rt.print('There was an error.  Please try again later.'); });
+</code></pre></div></div>
+
+<p>Add the following:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>          const fileNameWithNoExtension = fileName.replace(/(.+)\..*$/, '$1');
+          const newRecipeFile = fsPath.join('sites', 'mysite', 'recipes', `${fileNameWithNoExtension}.txt`);
+
+          const recipeFileContents = `${rt.postParams['recipe_title']}\n${rt.postParams['recipe_description']}`;
+
+          fs.writeFile(newRecipeFile, recipeFileContents, (err) =&gt; {
+            if (err) {
+              rt.print('There was an error while adding the recipe.');
+              return;
+            }
+
+            /js&gt;
+            &lt;div&gt;Recipe added successfully!&lt;/div&gt;
+            &lt;a href="/"&gt;Go back to the home page&lt;/a&gt;
+            &lt;js
+          });
+</code></pre></div></div>
+
+<p>We first take the recipe image’s file name and strip the extension off it.  Then we create a path to <code class="highlighter-rouge">recipes</code> using the same file name, but with a <code class="highlighter-rouge">.txt</code> extension.  So, if we initially have <code class="highlighter-rouge">tutorial_014_tomato_salad.png</code>, then <code class="highlighter-rouge">newRecipeFile</code> will be <code class="highlighter-rouge">recipes/tutorial_014_tomato_salad.txt</code>.</p>
+
+<p>The following line assigns the recipe’s title and description, which were taken from the submitted form via POST, to the <code class="highlighter-rouge">recipeFileContents</code> constant.</p>
+
+<p>And finally, we do the writing of the content of <code class="highlighter-rouge">recipeFileContents</code> to <code class="highlighter-rouge">recipes/tutorial_014_tomato_salad.txt</code>.</p>
+
+<p>We pass a callback to Node’s <code class="highlighter-rouge">fs.writeFile()</code> function in order to examine the result of the write operation.  If <code class="highlighter-rouge">err</code> is set, the program will inform the visitor that there was an error.  Otherwise, it will show that the recipe was successfully added, plus a link to go back to the home page.  Or at least, that’s what we expect, but it’s not what happens.</p>
+
+<p>Restart JSCause and refresh the browser page:</p>
+
+<p><img src="images/tutorial_019.png" alt="Browser showing the recipe form with a successful upload result message only" title="Image uploaded. What about the recipe?" /></p>
+
+<p>We get the same message as before, but where is the new message about the recipe added successfully? Was the recipe created at all?</p>
+
+<p><em><strong>Correctly announcing when the recipe is created</strong></em></p>
+
+<p>If you examine the <code class="highlighter-rouge">recipes</code> directory, you’ll notice that the recipe text file was indeed created:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>+ sites/
+      + mysite/
+            + recipes/
+            +    tutorial_014_tomato_salad.txt
+</code></pre></div></div>
+
+<p>The operation succeeds, but what happened to the callback? Why is there no “Recipe added successfully!” displayed on the page?</p>
+
+<p>Since we’re using a NodeJS file operation command, <code class="highlighter-rouge">fs.writeFile()</code> and not a built-in JSCause one, then JSCause does not wait for the callback to be invoked and completed.  It sends the response back to the web browser without taking the callback into account.</p>
+
+<p>That last sentence means that the callback does eventually get invoked.  But by the time it does, JSCause has already moved on.  Anything printed with <code class="highlighter-rouge">rt.print()</code> within that old-news callback will simply be discarded.</p>
+
+<p>In order to address this, we’ll have to instruct JSCause to wait, just like it does with its own built-in commands (e.g. <code class="highlighter-rouge">rt.moveFile()</code>.)  We’ll use the <code class="highlighter-rouge">rt.waitFor()</code> command for that.</p>
+
+<p><code class="highlighter-rouge">rt.waitFor()</code> takes the place of the callback, and takes said callback as its parameter (e.g. <code class="highlighter-rouge">rt.waitFor([callback here])</code>.)</p>
+
+<p>For example, the following piece of code:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>fs.writeFile(
+    filePath,
+    contents,
+    () =&gt; { console.log('Invoked!'); }
+);
+</code></pre></div></div>
+
+<p>Must be modified as follows:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>fs.writeFile(
+    filePath,
+    contents,
+    rt.waitFor(() =&gt; { console.log('Invoked!'); })
+);
+</code></pre></div></div>
+
+<p><code class="highlighter-rouge">rt.waitFor()</code> instructs JSCause to wait for the callback to be invoked and to complete before it sends a response back to the web browser.</p>
+
+<p>Back to our recipe’s example, modify the code so that the callback is a parameter for <code class="highlighter-rouge">rt.waitFor()</code>:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>          fs.writeFile(newRecipeFile, recipeFileContents, rt.waitFor((err) =&gt; {
+            if (err) {
+              rt.print('There was an error while adding the recipe.');
+              return;
+            }
+
+            /js&gt;
+            &lt;div&gt;Recipe added successfully!&lt;/div&gt;
+            &lt;a href="/"&gt;Go back to the home page&lt;/a&gt;
+            &lt;js
+          }));
+</code></pre></div></div>
+
+<p>Restart JSCause and refresh the browser.</p>
+
+<p><img src="images/tutorial_020.png" alt="Browser showing the recipe form with a successful upload result message, and a recipe addition result message" title="Image uploaded, and recipe added" /></p>
+
+<p>Great! Now the message appears as expected.</p>
+
+<p>You may be wondering, what’s the reason behind built-in JSCause commands, such as <code class="highlighter-rouge">rt.moveFile()</code>, not requiring the use <code class="highlighter-rouge">rt.waitFor()</code>? The answer is, they <em>do</em> require it, but they automatically provide it for us.</p>
+
+<p>Also, why should we use <code class="highlighter-rouge">rt.moveFile()</code> when <code class="highlighter-rouge">fs.move()</code> exists?  In the end, the you can, and should, use the tool that is best for the job.  One main difference is that <code class="highlighter-rouge">fs.move()</code>, and many other NodeJS commands that deal with file system operations, treat relative paths as relative to the location of the <code class="highlighter-rouge">jscause.js</code> executable, whereas in JSCause commands, the path is generally relative to the site’s directory .</p>
+
+<p>To illustrate the above, let’s take a look at our project file layout (we are assuming that you installed the stand-alone version):</p>
+
+<ul>
+  <li>jscause.js</li>
+  <li>jscause.conf</li>
+  <li>sites/
+    + mysite/
+          + website/</li>
+</ul>
+
+<p>When calling <code class="highlighter-rouge">rt.movFile('from_some_path', 'recipes')</code>, JSCause assumes that <code class="highlighter-rouge">recipes</code> is located as it appears here:</p>
+
+<ul>
+  <li>jscause.js</li>
+  <li>jscause.conf</li>
+  <li>sites/
+    + mysite/
+          + recipes   &lt;—– Assumed by rt.moveFile()
+          + website/</li>
+</ul>
+
+<p>In turn, when calling <code class="highlighter-rouge">fs.move('from_some_path', 'recipes')</code>, JSCause assumes that <code class="highlighter-rouge">recipes</code> is in a different location:</p>
+
+<ul>
+  <li>jscause.js</li>
+  <li>jscause.conf</li>
+  <li>recipes               &lt;—– Assumed by fs.move()</li>
+  <li>sites/
+    + mysite/
+          + website/</li>
+</ul>
+
+<p>You may say that JSCause built-in commands are “more local” than NodeJS ones.  In a future version, we’ll provide a way to guarantee that NodeJS commands refer to the same location as JSCause ones.</p>
+
+<p><strong>A word about security!</strong> Remember that <code class="highlighter-rouge">fileNameWithNoExtension</code> was derived from a value taken from <code class="highlighter-rouge">postParams[]</code>, and that value came from outside (that is, from the wild, wild Internet!)  For simplicity, we are writing code that just shows JSCause’s features.  But you should always treat values that come from a visitor as potentially dangerous.  For instance, what if the name contained <code class="highlighter-rouge">..</code>?  Could your application write to files that are outside of JSCause’s directory?  Would it contain characters that would make the application crash? Treat the security of your application seriously, so that you don’t get unpleasant surprises caused by external parties down the road.</p>
+
+<p>Alright, back to the recipe uploading and creating operations.</p>
+
+<p>Here is an exercise for you:</p>
+
+<p>Uploading the image and creating the file are two independent operations.  Ideally, if the recipe image uploading throws an error, the operation to create the actual recipe shouldn’t happen.  Or if writing the recipe text fails, then the uploaded image should be deleted.  How can you achieve this?  Here are hints for two potential approaches:</p>
+<ul>
+  <li>Approach No. 1:  The second operation should be inside of an <code class="highlighter-rouge">.rtOnSuccess()</code> handler.</li>
+  <li>Approach No. 2:  Use an extra <code class="highlighter-rouge">rt.runAfter()</code>.  Yup, there can be more than one, and they form a queue when this happens!</li>
+</ul>
+
+<p><em><strong>Preparing the home page to list existing recipes</strong></em></p>
+
+<p>Now that we can upload recipes, let’s list them.</p>
+
+<p>This is how we’ll achieve this:</p>
+
+<p>The first task is, we’ll read all the names of the files found inside the <code class="highlighter-rouge">recipeImages</code> directory.  Then, we’ll strip them off their file extensions, so we can derive the associated text file name with the recipe contents.  For example, if we find <code class="highlighter-rouge">tutorial_014_tomato_salad.png</code>, then we derive <code class="highlighter-rouge">tutorial_014_tomato_salad.txt</code> from it.</p>
+
+<p>Side note:  You may think that we could do it the other way around: that is, read the <code class="highlighter-rouge">recipes</code> directory, then derive the recipes’ images off the text files.  The issue with this is, different recipes may have images with different file extensions (e.g. <code class="highlighter-rouge">png</code>, <code class="highlighter-rouge">jpg</code>, <code class="highlighter-rouge">bmp</code>, etc.), so the derivation task is harder.  In turn, deriving the recipe text file is straightforward since every file ends in <code class="highlighter-rouge">.txt</code>.</p>
+
+<p>Once we complete this recipe retrieving task, the move on to the second task which is, we’ll render the list in HTML.</p>
+
+<p>Because the first task involves file operations, we know that we’ll use callbacks, and that we’ll have to wait for them to complete before rendering the list.</p>
+
+<p>Typically, one could render the initial part of the HTML, then render the rest when the last task completes.  To keep things simple, we’ll wait for all the tasks to complete, <em>then</em> we’ll render all the HTML.</p>
+
+<p>We can achieve that with <code class="highlighter-rouge">rt.runAfter()</code>.  Let’s take another look at the contents of <code class="highlighter-rouge">index.jscp</code> before modifying it:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;!doctype html&gt;</span>
+<span class="nt">&lt;html&gt;</span>
+  <span class="nt">&lt;head&gt;</span>
+    <span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">"icon"</span> <span class="na">href=</span><span class="s">"favicon.ico"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;title&gt;</span>No frills recipes<span class="nt">&lt;/title&gt;</span>
+  <span class="nt">&lt;/head&gt;</span>
+  <span class="nt">&lt;body&gt;</span>
+    <span class="nt">&lt;h1&gt;</span>No frills recipes<span class="nt">&lt;/h1&gt;</span>
+
+    <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"/newRecipe.jscp"</span><span class="nt">&gt;</span>Create a new recipe<span class="nt">&lt;/a&gt;</span>
+  <span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</code></pre></div></div>
+
+<p>Remove the <code class="highlighter-rouge"><span class="nt">&lt;html</span> <span class="nt">/&gt;</span></code> located at the very beginning of the file, and replace it with the following:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;js rt.runAfter(() =&gt; { /js&gt;
+</code></pre></div></div>
+
+<p>And after the last line, add the following:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;js }); /js&gt;
+</code></pre></div></div>
+
+<p>Restart JSCause and visit <code class="highlighter-rouge">https://localhost:8080</code>.  You’ll notice that the page will render unchanged. We told JSCause to wait for all pending operations to complete before rendering the HTML, but since there are no pending operations at all, JSCause just goes ahead and renders the HTML.</p>
+
+<p>On to reading all the recipes.</p>
+
+<p><em><strong>Retrieving existing recipes</strong></em></p>
+
+<p>Add the following at the beginning of the file:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;js
+      const fsPath = require('path');
+      const fs = require('fs');
+      const recipesList = [];
+
+      const imagesPath = fsPath.join('sites', 'mysite', 'website', 'recipeImages');
+/js&gt;
+</code></pre></div></div>
+
+<p>We’re importing the NodeJS <code class="highlighter-rouge">path</code> module in order to construct the path to <code class="highlighter-rouge">recipeImages</code>, and assign it to <code class="highlighter-rouge">imagesPath</code>.  As shown above, this path is <code class="highlighter-rouge">sites/mysite/website/recipeImages</code> (why aren’t paths relative to <code class="highlighter-rouge">mysite</code>? Remember that only the built-in JSCause commands such as <code class="highlighter-rouge">rt.readFile()</code> are relative to <code class="highlighter-rouge">mysite</code>, whereas regular NodeJS commands assume that paths are relative to where the <code class="highlighter-rouge">jscause.js</code> is located at.)</p>
+
+<p>We’ll use the <code class="highlighter-rouge">fs</code> module to read the contents of <code class="highlighter-rouge">recipeImages</code>, that is, its list of files (more accurately, just the file names.)</p>
+
+<p><code class="highlighter-rouge">recipesList</code> is an array that will contain all the recipes’ information required to build the HTML list.  It’s empty for now.</p>
+
+<p>Let’s read the directory.  Right after:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>const imagesPath = fsPath.join('sites', 'mysite', 'website', 'recipeImages');
+</code></pre></div></div>
+
+<p>Add the following:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>      fs.readdir(imagesPath, rt.waitFor((err, files) =&gt; {
+        files.forEach((fileName) =&gt; {
+            // We'll do something with each fileName here.
+        });
+      });
+</code></pre></div></div>
+
+<p>From the above, we are reading all the file names inside <code class="highlighter-rouge">recipeImages</code>, then we loop through each one.  The loop doesn’t do anything just yet.  Let’s change that.</p>
+
+<p>Replace the commented line:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// We'll do something with each fileName here.
+</code></pre></div></div>
+
+<p>With:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>          const [ _ignored, fileNameWithNoExtension, fileExtension ] = fileName.match(/(.+)\.(.*)$/) || [];
+          const fileNameWithTextExtension = `${fileNameWithNoExtension}.txt`;
+          const textPath = fsPath.join('recipes', fileNameWithTextExtension);
+          rt.readFile(textPath)
+            .rtOnSuccess((contents) =&gt; {})
+            .rtOnError((err) =&gt; {});
+</code></pre></div></div>
+
+<p>We first take the file name and extract its name and extension by using a regular expression.  There are probably other ways to do this that are better, but this one works for our purposes.  With just the name, we build <code class="highlighter-rouge">textPath</code>, which points to the actual recipe’s text file.</p>
+
+<p>Then we read the file.  Notice how we have already included the handler callbacks for both when the operation succeeds and when the operation fails.  They don’t do anything just yet, so let’s fix that.</p>
+
+<p>Let’s start with <code class="highlighter-rouge">.rtOnError()</code>.  You may be wondering, “why would the read operation fail, if we added the recipes ourselves?” Well, this is just a safeguard in case something happened to the file between the moment we created it, and the moment we read it (e.g. disk failures.)  Plus there may be other files that the Operating System may have placed in <code class="highlighter-rouge">recipeImages</code> in there as part of its normal operations.  For those files, there is no associated text files, so the read operation will fail.  <code class="highlighter-rouge">.rtOnError()</code> will handle that.</p>
+
+<p>Replace:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>            .rtOnError((err) =&gt; {});
+</code></pre></div></div>
+
+<p>With:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>            .rtOnError((err) =&gt; {
+              console.warn(`Warning: an error occurred while reading the contents of ${fileNameWithTextExtension}:`);
+              console.warn(err);
+            });
+</code></pre></div></div>
+
+<p>We are just displaying a warning to the terminal.  Usually, you may want to log this error event to a file or similar operation. JScause does not have the mechanisms to do this for the developer just yet, but you could come up with your own.  For now, displaying a warning is enough.  This way, JSCause won’t halt our program and show an HTTP Error 500 (internal server error) to the visitor.</p>
+
+<p>Why don’t you try it now?  Restart JSCause, refresh the page, then examine the terminal.  If there are no errors displayed, good.  If there are errors, and the program is still running, then good too!  Aren’t we glad we handled this kind of errors?</p>
+
+<p>Time to handle the actual file reading.</p>
+
+<p>Replace:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>            .rtOnSuccess((contents) =&gt; {})
+</code></pre></div></div>
+
+<p>With:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>            .rtOnSuccess((contentsBuffer) =&gt; {
+              const textContents = contentsBuffer.toString();
+              const recipeArray = textContents.split(/\n/);
+              const recipeTitle = recipeArray[0];
+              recipesList.push({ title: recipeTitle, name: fileNameWithNoExtension, extension: fileExtension });
+
+              });
+            })
+</code></pre></div></div>
+
+<p>From the above, we get the contents of the file as a file buffer in <code class="highlighter-rouge">contentsBuffer</code>.  We convert it to a string, then process it.  We know that the very first line in the contents represents the title of the recipe, so we extract it.  Once we do that, we add our recipe info to <code class="highlighter-rouge">recipeList</code>, namely, the title, the file name, and the recipe image file’s extension.  Why this information?</p>
+
+<p>We the recipe’s title, name and image’s file extension will help us build the list that we’ll show to the visitors in their web browsers.  Both the file name and extension are the way we’ll refer to this recipe later when displaying it (that is, when a visitor clicks on it.)  But we’ll deal with displaying the actual recipe later.</p>
+
+<p>Let’s create the actual list now.</p>
+
+<p><em><strong>Listing existing recipes</strong></em></p>
+
+<p>Let’s go through <code class="highlighter-rouge">recipesList</code>.  Right after this line:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;a href="/newRecipe.jscp"&gt;Create a new recipe&lt;/a&gt;
+</code></pre></div></div>
+
+<p>Insert the following:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    &lt;ul&gt;
+    &lt;js recipesList.forEach((recipe) =&gt; { /js&gt;
+        &lt;li&gt;&lt;a href="viewRecipe.jscp"&gt;&lt;js= recipe.title /js&gt;&lt;/a&gt;&lt;/li&gt;
+    &lt;js }); /js&gt;
+    &lt;/ul&gt;
+</code></pre></div></div>
+
+<p>Restart JSCause and refresh the page.  The above creates an unordered HTML list of all the recipe titles.</p>
+
+<p>You should now see a list of recipes.  In our example, there is only one:</p>
+
+<p><img src="images/tutorial_021.png" alt="Browser showing the home page with a list with one recipe title only" title="A list of one recipe" /></p>
+
+<p>Our work is not complete, though.  First of all, if we had more than one recipe, then each one would have the same link (<code class="highlighter-rouge">viewRecipe.jsp</code>).  Let’s pass the recipe’s text file name (without the <code class="highlighter-rouge">.txt</code>) as a URL parameter.  Let’s include the image’s extension as well since the recipe viewer will need it to retrieve the image later.</p>
+
+<p>Right after <code class="highlighter-rouge">viewRecipe.jscp</code>, insert the following: <code class="highlighter-rouge">?name=&lt;js= recipe.name /js&gt;&amp;extension=&lt;js= recipe.extension /js&gt;</code>, so the line looks like this:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    &lt;li&gt;&lt;a href="viewRecipe.jscp?name=&lt;js= recipe.name /js&gt;&amp;extension=&lt;js= recipe.extension /js&gt;"&gt;&lt;js= recipe.title /js&gt;&lt;/a&gt;&lt;/li&gt;
+</code></pre></div></div>
+
+<p>Restart JSCause and refresh the page.  Click on the recipe entry on the list.  The browser will display a “Page not found” error.  That’s fine for now.  However, check out the address bar.  It should read <code class="highlighter-rouge">https://localhost:8080/viewRecipe.jscp?name=tutorial_014_tomato_salad&amp;extension=png</code>.</p>
+
+<p>Alright, the browser can’t find <code class="highlighter-rouge">viewRecipe.jscp</code> because we haven’t created it yet.  Let’s do that.</p>
+
+<p><em><strong>Preparing to display a recipe</strong></em></p>
+
+<p>Create a new <code class="highlighter-rouge">viewRecipe.jsp</code> file alongside <code class="highlighter-rouge">index.jscp</code> and <code class="highlighter-rouge">newRecipe.jscp</code>:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>+ sites/
+      + mysite/
+            + website/
+            +    index.jscp
+            +    newRecipe.jscp
+            +    viewRecipe.jscp &lt;--- new file
+</code></pre></div></div>
+
+<p>Fill it out with the following code:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;js</span>
+      <span class="na">const</span> <span class="na">fs = </span><span class="s">require('fs');</span>
+      <span class="na">const</span> <span class="na">fsPath = </span><span class="s">require('path');</span>
+<span class="err">/</span><span class="na">js</span><span class="nt">&gt;</span>
+<span class="nt">&lt;js</span> <span class="na">rt</span><span class="err">.</span><span class="na">runAfter</span><span class="err">(()</span> <span class="err">=</span><span class="nt">&gt;</span> { /js&gt;
+<span class="cp">&lt;!doctype html&gt;</span>
+<span class="nt">&lt;html&gt;</span>
+  <span class="nt">&lt;head&gt;</span>
+    <span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">"icon"</span> <span class="na">href=</span><span class="s">"favicon.ico"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;title&gt;</span>No frills recipes<span class="nt">&lt;/title&gt;</span>
+  <span class="nt">&lt;/head&gt;</span>
+  <span class="nt">&lt;body&gt;</span>
+    <span class="nt">&lt;h1&gt;</span>No frills recipes<span class="nt">&lt;/h1&gt;</span>
+  <span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+<span class="nt">&lt;js</span> <span class="err">});</span> <span class="err">/</span><span class="na">js</span><span class="nt">&gt;</span>
+</code></pre></div></div>
+
+<p>We have an already familiar starting point:  Two <code class="highlighter-rouge">&lt;js /js&gt;</code> blocks, one with some preparation code, and the other used for rendering what the web browser will display.</p>
+
+<p>Since we’ll display the recipe, we’ll need to rely on file operations.  That’s why the code above already includes references to the NodeJS <code class="highlighter-rouge">fs</code> and <code class="highlighter-rouge">path</code> modules.</p>
+
+<p>From last section, we know that a visitor will land on <code class="highlighter-rouge">viewRecipe.jscp</code> through an address such as the following:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>https://localhost:8080/viewRecipe.jscp?name=tutorial_014_tomato_salad&amp;extension=png
+</code></pre></div></div>
+
+<p>The key parts here are the url query parameters, <code class="highlighter-rouge">name</code> and <code class="highlighter-rouge">extension</code>.  Our code can access those through the <code class="highlighter-rouge">rt.getParams[]</code> object.</p>
+
+<p><code class="highlighter-rouge">rt.getParams[]</code> is to url query params what <code class="highlighter-rouge">rt.postParams[]</code> is to form values.  So, in our example url above, <code class="highlighter-rouge">rt.getParams['name']</code> contains the <code class="highlighter-rouge">"tutorial_014_tomato_salad"</code> string, and <code class="highlighter-rouge">rt.getParams['extension']</code> contains <code class="highlighter-rouge">"png"</code>.</p>
+
+<p>Let’s make handling these parameters official.  After this line:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>      const fsPath = require('path');
+</code></pre></div></div>
+
+<p>Add the following:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>      const recipeName = rt.getParams['name'];
+      const recipeExtension = rt.getParams['extension'];
+</code></pre></div></div>
+
+<p>Now that <code class="highlighter-rouge">recipeName</code> and <code class="highlighter-rouge">recipeExtension</code> has the values we need, let’s use them.  We’ll need to retrieve two files in order to display them:  the recipe image file, and the recipe text file.  The text file is easy.  We know it ends in the <code class="highlighter-rouge">.txt</code> extension. The image, though, could have any valid image extension, such as <code class="highlighter-rouge">.png</code>, <code class="highlighter-rouge">.jpg</code>, <code class="highlighter-rouge">.svg</code>, etc.  Since the actual extension is coming from <code class="highlighter-rouge">recipeExtension</code>, we’ll use it to build the recipe image’s file name.</p>
+
+<p>Right after:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>      const recipeExtension = rt.getParams['extension'];
+</code></pre></div></div>
+
+<p>Add the following:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>      const recipeTextFileName = `${recipeName}.txt`
+      const recipeImageFileName = `${recipeName}.${recipeExtension}`
+
+      let recipeTitle = '';
+      let recipeContents = '';
+</code></pre></div></div>
+
+<p>Following our example url, <code class="highlighter-rouge">recipeTextFileName</code> contains <code class="highlighter-rouge">"tutorial_014_tomato_salad.txt"</code>, and <code class="highlighter-rouge">recipeImageFileName</code> contains <code class="highlighter-rouge">"tutorial_014_tomato_salad.png"</code>.</p>
+
+<p>We’ve also declared two variables <code class="highlighter-rouge">recipeTitle</code> and <code class="highlighter-rouge">recipeContents</code> which, as their names imply, will respectively hold our recipe’s title and contents.</p>
+
+<p>Let’s read the recipe from file now.  We know that the recipe is stored in the <code class="highlighter-rouge">recipes</code> directory:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>+ sites/
+      + mysite/
+            + recipes/
+            +    tutorial_014_tomato_salad.txt
+</code></pre></div></div>
+
+<p>Armed with this information, add the following right after the declarations of <code class="highlighter-rouge">recipeTitle</code> and <code class="highlighter-rouge">recipeContents</code>:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>      rt.readFile(fsPath.join('recipes', recipeTextFileName))
+        .rtOnError((err) =&gt; {
+          console.warn(`Warning: an error occurred while reading the recipe identified by ${recipeName}:`);
+          console.warn(err);
+        });
+</code></pre></div></div>
+
+<p>Nothing we haven’t seen before.  We read the file whose name is stored in <code class="highlighter-rouge">recipeTextFileName</code> (which is <code class="highlighter-rouge">tutorial_014_tomato_salad.txt</code> in our example.)  If there is an error, we’ll print some information about it on the terminal.</p>
+
+<p><strong>Be careful!</strong> Remember that <code class="highlighter-rouge">recipeTextFileName</code> was derived from a value taken from <code class="highlighter-rouge">getParams[]</code>, and that value came from outside (that is, from the wild, wild Internet!)  For simplicity, we are writing code that just shows JSCause’s features.  But you should always treat values that come from a visitor as potentially dangerous.  For instance, what if the name contained <code class="highlighter-rouge">..</code>?  Could your application expose files that are outside of JSCause’s directory?  Would it contain characters that would make the application crash? Treat the security of your application seriously, so that you don’t get unpleasant surprises caused by external parties down the road.</p>
+
+<p>On to dealing with the file contents.  Right after:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>      rt.readFile(fsPath.join('recipes', recipeTextFileName))
+</code></pre></div></div>
+
+<p>Insert the following:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>        .rtOnSuccess((contents) =&gt; {
+          const textContents = contents.toString();
+          const recipeArray = textContents.split(/\n([\s\S]+)/);
+          recipeTitle = recipeArray[0];
+          recipeContents = recipeArray[1];
+        })
+</code></pre></div></div>
+
+<p>We get the content and split in two.  The regular expression above matches for the first new line only.  So, <code class="highlighter-rouge">recipeArray</code> has two elements:  The first line, which the recipe title, and the rest, which is the actual recipe.</p>
+
+<p>Now <code class="highlighter-rouge">recipeTitle</code> and <code class="highlighter-rouge">recipeContents</code> have the information we need to display the recipe.</p>
+
+<p><em><strong>Displaying a recipe</strong></em></p>
+
+<p>Now let’s modify the HTML in order to show the recipe.</p>
+
+<p>Right after:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    &lt;h1&gt;No frills recipes&lt;/h1&gt;
+</code></pre></div></div>
+
+<p>Add the following:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    &lt;h2&gt;&lt;js= recipeTitle /js&gt;&lt;/h2&gt;
+
+    &lt;img src="/recipeImages/&lt;js= recipeImageFileName /js&gt;" /&gt;
+
+    &lt;p&gt;&lt;js= recipeContents /js&gt;&lt;/p&gt;
+
+    &lt;a href="/"&gt;Go back to the home page&lt;/a&gt;
+</code></pre></div></div>
+
+<p>Notice how we use <code class="highlighter-rouge">recipeImageFileName</code>.  Because we know that all images are stored in <code class="highlighter-rouge">mysite/website/recipeImages</code>, then we can refer to it from the HTML directly.  In our example, the image would have a source of <code class="highlighter-rouge">/recipeImages/tutorial_014_tomato_salad.png</code>, which translates to <code class="highlighter-rouge">https://localhost:8080/recipeImages/tutorial_014_tomato_salad.png</code>.</p>
+
+<p>Restart JSCause and refresh the page.  The browser will show the following:</p>
+
+<p><img src="images/tutorial_022.png" alt="Browser showing the tomato salad photo and recipe" title="The recipe" /></p>
+
+<p>Great! It’s not the most beautiful page in the world, but it does the job.  We could flesh it out with extra HTML and CSS, but that’s not the scope of this tutorial.</p>
+
+<p><strong>Our usual word of caution!</strong> We are telling JSCause to print the contents of <code class="highlighter-rouge">recipeContents</code> directly.  <code class="highlighter-rouge">rt.print()</code> does its best to print it in a safe way.  Having said that, it’s not generally a good idea to just print something that we received from the wild Internet directly in our application.  That’s how bad actors (bad visitors) could potentially run malicious operations with your application.  Always validate your user input, making sure that it contains only what you’re willing to display.  Treat the security of your application seriously.</p>
+
+<p>Congratulations! You now have a functional recipe management site.</p>
+
+<h3 id="changing-your-sites-hostname">Changing your site’s hostname</h3>
+
+<p>Your site will respond to requests that match the host name it was configured with.  The default host name is <code class="highlighter-rouge">localhost</code>.</p>
+
+<p>There might be settings in which you don’t need to change this.  But in many circumstances, you’ll need to change it to your website’s name when hosting your site in a production server.  For example, if your website is called <code class="highlighter-rouge">example.com</code>, you must replace the host name from <code class="highlighter-rouge">localhost</code> to <code class="highlighter-rouge">example.com</code>.</p>
+
+<p>In order to do that, modify your site’s <code class="highlighter-rouge">site.json</code> file. It’s located inside the <code class="highlighter-rouge">mysite</code> directory, <code class="highlighter-rouge">configuration</code> subdirectory:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>+ sites/
+      + mysite/
+            + configuration/
+                + site.json
+</code></pre></div></div>
+
+<p>Open it and find the line with the <code class="highlighter-rouge">hostname</code> configuration:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>      "hostName": "localhost",
+</code></pre></div></div>
+
+<p>Replace <code class="highlighter-rouge">"localhost"</code> with <code class="highlighter-rouge">"example.com"</code>:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>      "hostName": "example.com",
+</code></pre></div></div>
+
+<p>And done.</p>
+
+<h3 id="there-is-more-in-the-documentation">There is more in the documentation</h3>
+
+<p>We invite you to explore the rest of the documentation in order to learn more about JSCause.  There are many other features that will make your web development life easier and more fun:</p>
+
+<ul>
+  <li>Modules.</li>
+  <li>Cookies.</li>
+  <li>Other file operations.</li>
+  <li>Redirecting to another location.</li>
+</ul>
+
+<p><a href="/docs.html">Explore the manual</a> today!</p>
+
+<h3 id="the-full-recipes-example">The full Recipes example</h3>
+
+<p>The full Recipes example we built in this tutorial is available at Github:</p>
+
+<p><a href="https://github.com/eighthjouster/jscause_tutorial_recipes_example">https://github.com/eighthjouster/jscause_tutorial_recipes_example</a></p>
+
+<hr />
 
       </div>
       <div class="topmenu">
