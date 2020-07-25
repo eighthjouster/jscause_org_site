@@ -163,7 +163,8 @@
     <ul>
       <li><a href="#why-doesnt-jscause-complain-when-a-certificate-or-key-file-is-invalid">Why doesn’t JSCause complain when a certificate or key file is invalid?</a></li>
       <li><a href="#sitejson-accepts-a-hostname-that-could-already-be-used-in-another-sites-sitejson--is-this-a-bug"><code class="highlighter-rouge">site.json</code> accepts a hostName that could already be used in another site’s json.  Is this a bug?</a></li>
-      <li><a href="#jscause-says-a-file-does-not-exist-but-i-can-see-it-in-the-file-system">JSCause says a file does not exist, but I can see it in the file system.</a></li>
+      <li><a href="#jscause-says-a-file-does-not-exist-but-i-can-see-it-in-the-file-system--why">JSCause says a file does not exist, but I can see it in the file system.  Why?</a></li>
+      <li><a href="#my-question-is-not-answered-here">My question is not answered here.</a></li>
     </ul>
   </li>
   <li><a href="#list-of-common-errors-and-warnings-reported-by-jscause">List of common errors and warnings reported by JSCause</a>
@@ -2461,9 +2462,15 @@ rt.readFile('my_source.txt', 'utf-8')
 
 <p>This is fine as long as both sites use different ports.</p>
 
-<h3 id="jscause-says-a-file-does-not-exist-but-i-can-see-it-in-the-file-system">JSCause says a file does not exist, but I can see it in the file system.</h3>
+<h3 id="jscause-says-a-file-does-not-exist-but-i-can-see-it-in-the-file-system--why">JSCause says a file does not exist, but I can see it in the file system.  Why?</h3>
 
-<p>It may be a broken symlink that doesn’t point to a valid file anymore.</p>
+<p>It may be a broken symlink that doesn’t point to a valid file anymore.  Also, check the spelling and the case-sensitivity.  For example, if your file is named <code class="highlighter-rouge">newPage.jscp</code>, make sure you’re typing it as is in the web client; <code class="highlighter-rouge">NEWPAGE.JSCP</code>, <code class="highlighter-rouge">newpage.jscp</code>, <code class="highlighter-rouge">NewPage.jscp</code>, etc, won’t work.</p>
+
+<p>Also, for now, whenever you add a new file, or rename/move it, restart JSCause so it picks it up.  And make sure that it’s stored inside the <code class="highlighter-rouge">website</code> directory.</p>
+
+<h3 id="my-question-is-not-answered-here">My question is not answered here.</h3>
+
+<p>Check out more <a href="https://jscause.org/faq.html">Frequently Asked Questions</a> in our dedicated page.</p>
 
 <h2 id="list-of-common-errors-and-warnings-reported-by-jscause">List of common errors and warnings reported by JSCause</h2>
 
