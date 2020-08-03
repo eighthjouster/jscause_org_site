@@ -119,15 +119,54 @@
 
 <h3 id="can-i-use-jscause-on-windowsmacosos-xlinux">Can I use JSCause on Windows/macOS/OS X/Linux?</h3>
 
+<p>JSCause is available on any platform supported by NodeJS, including Windows, macOS and Linux.</p>
+
 <h3 id="is-jcause-ready-for-production">Is JCause ready for production?</h3>
+
+<p>Not yet.  When JSCause reaches version 1.0 then yes, it will be ready for production.  But there are quite a lot of things to implement and fix in order to get there.</p>
+
+<p>Versions prior to 1.0 of JSCause are intended for testing, and perhaps readying applications for when version 1.0 is available.  Use at your own risk.</p>
 
 <h3 id="is-jscause-securesafe-to-use">Is JSCause secure/safe to use?</h3>
 
+<p>When developing JSCause, we’ve put great care to avoid many forms of pitfalls and vulnerabilities.  But we can’t guarantee that JSCause is bug-free, therefore we can’t guarantee that it won’t affect your system due to some hidden flaw its internal code.  We will reassess this stance once we reach version 1.0.</p>
+
 <h3 id="how-fast-is-jscause">How fast is JSCause?</h3>
+
+<p>JSCause runs on top of NodeJS, and programs written for it are precompiled when they start, just like any other NodeJS application.  Since NodeJS uses a modern Javascript engine, one can say that a JSCause application can be quite fast.  However, speed will ultimately depend on the type of application written, and the quality of the code.</p>
 
 <h3 id="can-i-use-databases-with-jscause">Can I use databases with JSCause?</h3>
 
+<p>JSCause does not have a built-in mechanism to handle databases just yet.  This will come in a future version (1.0 or earlier), which will primarily focus on MySQL/MariaDB.  Meanwhile, feel free to use any of the available npm packages, such as <a href="https://www.npmjs.com/package/mysql">mysql</a>,  <a href="https://www.npmjs.com/package/mysql2">mysql2</a> or <a href="https://www.npmjs.com/package/mariadb">mariadb</a>.</p>
+
 <h3 id="can-jscause-handle-ajax-requests">Can JSCause handle Ajax requests?</h3>
+
+<p>Yes, it can. The easiest way to do it is by using JSON as a response via <code class="highlighter-rouge">rt.printJSON()</code>.  <a href="/docs.html">The documentation</a> has more information about <code class="highlighter-rouge">rt.printJSON()</code>, but here is an example:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rt.printJSON({ randomNumber: `${Math.random()}` });
+</code></pre></div></div>
+
+<p>Notice that multiple <code class="highlighter-rouge">rt.printJSON()</code> in the same program will not output chained JSON objects.  Only the last JSON object output will be sent as a response.</p>
+
+<p>Another way would involve manually setting the <code class="highlighter-rouge">Content-Type</code> header to <code class="highlighter-rouge">application/json</code>, then composing the JSON content just like one would with HTML.  For example:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;js rt.header('Content-Type', 'application/json'); /js&gt;
+{
+    "randomNumber": "&lt;js= Math.random() /js&gt;"
+}
+</code></pre></div></div>
+
+<p>Here are two more ways involving the use <code class="highlighter-rouge">rt.unsafePrint()</code> (however, this is not recommended - use this if you really know what you’re doing):</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rt.header('Content-Type', 'application/json');
+rt.unsafePrint('{"randomNumber": "' + Math.random() + '"}');
+</code></pre></div></div>
+
+<p>And:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rt.header('Content-Type', 'application/json');
+rt.unsafePrint(JSON.stringify({ randomNumber: `${Math.random()}` }));
+</code></pre></div></div>
 
 <h3 id="can-i-use-node-modules-with-jscause">Can I use Node modules with JSCause?</h3>
 

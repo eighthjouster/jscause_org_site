@@ -148,6 +148,7 @@
       <li><a href="#rtmovefile">rt.moveFile()</a></li>
       <li><a href="#rtpostparams">rt.postParams</a></li>
       <li><a href="#rtprint">rt.print()</a></li>
+      <li><a href="#rtprintjson">rt.printJSON()</a></li>
       <li><a href="#rtreadfile">rt.readFile()</a></li>
       <li><a href="#rtredirectto">rt.redirectTo()</a></li>
       <li><a href="#rtrequestmethod">rt.requestMethod</a></li>
@@ -2083,6 +2084,42 @@ For instance, the following:</p>
 <p>See also:</p>
 <ul>
   <li><a href="#rtunsafeprint">rt.unsafePrint</a></li>
+  <li><a href="#rtprintjson">rt.printJSON</a></li>
+</ul>
+
+<h3 id="rtprintjson">rt.printJSON()</h3>
+
+<p><em>Type</em>: Method.</p>
+
+<p><em>Syntax</em>: <code class="highlighter-rouge">rt.printJSON(value:JSON object)</code></p>
+
+<p><em>Returns</em>: Undefined.</p>
+
+<p>It sends a JSON object to the web client.  It will automatically set the <code class="highlighter-rouge">Content-Type</code> header entry to <code class="highlighter-rouge">application/json</code>, even if it was previously set to a different value.</p>
+
+<p>Example:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rt.printJSON({
+  randomNumber: `${Math.random()}`
+});
+</code></pre></div></div>
+
+<p>A couple of things to take into account:</p>
+
+<ul>
+  <li>
+    <p>If you invoke <code class="highlighter-rouge">rt.printJSON()</code> multiple times in your program, only the value of the last one will be sent to the web client (that is, the previous ones will be discarded.)  This is by design.  Otherwise, the resulting chain of JSON objects would not be valid JSON.</p>
+  </li>
+  <li>
+    <p>Unless you now exactly what you’re doing, make sure that your program does not modify <code class="highlighter-rouge">Content-Type</code> after invoking <code class="highlighter-rouge">rt.printJSON()</code>, especially if it modifies to something other than <code class="highlighter-rouge">application/json</code>. Otherwise, the resulting output response may be invalid and the web client might parse it incorrectly.</p>
+  </li>
+</ul>
+
+<p>See also:</p>
+<ul>
+  <li><a href="#rtheader">rt.header</a></li>
+  <li><a href="#rtprint">rt.print</a></li>
+  <li><a href="#rtunsafeprint">rt.unsafePrint</a></li>
 </ul>
 
 <h3 id="rtreadfile">rt.readFile()</h3>
@@ -2327,6 +2364,7 @@ const cookieValue2 = rt.getCookie('my_cookie', { path: '/' });
 <p>See also:</p>
 <ul>
   <li><a href="#rtprint">rt.print</a></li>
+  <li><a href="#rtprintjson">rt.printJSON</a></li>
 </ul>
 
 <h3 id="rtuploadedfiles">rt.uploadedFiles</h3>
