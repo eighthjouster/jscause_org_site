@@ -170,13 +170,39 @@ rt.unsafePrint(JSON.stringify({ randomNumber: `${Math.random()}` }));
 
 <h3 id="can-i-use-node-modules-with-jscause">Can I use Node modules with JSCause?</h3>
 
+<p>Yes, you can.</p>
+
 <h3 id="can-jscause-work-with-reactvuemy-favorite-front-end-framework">Can JSCause work with React/Vue/my favorite front-end framework?</h3>
+
+<p>Yes, it can.  Given that those frameworks’ files must be delivered to the browser, this can be done via JSCause.</p>
+
+<p>Now, if you plan on using the frameworks’ built-in development web servers, you may need to tweak your development environment so it can coexist with JSCause.</p>
 
 <h3 id="does-jscause-support-typescript">Does JSCause support Typescript?</h3>
 
+<p>Not officially.  We haven’t tried this yet, but it shouldn’t be too hard to incorporate the Typescript compiler into your workflow.  As static front-end assets, JSCause should be able to serve the resulting compiled Javascript without issue.</p>
+
+<p>As part of a <code class="highlighter-rouge">JSCP</code> program, it may be tricky (or may not - again, we haven’t tried it yet.)  Typescript doesn’t support the <code class="highlighter-rouge">&lt;js ... /js&gt;</code> block notation, you may need to arrange your sources so that the Typescript code is isolated from the JSCP code.</p>
+
 <h3 id="does-jscause-support-webassembly">Does JSCause support Webassembly?</h3>
 
+<p>Not officially.  We haven’t tried using Webassembly with JSCause. But it shouldn’t be too difficult to deliver Webassembly binaries to the web browser as static resources with JSCause.</p>
+
 <h3 id="how-does-jscause-compare-with-other-frameworks-like-express">How does JSCause compare with other frameworks like Express?</h3>
+
+<p>JSCause is very early in the game, so we don’t have all the information for different comparison metrics.</p>
+
+<p>In terms of performance, we haven’t run the numbers yet.  You’re welcome to give it a try, though - and please share!</p>
+
+<p>In terms of use cases, Express and other frameworks have a wide range of use cases, from the development of web applications, to API providers and, of course, regular web sites.</p>
+
+<p>JSCause focuses on the easy development of simple websites.  It can serve as a tool for rapid prototyping.  It can be used as a web dev basics teaching tool.  And of course, it can serve as a platform to develop basic websites with minimal fuss.</p>
+
+<p>In order to use Express and similar frameworks, you must install NodeJS and be familiar with it.  You must use npm.  And you must learn how to use Express, which can have a bit of a learning curve, depending on your web development experience.  Granted, many frameworks including Express allow you to serve static files, just like with JSCause.  But it involves a bit of setting up.</p>
+
+<p>With JSCause, in turn, you must install NodeJS, and you must install the JSCause package, which can be a simply as uncompressing a zip file somewhere in your computer’s file system.  That’s it.  You can use the example site provided with the JSCause package as a starting point.</p>
+
+<p>In the end, we used Express above to illustrate a point as to why you may want to use JSCause (and to answer this question). But it may be that Express, and frameworks similar to it, may be the right tool for your project; especially if it involves complex specifications.  Always strive to use the right tool for the job.</p>
 
 <h3 id="why-doesnt-jscause-complain-when-a-certificate-or-key-file-is-invalid">Why doesn’t JSCause complain when a certificate or key file is invalid?</h3>
 
@@ -216,16 +242,23 @@ rt.unsafePrint(JSON.stringify({ randomNumber: `${Math.random()}` }));
 
 <h3 id="how-can-you-sleep-at-night--were-you-dropped-as-a-baby">How can you sleep at night?  Were you dropped as a baby?</h3>
 
-<p>Yes, I was dropped as a baby.  Maybe that’s why I sleep quite well at night.</p>
+<p>Maybe I was dropped as a baby.  Maybe that’s why I sleep quite well at night.</p>
 
 <h3 id="should-i-keep-reading-this-useless-faq">Should I keep reading this useless FAQ?</h3>
 
-<p>Well, there are two more questions to go, so… you may as well.</p>
-
-<h3 id="my-question-is-not-answered-here--how-can-i-get-help">My question is not answered here.  How can I get help?</h3>
+<p>There are two more questions left below, so… you may as well.</p>
 
 <h3 id="how-can-i-contribute-to-jscause">How can I contribute to JSCause?</h3>
 
+<p>The code for the JSCause project is hosted on Github:  https://github.com/eighthjouster/jscause/</p>
+
+<p>Feel free to submit a pull request, report bugs, or contact the maintainers for feedback, questions and suggestions.</p>
+
+<h3 id="my-question-is-not-answered-here--how-can-i-get-help">My question is not answered here.  How can I get help?</h3>
+
+<p>If you’d like to report a bug or issue with JSCause, please open a ticket on our Github repository: https://github.com/eighthjouster/jscause/</p>
+
+<p>You can also send us an e-mail.  Find out more at the <a href="/about.html">About page</a>.</p>
 
       </div>
       <div class="topmenu">
@@ -267,7 +300,7 @@ rt.unsafePrint(JSON.stringify({ randomNumber: `${Math.random()}` }));
 
       </div>
       <footer>
-          &copy; 2020 EighthJouster
+          This website is &copy; 2020 EighthJouster.  No cookies are used in this site.
       </footer>
   </body>
 </html>
