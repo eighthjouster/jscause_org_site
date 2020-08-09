@@ -13,6 +13,9 @@ a:hover {
   text-decoration: underline;
   color: #f00a40; }
 
+li {
+  margin-bottom: 1em; }
+
 .maincontainer {
   margin: 0 auto;
   width: 80%;
@@ -36,7 +39,8 @@ pre, code {
 pre {
   border: 1px solid #aaa;
   padding: 0.5em;
-  font-size: 1.1em; }
+  font-size: 1.1em;
+  overflow: scroll; }
   pre code {
     font-size: 1.25em;
     border: none; }
@@ -76,3 +80,7 @@ header {
   padding: 2em;
   border: 1px solid #aaa;
   border-radius: 5px; }
+
+@media screen and (max-width: 360px) {
+  ul {
+    padding: 1em; } }
