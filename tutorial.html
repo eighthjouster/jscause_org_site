@@ -9,10 +9,10 @@
   <body>
     <div class="maincontainer">
       <header>
-          JS Cause
+          <img src="images/jscauselogo.svg" class="sitelogo" />
       </header>
       
-      <div class="topmenu">
+      <div class="sitemenu">
         <ul>
     
       
@@ -97,7 +97,8 @@
   </li>
 </ul>
 
-<p><img src="images/tutorial_006.png" alt="Browser showing this page's HTML source code" title="This website's HTML source code" /></p>
+<p><img src="images/tutorial_006.png" alt="Browser showing this page's HTML source code" title="This website's HTML source code" />
+<span>This website’s HTML source code</span></p>
 
 <ul>
   <li>
@@ -161,7 +162,8 @@ INFO: Will start listening.
 INFO: Server 0 listening on port 3000
 </code></pre>
 
-<p><img src="images/tutorial_001.png" alt="Terminal window showing JSCause running" title="JSCause running" /></p>
+<p><img src="images/tutorial_001.png" alt="Terminal window showing JSCause running" title="JSCause running" />
+<span>JSCause running</span></p>
 
 <p>Great! At this point, JSCause is ready to receive requests.  Go to your web browser and visit: <a href="https://localhost:3000">https://localhost:3000</a></p>
 
@@ -171,7 +173,8 @@ INFO: Server 0 listening on port 3000
 
 <p>In a modern browser, you’ll also see a row of rectangles slowly changing colors.</p>
 
-<p><img src="images/tutorial_002.gif" alt="Web browser window displaying the phrase 'It works!'" title="It works! JSCause is running!" /></p>
+<p><img src="images/tutorial_002.gif" alt="Web browser window displaying the phrase 'It works!'" title="It works! JSCause is running!" />
+<span>It works! JSCause is running!</span></p>
 
 <p><strong>Important</strong>: Your browser may warn you that the site is not secure.  That’s because we’re using a placeholder SSL certificate in order to test and use HTTPS connections.  These certificates are <strong>not</strong> suitable for production!  If you use these certs, your users will get a security warning in their browsers.  <strong>You must provide your valid private key file and certificate file</strong>.</p>
 
@@ -189,7 +192,8 @@ INFO: Server 0 listening on port 3000
 
 <p><strong>1. Server-side rendering:</strong>  Notice how the row colors change with each refresh.  These colors are chosen on the server side.  This is easy to check by viewing the page’s source code:</p>
 
-<p><img src="images/tutorial_005.png" alt="Browser showing the example site's HTML source code" title="Part of the example site's HTML source code" /></p>
+<p><img src="images/tutorial_005.png" alt="Browser showing the example site's HTML source code" title="Part of the example site's HTML source code" />
+<span>Part of the example site’s HTML source code</span></p>
 
 <p>Notice the section about the CSS keyframes.  Don’t worry if you don’t know much about CSS animations.  Just pay attention to the numeric values inside <code>rgb()</code> (the values in your browser will very likely differ from this example):</p>
 
@@ -234,7 +238,8 @@ Received interrupt signal.  Cleaning up before exiting...
 Terminated.
 </code></pre>
 
-<p><img src="images/tutorial_003.png" alt="Terminal window showing JSCause stopping" title="JSCause stopping" /></p>
+<p><img src="images/tutorial_003.png" alt="Terminal window showing JSCause stopping" title="JSCause stopping" />
+<span>JSCause stopping</span></p>
 
 <p>Very easy.  Restart JSCause to continue with the tutorial.</p>
 
@@ -531,13 +536,15 @@ ERROR: Server not started.  No sites are running.
 
 <p>You should see a very modest page showing a “No frills recipes” heading, and a “Create a new recipe” link:</p>
 
-<p><img src="images/tutorial_007.png" alt="Browser showing the No Frills Recipes example" title="No Frills Recipes page" /></p>
+<p><img src="images/tutorial_007.png" alt="Browser showing the No Frills Recipes example" title="No Frills Recipes page" />
+<span>No Frills Recipes page</span></p>
 
 <p><em><strong>Creating a new page</strong></em></p>
 
 <p>Try to follow the “Create a new recipe” link.  You will greeted with a “Not found” message:</p>
 
-<p><img src="images/tutorial_008.png" alt="Browser showing a Not Found error page" title="HTTP 404 Error: Not found" /></p>
+<p><img src="images/tutorial_008.png" alt="Browser showing a Not Found error page" title="HTTP 404 Error: Not found" />
+<span>HTTP 404 Error: Not found</span></p>
 
 <p>When we click on the link, JSCause sees a <code>/newRecipe.jscp</code> request, but no <code>newRecipe.jsp</code> file exists and, therefore, it responds with an HTTP 404 error.  Let’s fix that.</p>
 
@@ -567,7 +574,8 @@ ERROR: Server not started.  No sites are running.
 
 <p>Restart JSCause and refresh the page.  The browser will show the following:</p>
 
-<p><img src="images/tutorial_009.png" alt="Browser showing the New Recipe page" title="New Recipe page" /></p>
+<p><img src="images/tutorial_009.png" alt="Browser showing the New Recipe page" title="New Recipe page" />
+<span>New Recipe page</span></p>
 
 <p>Notice that JSCause treats URL paths as case-sensitive.  That is, if you created a page called <code>newPage.jscp</code>, and try to visit <code>https://localhost:8080/NEWPAGE.JSCP</code>, or <code>/newpage.jscp</code>, <code>/nEwPaGe.JsCp</code>, etc, JSCause will respond that the page is not found.  The URL must correctly match the <code>JSCP</code> file exactly as it is written, <code>/newPage.jscp</code>.</p>
 
@@ -585,7 +593,8 @@ ERROR: Server not started.  No sites are running.
 
 <p>As you can see, it’s just a standard HTML upload form.  Restart JSCause and refresh the page in order to see it:</p>
 
-<p><img src="images/tutorial_010.png" alt="Browser showing the New Recipe form" title="New Recipe form" /></p>
+<p><img src="images/tutorial_010.png" alt="Browser showing the New Recipe form" title="New Recipe form" />
+<span>New Recipe form</span></p>
 
 <p>Fill it out with some random data, then, click the “Submit recipe” button.  You will notice that the page will refresh, and your entered form data gone.  If you already have some experience with form handling, you may have an idea of what happened.  If not, we’ll explain it now.  So, what happened?</p>
 
@@ -593,7 +602,8 @@ ERROR: Server not started.  No sites are running.
 
 <p>The form instructed the browser to submit the form to the <code>newRecipe.jsp</code> (indicated by the <code>action="newRecipe.jsp"</code> attribute.)  JSCause runs <code>newRecipe.jsp</code> again and, given that it’s the same code as before, it responds in exactly the same way as before.  Which is, it displays the form again:</p>
 
-<p><img src="images/tutorial_010.png" alt="Browser showing the New Recipe form after submission" title="New Recipe form after submission" /></p>
+<p><img src="images/tutorial_010.png" alt="Browser showing the New Recipe form after submission" title="New Recipe form after submission" />
+<span>New Recipe form after submission</span></p>
 
 <p>In order to access the form query parameters, you can use the <code>rt.postParams[]</code> object.  Each key in <code>rt.postParams[]</code> represents the name of a parameter.  Each value, in turn, represents the value of the parameter.</p>
 
@@ -612,7 +622,8 @@ ERROR: Server not started.  No sites are running.
 
 <p>Restart JSCause and refresh the page.  Your browser will ask you to confirm that you want to resubmit the form.  Indicate that yes, you intend to resubmit.  If you entered “Tomato salad” in the title, you’ll see the following:</p>
 
-<p><img src="images/tutorial_011.png" alt="Browser showing that we submitted a New Recipe title" title="New Recipe title" /></p>
+<p><img src="images/tutorial_011.png" alt="Browser showing that we submitted a New Recipe title" title="New Recipe title" />
+<span>New Recipe title</span></p>
 
 <p><em><strong>The rt.print() command</strong></em></p>
 
@@ -657,11 +668,13 @@ ERROR: Server not started.  No sites are running.
 
 <p>Restart JSCause and refresh the page.  The browser will show the following:</p>
 
-<p><img src="images/tutorial_012.png" alt="Browser showing that we need to provide more data" title="Browser validation" /></p>
+<p><img src="images/tutorial_012.png" alt="Browser showing that we need to provide more data" title="Browser validation" />
+<span>Browser validation</span></p>
 
 <p>We had already provided a recipe title, but not a photo or description; hence we get those two messages in the response.  Alright, let’s provide all the fields in the form. Re-add “Tomato soup” as a title, and click on the “Browse…” button next to the “Recipe photo” field in order to upload a photo.  Any image file you have on your computer should work.  If you don’t have any, you can download this one, <a href="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/Mozzarella_and_Tomato_Salad_Platter.jpg/1920px-Mozzarella_and_Tomato_Salad_Platter.jpg">courtesy of Wikipedia</a>:</p>
 
-<p><img src="images/tutorial_014_tomato_salad.png" alt="An image of a Mozzarella and Tomato Salad Platter" title="Mozzarella and Tomato Salad Platter" /></p>
+<p><img src="images/tutorial_014_tomato_salad.png" alt="An image of a Mozzarella and Tomato Salad Platter" title="Mozzarella and Tomato Salad Platter" />
+<span>Mozzarella and Tomato Salad Platter</span></p>
 
 <p>Finally, on the “Recipe description” field, add some text (for example, “This recipe will be available soon.”)</p>
 
@@ -669,7 +682,8 @@ ERROR: Server not started.  No sites are running.
 
 <p>The browser will now show the message “All form fields valid!”, indicating that the form data passed validation:</p>
 
-<p><img src="images/tutorial_013.png" alt="Browser showing that all the form data submitted is valid" title="All form data is valid" /></p>
+<p><img src="images/tutorial_013.png" alt="Browser showing that all the form data submitted is valid" title="All form data is valid" />
+<span>All form data is valid</span></p>
 
 <p><em><strong>Examining uploaded files</strong></em></p>
 
@@ -701,7 +715,7 @@ ERROR: Server not started.  No sites are running.
     <p>The full path typically points to a location within the site’s subdirectory.  In this example, it will be <code>sites/website/workbench</code>.</p>
   </li>
   <li>
-    <p>The name specified in <code>path</code> will most likely <em>not</em> match the file name specified in <code>name</code>.  In our example, <code>name</code> will be something like <code>tutorial_014_tomato_salad.png</code>, whereas <code>path</code> will contain a random name similar to <code>jscupload_2a595765dd630a8e0a7c0fb92df7227d</code>.  This is for security purposes.  Don’t pay too much attention to that random name.  It’s just temporary, after all.</p>
+    <p>The name specified in <code>path</code> will most likely <em>not</em> match the file name specified in <code>name</code>.  In our example, <code>name</code> will be something like <code>tutorial_014_tomato_salad.png</code>, whereas <code>path</code> will contain a random name similar to <code>jscupload_2a5957...f7227d</code>.  This is for security purposes.  Don’t pay too much attention to that random name.  It’s just temporary, after all.</p>
   </li>
 </ol>
 
@@ -793,7 +807,8 @@ ERROR: Server not started.  No sites are running.
 
 <p>Restart JSCause and refresh the page.  The browser will show an error page:</p>
 
-<p><img src="images/tutorial_008.png" alt="Browser showing a Server Error page" title="HTTP 500 Error: Internal server error" /></p>
+<p><img src="images/tutorial_008.png" alt="Browser showing a Server Error page" title="HTTP 500 Error: Internal server error" />
+<span>HTTP 500 Error: Internal server error</span></p>
 
 <p>If you check the terminal where JSCause is running, you’ll a message like the following:</p>
 
@@ -825,7 +840,8 @@ Sun, 12 Jul 2020 17:05:22 GMT - localhost - POST: /newRecipe.jscp - 500
 
 <p>Restart JSCause and refresh the page.  The browser will show your error page:</p>
 
-<p><img src="images/tutorial_016.png" alt="Browser showing the recipe form with an error message" title="Error message in the form" /></p>
+<p><img src="images/tutorial_016.png" alt="Browser showing the recipe form with an error message" title="Error message in the form" />
+<span>Error message in the form</span></p>
 
 <p>Our custom error message is displayed now.  However, check out those issues with red arrows above.</p>
 
@@ -873,7 +889,8 @@ Sun, 12 Jul 2020 17:05:22 GMT - localhost - POST: /newRecipe.jscp - 500
 
 <p>Restart JSCause and refresh the browser.  The page will now show the following:</p>
 
-<p><img src="images/tutorial_017.png" alt="Browser showing the recipe form with an error message" title="Error message in the form" /></p>
+<p><img src="images/tutorial_017.png" alt="Browser showing the recipe form with an error message" title="Error message in the form" />
+<span>Error message in the form</span></p>
 
 <p>The success message is gone now.  Remember that the file move operation fails because we deliberately made it fail by rewriting the <code>'website'</code> string in the <code>path</code> building operation to <code>'website_INVALID'</code>.</p>
 
@@ -943,7 +960,8 @@ Sun, 12 Jul 2020 17:05:22 GMT - localhost - POST: /newRecipe.jscp - 500
 
 <p>Restart JSCause and refresh the browser.  Now you should be seeing the error message on top of the form:</p>
 
-<p><img src="images/tutorial_018.png" alt="Browser showing the recipe form with an error message on the correct position" title="Error message in the form" /></p>
+<p><img src="images/tutorial_018.png" alt="Browser showing the recipe form with an error message on the correct position" title="Error message in the form" />
+<span>Error message in the form</span></p>
 
 <p>Now, let’s fix the destination path.  Rememeber we deliberately made it invalid:</p>
 
@@ -957,7 +975,8 @@ Sun, 12 Jul 2020 17:05:22 GMT - localhost - POST: /newRecipe.jscp - 500
 
 <p>Restart JSCause and refresh the browser.  Now the operation succeeds, and the success message appears on top of the form:</p>
 
-<p><img src="images/tutorial_019.png" alt="Browser showing the recipe form with a successful upload result message" title="Upload successful" /></p>
+<p><img src="images/tutorial_019.png" alt="Browser showing the recipe form with a successful upload result message" title="Upload successful" />
+<span>Upload successful</span></p>
 
 <p>Let’s check that the recipe photo was indeed uploaded.  Examine the <code>sites/mysite/website/recipeImages</code> subdirectory (by using macOS’s Finder, Windows Explorer, or Linux equivalent; or the from terminal with the <code>ls</code> or <code>dir</code> command.)</p>
 
@@ -1048,7 +1067,8 @@ tutorial_014_tomato_salad.png
 
 <p>Restart JSCause and refresh the browser page:</p>
 
-<p><img src="images/tutorial_019.png" alt="Browser showing the recipe form with a successful upload result message only" title="Image uploaded. What about the recipe?" /></p>
+<p><img src="images/tutorial_019.png" alt="Browser showing the recipe form with a successful upload result message only" title="Image uploaded. What about the recipe?" />
+<span>Image uploaded. What about the recipe?</span></p>
 
 <p>We get the same message as before, but where is the new message about the recipe added successfully? Was the recipe created at all?</p>
 
@@ -1109,7 +1129,8 @@ tutorial_014_tomato_salad.png
 
 <p>Restart JSCause and refresh the browser.</p>
 
-<p><img src="images/tutorial_020.png" alt="Browser showing the recipe form with a successful upload result message, and a recipe addition result message" title="Image uploaded, and recipe added" /></p>
+<p><img src="images/tutorial_020.png" alt="Browser showing the recipe form with a successful upload result message, and a recipe addition result message" title="Image uploaded, and recipe added" />
+<span>Image uploaded, and recipe added</span></p>
 
 <p>Great! Now the message appears as expected.</p>
 
@@ -1327,7 +1348,8 @@ tutorial_014_tomato_salad.png
 
 <p>You should now see a list of recipes.  In our example, there is only one:</p>
 
-<p><img src="images/tutorial_021.png" alt="Browser showing the home page with a list with one recipe title only" title="A list of one recipe" /></p>
+<p><img src="images/tutorial_021.png" alt="Browser showing the home page with a list with one recipe title only" title="A list of one recipe" />
+<span>A list of one recipe</span></p>
 
 <p>Our work is not complete, though.  First of all, if we had more than one recipe, then each one would have the same link (<code>viewRecipe.jsp</code>).  Let’s pass the recipe’s text file name (without the <code>.txt</code>) as a URL parameter.  Let’s include the image’s extension as well since the recipe viewer will need it to retrieve the image later.</p>
 
@@ -1480,7 +1502,8 @@ tutorial_014_tomato_salad.png
 
 <p>Restart JSCause and refresh the page.  The browser will show the following:</p>
 
-<p><img src="images/tutorial_022.png" alt="Browser showing the tomato salad photo and recipe" title="The recipe" /></p>
+<p><img src="images/tutorial_022.png" alt="Browser showing the tomato salad photo and recipe" title="The recipe" />
+<span>The recipe</span></p>
 
 <p>Great! It’s not the most beautiful page in the world, but it does the job.  We could flesh it out with extra HTML and CSS, but that’s not the scope of this tutorial.</p>
 
@@ -1536,7 +1559,7 @@ tutorial_014_tomato_salad.png
 <hr />
 
       </div>
-      <div class="topmenu">
+      <div class="sitemenu">
         <ul>
     
       
@@ -1575,7 +1598,7 @@ tutorial_014_tomato_salad.png
 
       </div>
       <footer>
-          This website is &copy; 2020 EighthJouster.  No cookies are used in this site.
+          This website is &copy; 2020 JSCause.org - No cookies used.
       </footer>
   </body>
 </html>
