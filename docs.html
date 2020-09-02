@@ -1249,6 +1249,10 @@ rt.readFile('my_source.txt', 'utf-8')
 
 <p>You can read more about this behavior in the next section about <a href="#rt-promises">RT Promises</a>.</p>
 
+<p><strong>Important!</strong></p>
+
+<p>We advise you to <em>always</em> use <code>rt.waitFor()</code> with callbacks (unless you’re using them with <code>rt</code> methods, as mentioned above.)  If you don’t, then make sure you catch all the potential errors by using Javascript’s <code>try / catch</code> blocks.  If an error occurs, and you don’t catch it, <strong>the whole JSCause application will crash, and your website will become unavailable</strong>.  This is not a limitation of JSCause, but rather a behavior of NodeJS/Javascript by design.  Another way to deal with this is by using an external monitor that watches JSCause’s process, and restarts it when it goes down.</p>
+
 <h2 id="rt-promises">RT Promises</h2>
 
 <p>RT Promises refers to the mechanism some <code>rt</code> methods use to deal with the asynchronous nature of their operations.  They seek to emulate Javascript’s Promises.  One important difference is that RT Promises will always involve two methods, <code>rtOnSuccess()</code> and <code>rtOnError()</code>.</p>

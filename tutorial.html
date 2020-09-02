@@ -1174,6 +1174,8 @@ tutorial_014_tomato_salad.png
 
 <p><strong>A word about security!</strong> Remember that <code>fileNameWithNoExtension</code> was derived from a value taken from <code>postParams[]</code>, and that value came from outside (that is, from the wild, wild Internet!)  For simplicity, we are writing code that just shows JSCause’s features.  But you should always treat values that come from a visitor as potentially dangerous.  For instance, what if the name contained <code>..</code>?  Could your application write to files that are outside of JSCause’s directory?  Would it contain characters that would make the application crash? Treat the security of your application seriously, so that you don’t get unpleasant surprises caused by external parties down the road.</p>
 
+<p><strong>Important!</strong> <em>Always</em> use <code>rt.waitFor()</code> with callbacks (unless you’re using them with <code>rt</code> methods, as mentioned above.)  If you don’t, then make sure you catch all the potential errors with <code>try / catch</code> blocks.  Otherwise, if an error occurs <strong>the whole JSCause application will crash, and your website will become unavailable</strong>.  You will need to manually restart it (or implement an external automatic system that does this for you.)</p>
+
 <p>Alright, back to the recipe uploading and creating operations.</p>
 
 <p>Here is an exercise for you:</p>
