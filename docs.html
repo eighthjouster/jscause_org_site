@@ -1242,7 +1242,7 @@ rt.print('Two! ');
 <pre><code>One! Two!
 </code></pre>
 
-<p>We were expecting to see “One! Two! And three!”.  The <code>andThree()</code> callback _ did run_, but too late - JSCause had already sent the response to the browser.</p>
+<p>We were expecting to see “One! Two! And three!”.  The <code>andThree()</code> callback <em>did run</em>, but too late - JSCause had already sent the response to the browser.</p>
 
 <p>We must signal JSCause that it must wait for the callback to complete.  We do that by enclosing it with <a href="#rtwaitfor"><code>rt.waitFor()</code></a>:</p>
 
