@@ -74,6 +74,7 @@
   <li><a href="#does-jscause-support-typescript">Does JSCause support Typescript?</a></li>
   <li><a href="#does-jscause-support-webassembly">Does JSCause support Webassembly?</a></li>
   <li><a href="#how-does-jscause-compare-with-other-frameworks-like-express">How does JSCause compare with other frameworks like Express?</a></li>
+  <li><a href="#why-does-the-browser-complain-about-security-when-accessing-a-jscause-site-during-development">Why does the browser complain about security when accessing a JSCause site during development?</a></li>
   <li><a href="#why-doesnt-jscause-complain-when-a-certificate-or-key-file-is-invalid">Why doesn’t JSCause complain when a certificate or key file is invalid?</a></li>
   <li><a href="#sitejson-accepts-a-hostname-that-could-already-be-used-in-another-sites-sitejson--is-this-a-bug"><code>site.json</code> accepts a hostName that could already be used in another site’s json.  Is this a bug?</a></li>
   <li><a href="#jscause-says-a-file-does-not-exist-but-i-can-see-it-in-the-file-system--why">JSCause says a file does not exist, but I can see it in the file system.  Why?</a></li>
@@ -203,6 +204,16 @@ rt.unsafePrint(JSON.stringify({ randomNumber: `${Math.random()}` }));
 <p>With JSCause, in turn, you must install NodeJS, and you must install the JSCause package, which can be a simply as uncompressing a zip file somewhere in your computer’s file system.  That’s it.  You can use the example site provided with the JSCause package as a starting point.</p>
 
 <p>In the end, we used Express above to illustrate a point as to why you may want to use JSCause (and to answer this question). But it may be that Express, and frameworks similar to it, may be the right tool for your project; especially if it involves complex specifications.  Always strive to use the right tool for the job.</p>
+
+<h3 id="why-does-the-browser-complain-about-security-when-accessing-a-jscause-site-during-development">Why does the browser complain about security when accessing a JSCause site during development?</h3>
+
+<p>When accessing a JSCause site in a development environment via web, the browser may initially display a security warning message to the visitor before displaying the page.  Depending on the browser, the message may say that there is a “Potential Security Risk Ahead” (like Firefox) or that “Your connection is not private” (like Chrome.)  This is because the site is being accessed via HTTPS, and JSCause is using a self-signed SSL certificate when establishing the connection.</p>
+
+<p>Modern browsers will always warn visitors when a website is using a self-signed SSL certificate. In a production environment, you must provide a certificate created by a Certificate Authority (such as Comodo/Sectigo, RapidSSL, Symantec, or the free LetsEncrypt.org.)  Otherwise your visitors will get a warning, and rightly so.</p>
+
+<p>In a development environment, though, the warning can be safely ignored and bypassed.</p>
+
+<p>Learn about how to set up <a href="https://jscause.org/docs.html#sitejson-configuring-your-websites-details">your SSL certificates in JSCause</a> when configuring your website’s details in the documentation (namely, the <code>httpsCertFile</code> and <code>httpsKeyFile</code> configuration attributes.)</p>
 
 <h3 id="why-doesnt-jscause-complain-when-a-certificate-or-key-file-is-invalid">Why doesn’t JSCause complain when a certificate or key file is invalid?</h3>
 
