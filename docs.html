@@ -2900,6 +2900,13 @@ You placed an error file, such as <code>error4xx.html</code> or <code>error4xx.j
 JSCause failed deleting an uploaded file.  It may not have permissions to do so, or there is a problem with the file system.  If the file still exists, it will be located at <code>&lt;path&gt;</code>.  You may want to manually delete it.  Note that the file name specified in <code>&lt;file name&gt;</code> will most likely differ from <code>&lt;path&gt;</code>.</p>
 
 <p>Message:</p>
+<pre><code>allowExeExtensionsInOpr server configuration disallows &lt;operation&gt; file operation involving &lt;path&gt;
+</code></pre>
+
+<p>Explanation:
+JSCause did not allow an <code>rt</code> file operation on an executable file defined by <code>&lt;path&gt;</code> (with either a <code>.jscp</code> or a <code>.jscm</code> extension.) This is due to the <code>allowExeExtensionsInOpr</code> server configuration attribute being <code>false</code>.  This is typically a default behavior imposed for security reasons. Don’t just change the value to <code>true</code> without understanding the security implications! Read the <code>allowExeExtensionsInOpr</code> entry in the <a href="#jscauseconf-configuring-jscause-to-serve-your-website">jscause.conf configuration</a> section for more information.</p>
+
+<p>Message:</p>
 <pre><code>warning: Site &lt;site name&gt;: attempted to process already sent response (retriggered timer?)
 </code></pre>
 
