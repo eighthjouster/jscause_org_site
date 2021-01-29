@@ -187,7 +187,7 @@
 
 <p>Please refer to the project’s CHANGELOG.md file on the <a href="https://github.com/eighthjouster/jscause">Github repository</a> for project updates.</p>
 
-<p>In the repository, you can also check the ROADMAP.md file to learn more about planned future features and additions.</p>
+<p>In the repository, you can also check out the ROADMAP.md file to learn more about planned future features and additions.</p>
 
 <h2 id="what-is-jscause">What is JSCause?</h2>
 
@@ -217,7 +217,7 @@
 
 <h2 id="installation">Installation</h2>
 
-<p>JSCause requires <a href="https://nodejs.org">NodeJS</a>.  Please make sure you have it installed in your system.  Any version above 8.x should be fine.</p>
+<p>JSCause requires <a href="https://nodejs.org">NodeJS</a>.  Please make sure you have it installed in your system.  Any version equal or above 12.x should be fine.</p>
 
 <p>There are two types of installation: standalone JSCause, and installation via npm.</p>
 
@@ -355,6 +355,28 @@
 </code></pre>
 
 <p>If HTTPS is enabled, you must provide JSCause with your certificate file, as well as your certificate’s public key file.  Check out these resources: <a href="#sitejson-configuring-your-websites-details">httpsCertFile and httpsKeyFile section on site.json</a>, and the <a href="#httpsssl-configuration">HTTPS/SSL configuration section</a>.</p>
+
+<p><strong><em>allowExeExtensionsInOpr</em></strong></p>
+
+<p>This attribute indicates whether <code>rt</code> file instructions (such as <code>rt.copyFile()</code>) are allowed on files ending in <code>.jscp</code> or <code>.jscm</code> inside the <code>website/</code> directory. Not allowing file operations in such JSCause executable files is considered good practice; any attempt of reading, modification, deletion or similar action by a potential attacker will not succeed.</p>
+
+<pre><code>"allowExeExtensionsInOpr": false
+</code></pre>
+
+<p>This attribute is optional.  However, if you omit it, it will be assumed <code>false</code> by default.</p>
+
+<p>There are two valid values:</p>
+
+<ul>
+  <li><code>true</code>: JSCause will allow any file operations inside the <code>website/</code> directory.  Do this <em>only</em> if you know what you’re doing.</li>
+  <li><code>false</code>: An error will be thrown at any <code>rt</code> file operation attempt involving JSCause executable files (ending in either <code>.jscp</code> or <code>.jscm</code>) inside the <code>website/</code> directory. Such error can be caught via <code>rtOnError()</code>. The restriction is not case-sensitive so, for example, neither <code>.jscp</code> or <code>.JSCP</code> will be allowed.</li>
+</ul>
+
+<p><strong>Important notes</strong>:</p>
+<ul>
+  <li>File operations done with NodeJS’s <code>fs</code> module (such as <code>read()</code>) WILL be allowed for JSCause executable files inside <code>website/</code> regardless of the value set for <code>allowExeExtensionsInOpr</code>.  We therefore strongly advise that you stick to using <code>rt</code> instructions for predictable file operation behavior and security.</li>
+  <li><code>allowExeExtensionsInOpr</code> should NOT be considered an all encompassing solution against attacks.  Even when it’s set to <code>false</code>, keep exercising caution when dealing with sensitive data inside JSCause executable files.  For example, a hard-coded database password should not be present in an executable file.  Even if JSCause can prevent reading such file, a malicious actor could potentially compromise the system by other means and still retrieve or delete your sensitive data.</li>
+</ul>
 
 <h3 id="logging">logging:</h3>
 
@@ -694,7 +716,7 @@
 
 <p><strong><em>logging:</em></strong></p>
 
-<p>Just like in <a href="#logging"><code>site.conf</code></a>, this is a list of attributes to indicate what aspects of the website JSCause will log, and how:</p>
+<p>Just like <a href="#logging"><code>logging</code> in <code>jscause.conf</code></a>, this is a list of attributes to indicate what aspects of the website JSCause will log, and how:</p>
 
 <pre><code>"logging": {
   // Attributes pertaining website logging.
@@ -1736,6 +1758,7 @@ Sun, 23 Feb 2020 00:32:04 GMT - jscausesite1 - GET: /some_file.jscp - 500
   <li><a href="#rtfileexists">rt.fileExists</a></li>
   <li><a href="#rtuploadedfiles">rt.uploadedFiles</a></li>
   <li><a href="#rtrunafter">rt.runAfter</a></li>
+  <li><a href="#sites">Sites <code>allowExeExtensionsInOpr</code> configuration attribute in <code>jscause.conf</code></a></li>
   <li><a href="#rt-promises">RT Promises</a></li>
 </ul>
 
@@ -1745,7 +1768,7 @@ Sun, 23 Feb 2020 00:32:04 GMT - jscausesite1 - GET: /some_file.jscp - 500
 
 <p><em>Syntax</em>: <code>rt.deleteCookie(name:String)</code></p>
 
-<p><em>Returns</em>: Boolean.</p>
+<p><em>Returns</em>: Object.</p>
 
 <p>It deletes a browser cookie.</p>
 
@@ -1754,9 +1777,17 @@ Sun, 23 Feb 2020 00:32:04 GMT - jscausesite1 - GET: /some_file.jscp - 500
 <pre><code>rt.deleteCookie('my_cookie');
 </code></pre>
 
-<p>If it succeeds, it will return <code>true</code>.  Otherwise, it will return <code>false</code>.</p>
+<p><code>rt.deleteCookie</code> returns an object representing the result of the cookie deletion operation.  Always check its value to make sure that everything went well.</p>
 
-<p>If <code>name</code> is not a string, <code>rt.deleteCookie</code> will return <code>false</code>.</p>
+<p>If the operation succeeds, <code>rt.deleteCookie</code> will return <code>{ success: true }</code>.</p>
+
+<p>If the operation fails, <code>rt.deleteCookie</code> will return <code>{ error: '&lt;message&gt;' }</code>, where <code>error</code> is a string explaining the issue.</p>
+
+<p>The <code>error</code> messages could be the following (list not complete):</p>
+
+<ul>
+  <li><code>Invalid cookie name. String expected.</code></li>
+</ul>
 
 <p>See also:</p>
 <ul>
@@ -1797,6 +1828,7 @@ Sun, 23 Feb 2020 00:32:04 GMT - jscausesite1 - GET: /some_file.jscp - 500
   <li><a href="#rtfileexists">rt.fileExists</a></li>
   <li><a href="#rtuploadedfiles">rt.uploadedFiles</a></li>
   <li><a href="#rtrunafter">rt.runAfter</a></li>
+  <li><a href="#sites">Sites <code>allowExeExtensionsInOpr</code> configuration attribute in <code>jscause.conf</code></a></li>
   <li><a href="#rt-promises">RT Promises</a></li>
 </ul>
 
@@ -1833,6 +1865,7 @@ Sun, 23 Feb 2020 00:32:04 GMT - jscausesite1 - GET: /some_file.jscp - 500
   <li><a href="#rtdeletefile">rt.deleteFile</a></li>
   <li><a href="#rtuploadedfiles">rt.uploadedFiles</a></li>
   <li><a href="#rtrunafter">rt.runAfter</a></li>
+  <li><a href="#sites">Sites <code>allowExeExtensionsInOpr</code> configuration attribute in <code>jscause.conf</code></a></li>
   <li><a href="#rt-promises">RT Promises</a></li>
 </ul>
 
@@ -1996,6 +2029,7 @@ console.log(rt.getCookie('my_cookie'), { decodeURIValue: false }); // --&gt; Ret
   <li><a href="#rtfileexists">rt.fileExists</a></li>
   <li><a href="#rtuploadedfiles">rt.uploadedFiles</a></li>
   <li><a href="#rtrunafter">rt.runAfter</a></li>
+  <li><a href="#sites">Sites <code>allowExeExtensionsInOpr</code> configuration attribute in <code>jscause.conf</code></a></li>
   <li><a href="#rt-promises">RT Promises</a></li>
 </ul>
 
@@ -2161,6 +2195,7 @@ For instance, the following:</p>
   <li><a href="#rtfileexists">rt.fileExists</a></li>
   <li><a href="#rtuploadedfiles">rt.uploadedFiles</a></li>
   <li><a href="#rtrunafter">rt.runAfter</a></li>
+  <li><a href="#sites">Sites <code>allowExeExtensionsInOpr</code> configuration attribute in <code>jscause.conf</code></a></li>
   <li><a href="#rt-promises">RT Promises</a></li>
 </ul>
 
@@ -2185,7 +2220,7 @@ For instance, the following:</p>
 
 <p>JSCause sets an HTTP 302 (found) status code to perform the redirect.  It also typically sets the <code>Location</code> HTTP header.  If delayInSeconds is provided and is valid, the <code>Refresh</code> header will be used instead.  This is not a standard header, although most modern browsers support it.</p>
 
-<p>If more than one <code>rt.redirectTo</code> call are made, only the last one will be taken into account.</p>
+<p>If more than one <code>rt.redirectTo</code> call is made, only the last one will be taken into account.</p>
 
 <p>The value of the <code>redirectUrl</code> parameter should be of the string type.  Numbers can be used, but they will be converted to strings.  Anything else will be converted to its <code>.toString()</code> equivalent.  For instance, objects will be assumed <code>"[object Object]"</code>, arrays will be converted to a string with its values comma-separated (e.g. <code>"[1,2,3]"</code>).  You most likely don’t want to do this, so make sure you pass a string.</p>
 
@@ -2255,7 +2290,7 @@ For instance, the following:</p>
 
 <p><em>Syntax</em>: <code>rt.setCookie(name:String, value:String[, options:Object])</code></p>
 
-<p><em>Returns</em>: String.</p>
+<p><em>Returns</em>: Object.</p>
 
 <p>It sets the value of a browser cookie. <code>options</code> is optional, and it contains additional instructions to create or update the cookie.</p>
 
@@ -2332,11 +2367,30 @@ const cookieValue2 = rt.getCookie('my_cookie', { path: '/' });
   </li>
 </ul>
 
+<p><code>rt.setCookie</code> returns an object representing the result of the cookie setting operation.  Always check its value to make sure that everything went well.</p>
+
+<p>If the operation succeeds, <code>rt.setCookie</code> will return <code>{ success: true }</code>.</p>
+
+<p>If the operation fails, <code>rt.setCookie</code> will return <code>{ error: '&lt;message&gt;' }</code>, where <code>error</code> is a string explaining the issue.</p>
+
+<p>The <code>error</code> messages could be one of the following (list not complete):</p>
+
+<ul>
+  <li>
+    <p><code>Invalid cookie name. String expected.</code></p>
+  </li>
+  <li>
+    <p><code>Invalid expired value.  Date object expected.</code></p>
+  </li>
+  <li>
+    <p><code>Invalid sameSite value.  'strict' or 'lax' expected.</code></p>
+  </li>
+  <li>
+    <p><code>Cookie is secure but the connection is not HTTPS.  Will not send.</code></p>
+  </li>
+</ul>
+
 <p>The values of the <code>value</code> parameter, as well as those of the <code>domain</code> and <code>path</code> attributes of <code>option</code>, should be of the string type.  Numbers can be used, but they will be converted to strings.  Anything else will be converted to its <code>.toString()</code> equivalent.  For instance, objects will be assumed <code>"[object Object]"</code>, arrays will be converted to a string with its values comma-separated (e.g. <code>"[1,2,3]"</code>).</p>
-
-<p>If <code>name</code> is not a string, <code>rt.setCookie</code> will return <code>false</code>.</p>
-
-<p>To handle unexpected scenarios which could potentially throw exceptions (and therefore send an error 500 status code to the browser), <code>rt.setCookie()</code> could be wrapped in a <code>try/catch</code> block. If you do this, always check for exceptions and handle accordingly.</p>
 
 <p>See also:</p>
 <ul>
@@ -2484,6 +2538,27 @@ rt.readFile('my_source.txt', 'utf-8')
 </code></pre>
 
 <p>Remember that the <a href="#requesttimeoutsecs"><code>requestTimeoutSecs</code></a> (<code>requesttimeoutsecs</code>) server config value dictates how many seconds the JSCause will wait for a request to complete.</p>
+
+<p><strong>Note:</strong> <code>rt.waitFor()</code> can only be used when the callback will be used once only.  Instructions like <code>setInterval()</code> which run the callback more than one time will not work well with JSCause.  JSCause will only wait for the first callback to complete, then move on towards ending the request.  The following callbacks will continue to happen, but JSCause may have already sent a response.</p>
+
+<p>There is a trick to work around this limitation, though.  Since <code>rt.waitFor()</code> returns a callback, then create such callback <em>outside</em> of the block that will be called several times.  When the multiple-call operation ends, make sure to call that originally created callback.  Here’s an example:</p>
+
+<pre><code>let t = 1; // Let's increase this variable by 1 in an interval, until it reaches 10.
+
+const appEnd = rt.waitFor(); // JSCause will not send a response until appEnd() is called.
+
+const timerId = setInterval(() =&gt; { // Notice that we're enclosing this callback with an rt.waitFor() here.
+  // We should be enclosing the following with a try/catch block, for more robustness.
+  console.log(`Tick-tack... ${t}`);
+  rt.print(`${t} `);
+  if (t++ &gt;= 10) {
+    clearInterval(timerId);
+    appEnd(); // Done counting.  Signal JSCause to stop waiting for us.
+  }
+}, 500);
+</code></pre>
+
+<p>Please note the following:  As stated in the comments in the example above, since the callback in not enclosed inside an <code>rt.watchFor()</code>, we should be using a <code>try/catch</code> error within it.  Otherwise, <strong>any errors produced inside it will crash JSCause</strong>, bringing your site down.  You’ll need to manually restart JSCause if this happens.</p>
 
 <p>See also:</p>
 <ul>
@@ -2823,6 +2898,13 @@ You placed an error file, such as <code>error4xx.html</code> or <code>error4xx.j
 
 <p>Explanation:
 JSCause failed deleting an uploaded file.  It may not have permissions to do so, or there is a problem with the file system.  If the file still exists, it will be located at <code>&lt;path&gt;</code>.  You may want to manually delete it.  Note that the file name specified in <code>&lt;file name&gt;</code> will most likely differ from <code>&lt;path&gt;</code>.</p>
+
+<p>Message:</p>
+<pre><code>warning: Site &lt;site name&gt;: attempted to process already sent response (retriggered timer?)
+</code></pre>
+
+<p>Explanation:
+Your program may have a retriggering timer (set up via <code>setInterval()</code> or a retriggering <code>setTimeout()</code>) with a callback enclosed in an <code>rt.waitFor()</code>.  The original request has been handled, and JSCause has moved on to the next request.  When the phantom timer from the previous request gets triggered again, its callback is invoked, and JSCause attempts to “end this request.”  But because the request has already been ended, there is nothing left for JSCause to do.  Having said that, this phantom timer will live on (causing a memory leak!), therefore JSCause emits the warning.</p>
 
 <p>Message:</p>
 <pre><code>error: Could not rename unhandled uploaded file: &lt;file name&gt;
