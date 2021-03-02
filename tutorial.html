@@ -70,7 +70,7 @@
   <li>How to display basic web pages.</li>
   <li>How to display dynamic content.</li>
   <li>How to handle HTML forms and file uploads.</li>
-  <li>How to do basic file system operations (read, write files, read directories.)</li>
+  <li>How to do basic file system operations (read, move files.)</li>
   <li>How to handle URL query parameters.</li>
 </ul>
 
@@ -176,7 +176,7 @@ INFO: Server 0 listening on port 3000
 <p><img src="images/tutorial_002.gif" alt="Web browser window displaying the phrase 'It works!'" title="It works! JSCause is running!" />
 <span>It works! JSCause is running!</span></p>
 
-<p><strong>Important</strong>: Your browser may warn you that the site is not secure.  That’s because we’re using a placeholder SSL certificate in order to test and use HTTPS connections.  These certificates are <strong>not</strong> suitable for production!  If you use these certs, your users will get a security warning in their browsers.  <strong>You must provide your valid private key file and certificate file</strong>.  More information in <a href="https://jscause.org/docs.html#why-does-the-browser-complain-about-security-when-accessing-a-jscause-site-during-development">the FAQ</a>, and in the <a href="https://jscause.org/docs.html#sitejson-configuring-your-websites-details">site configuration section</a> in the documentation (specifically, the <code>httpsCertFile</code> and <code>httpsKeyFile</code> configuration attributes.)</p>
+<p><strong>Important</strong>: Your browser may warn you that the site is not secure.  That’s because we’re using a placeholder SSL certificate in order to test and use HTTPS connections.  These certificates are <strong>not</strong> suitable for production!  If you use these certs, your users will get a security warning in their browsers.  <strong>You must provide your valid private key file and certificate file</strong>.  More information in <a href="https://jscause.org/faq.html#why-does-the-browser-complain-about-security-when-accessing-a-jscause-site-during-development">the FAQ</a>, and in the <a href="https://jscause.org/docs.html#sitejson-configuring-your-websites-details">site configuration section</a> in the documentation (specifically, the <code>httpsCertFile</code> and <code>httpsKeyFile</code> configuration attributes.)</p>
 
 <h4 id="choose-your-own-adventure">Choose your own adventure</h4>
 
@@ -284,7 +284,7 @@ Terminated.
 
 <p><code>https://localhost:3000/secondDir</code></p>
 
-<p>Please note this exception: <code>error4xx.jscp</code> and <code>error5xx.jscp</code> are special files, so trying to request them directly (e.g. <code>https://localhost:3000/err5xx.jscp</code>) won’t work - JSCause will respond with an HTTP 404 error (not found) to the web browser.  We’ll talk more about these special files later.</p>
+<p>Please note this exception: <code>error4xx.jscp</code> and <code>error5xx.jscp</code> are special files, so trying to request them directly (e.g. <code>https://localhost:3000/err5xx.jscp</code>) won’t work - JSCause will respond with an HTTP 404 error (not found) to the web browser.  Please <a href="https://jscause.org/docs.html#custom-4xx-and-5xx-errors">refer to the documentation</a> for more information about these special error files.</p>
 
 <p>Let’s move on.</p>
 
@@ -515,7 +515,7 @@ INFO: ************ All sites' configuration read at this point *****************
 ERROR: Server not started.  No sites are running.
 </code></pre>
 
-<p>JSCause is telling us that it didn’t recognize the veru first character in our file, the <code>&lt;</code> in <code>&lt;!doctype html&gt;</code>.</p>
+<p>JSCause is telling us that it didn’t recognize the very first character in our file, the <code>&lt;</code> in <code>&lt;!doctype html&gt;</code>.</p>
 
 <p>This is because JSCause is expecting Javascript code.  It’s a <code>JSCP</code> file after all.  Since there are no <code>&lt;js ... /js&gt;</code> blocks anywhere on the page, it assumes that the whole file is Javascript.  Of course, this is the wrong assumption since the whole file is HTML instead.</p>
 
@@ -1319,8 +1319,6 @@ tutorial_014_tomato_salad.png
               const recipeArray = textContents.split(/\n/);
               const recipeTitle = recipeArray[0];
               recipesList.push({ title: recipeTitle, name: fileNameWithNoExtension, extension: fileExtension });
-
-              });
             })
 </code></pre>
 
@@ -1379,7 +1377,6 @@ tutorial_014_tomato_salad.png
 <p>Fill it out with the following code:</p>
 
 <pre><code>&lt;js
-      const fs = require('fs');
       const fsPath = require('path');
 /js&gt;
 &lt;js rt.runAfter(() =&gt; { /js&gt;
@@ -1398,7 +1395,7 @@ tutorial_014_tomato_salad.png
 
 <p>We have an already familiar starting point:  Two <code>&lt;js /js&gt;</code> blocks, one with some preparation code, and the other used for rendering what the web browser will display.</p>
 
-<p>Since we’ll display the recipe, we’ll need to rely on file operations.  That’s why the code above already includes references to the NodeJS <code>fs</code> and <code>path</code> modules.</p>
+<p>Since we’ll display the recipe, we’ll need to rely on file operations.  That’s why the code above already includes a reference to the NodeJS <code>path</code> module.</p>
 
 <p>From last section, we know that a visitor will land on <code>viewRecipe.jscp</code> through an address such as the following:</p>
 
@@ -1509,7 +1506,7 @@ tutorial_014_tomato_salad.png
 
 <p>Great! It’s not the most beautiful page in the world, but it does the job.  We could flesh it out with extra HTML and CSS, but that’s not the scope of this tutorial.</p>
 
-<p><strong>Our usual word of caution!</strong> We are telling JSCause to print the contents of <code>recipeContents</code> directly.  <code>rt.print()</code> does its best to print it in a safe way.  Having said that, it’s not generally a good idea to just print something that we received from the wild Internet directly in our application.  That’s how bad actors (bad visitors) could potentially run malicious operations with your application.  Always validate your user input, making sure that it contains only what you’re willing to display.  Treat the security of your application seriously.</p>
+<p><strong>Our usual word of caution!</strong> We are telling JSCause to print the contents of <code>recipeContents</code> directly.  The <code>&lt;js= /js&gt;</code> syntax we use here (and also <code>rt.print()</code>) does its best to print it in a safe way.  Having said that, it’s not generally a good idea to just print something that we received from the wild Internet directly in our application.  That’s how bad actors (bad visitors) could potentially run malicious operations with your application.  Always validate your user input, making sure that it contains only what you’re willing to display.  Treat the security of your application seriously.</p>
 
 <p>Congratulations! You now have a functional recipe management site.</p>
 
